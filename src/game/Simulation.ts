@@ -26,7 +26,8 @@ import {
   SMELTING,
 } from "./recipes";
 import { intersectsWorld, moveBody, raycastVoxel } from "../engine/physics";
-import { surfaceHeight } from "../engine/generator";
+import { surfaceHeight, seedNumber } from "../engine/generator";
+import { FarmingSystem, CROP_DEFINITIONS, cropAt, harvestCrop, FARMLAND } from "./farming";
 
 const uid = () => crypto.randomUUID();
 export const posKey = (p: Vec3) =>
@@ -52,8 +53,8 @@ export function createNewSave(
   const spawn = { x: 0.5, y: surfaceHeight(worldSeed, 0, 0) + 1.05, z: 0.5 };
   return {
     manifest: {
-      version: 1,
-      generatorVersion: 1,
+      version: 2,
+      generatorVersion: 2,
       id: uid(),
       name: name.trim() || "新的世界",
       seed: worldSeed,
@@ -82,6 +83,7 @@ export function createNewSave(
     entities: [],
     drops: [],
     time: 1000,
+    farming: { version: 1, randomState: seedNumber(worldSeed), clock: 0, accumulator: 0, scanCursor: 0, plots: [] },
   };
 }
 
@@ -93,6 +95,7 @@ export class Simulation {
   entities: EntityState[];
   drops: DropState[];
   containers: Record<string, ContainerState>;
+  readonly farming: FarmingSystem;
   craftSlots: Slot[] = Array(4).fill(null);
   cursor: Slot = null;
   station: "inventory" | "workbench" = "inventory";
@@ -127,6 +130,12 @@ export class Simulation {
     this.entities = clone(data.entities);
     this.drops = clone(data.drops);
     this.containers = clone(data.containers);
+    this.farming = new FarmingSystem(world, data.manifest.seed, data.farming, {
+      dropItem: (stack, position) => this.spawnDrop(stack, position),
+      changed: () => { this.dirty = true; },
+    });
+    if (!data.farming) for (const change of world.getChanges())
+      if (change.id === 28 || change.id === 29) this.farming.notifyBlockChanged(change, 0, change.id);
   }
   get creative() {
     return this.manifest.mode === "creative";
@@ -143,6 +152,17 @@ export class Simulation {
   }
   sound(sound: string) {
     this.emit({ type: "sound", sound });
+  }
+  /** All player-originated block changes notify block-dependent simulation systems. */
+  setBlock(x: number, y: number, z: number, id: number) {
+    if (y < -16 || y >= 96 || !this.world.isReady(x, z) || !BLOCKS[id]) return;
+    const position = { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) };
+    const oldId = this.world.getBlock(position.x, position.y, position.z);
+    if (oldId === id) return;
+    this.world.setBlock(position.x, position.y, position.z, id);
+    if (this.world.getBlock(position.x, position.y, position.z) === id)
+      this.farming.notifyBlockChanged(position, oldId, id);
+    this.dirty = true;
   }
   eye(): Vec3 {
     return {
@@ -183,6 +203,7 @@ export class Simulation {
       this.updateNeeds(dt, input);
     }
     this.updateFurnaces(dt);
+    this.farming.step(dt, this.player.position, this.night ? 4 : 15);
     this.updateDrops(dt);
     this.updateMobs(dt);
     this.dirty = true;
@@ -342,6 +363,13 @@ export class Simulation {
           p.hunger = Math.min(20, p.hunger + ITEMS[item.id].food!);
           item.count--;
           if (!item.count) p.inventory[p.selected] = null;
+          const remainder = ITEMS[item.id].foodRemainder;
+          if (remainder) {
+            const left = addItem(p.inventory, { id: remainder, count: 1 });
+            if (left) this.spawnDrop(left, p.position);
+          }
+          if (item.id === "poisonous_potato" && this.farming.nextRandom() < 0.6)
+            this.damage(Math.min(4, Math.max(0, p.health - 1)), "poison");
           this.sound("eat");
           this.toast("吃饱一点，继续探索。");
         }
@@ -574,21 +602,21 @@ export class Simulation {
       y: Math.floor(position.y),
       z: Math.floor(position.z),
     };
-    this.world.setBlock(p.x, p.y, p.z, 0);
+    this.setBlock(p.x, p.y, p.z, 0);
     if (id === 18 || id === 19) {
-      this.world.setBlock(p.x, p.y + 1, p.z, 0);
+      this.setBlock(p.x, p.y + 1, p.z, 0);
       drop = "door";
     }
     if (id === 25 || id === 26) {
-      this.world.setBlock(p.x, p.y - 1, p.z, 0);
+      this.setBlock(p.x, p.y - 1, p.z, 0);
       drop = "door";
     }
     if (id === 22) {
-      this.world.setBlock(p.x, p.y, p.z + 1, 0);
+      this.setBlock(p.x, p.y, p.z + 1, 0);
       drop = "bed";
     }
     if (id === 27) {
-      this.world.setBlock(p.x, p.y, p.z - 1, 0);
+      this.setBlock(p.x, p.y, p.z - 1, 0);
       drop = "bed";
     }
     const container = this.containers[posKey(p)];
@@ -598,7 +626,12 @@ export class Simulation {
       });
       delete this.containers[posKey(p)];
     }
-    if (drop && !this.creative && (exploded || eligible))
+    if (!this.creative && cropAt(id)) {
+      for (const stack of harvestCrop(id, () => this.farming.nextRandom())) this.spawnDrop(stack, { x: p.x + 0.5, y: p.y + 0.1, z: p.z + 0.5 });
+    } else if (!this.creative && id === 58) {
+      if (this.held?.id === "shears") this.spawnDrop({ id: "short_grass", count: 1 }, p);
+      else if (this.farming.nextRandom() < 0.125) this.spawnDrop({ id: "wheat_seeds", count: 1 }, p);
+    } else if (drop && !this.creative && (exploded || eligible))
       this.spawnDrop(
         { id: drop, count: 1 },
         { x: p.x + 0.5, y: p.y + 0.1, z: p.z + 0.5 },
@@ -655,9 +688,14 @@ export class Simulation {
     );
     victim.position = knock.position;
     if (victim.health <= 0) {
-      ENTITIES[victim.kind].drops.forEach((s) =>
-        this.spawnDrop(s, victim!.position),
-      );
+      if ((victim.age ?? 0) >= 0) ENTITIES[victim.kind].drops.forEach((s) => {
+        if (s.id !== "wool" || !victim!.sheared) this.spawnDrop(s, victim!.position);
+      });
+      // Adult zombies provide the survival route to the two root crops.
+      if (victim.kind === "zombie" && this.farming.nextRandom() < 0.025) {
+        const rare = ["iron_ingot", "carrot", "potato"][Math.floor(this.farming.nextRandom() * 3)];
+        this.spawnDrop({ id: rare, count: 1 }, victim.position);
+      }
       this.entities = this.entities.filter((e) => e.id !== victim!.id);
       this.entityVel.delete(victim.id);
     }
@@ -667,6 +705,9 @@ export class Simulation {
     if (this.player.dead) return;
     const held = this.held,
       def = held ? ITEMS[held.id] : null;
+    const target = this.target();
+    if (held && this.interactAnimal(held.id)) return;
+    if (held && this.interactFarm(held.id, target)) return;
     if (def?.food && !this.creative) {
       if (this.player.hunger >= 20) {
         this.toast("现在还不饿");
@@ -680,7 +721,6 @@ export class Simulation {
       }
       return;
     }
-    const target = this.target();
     if (!target) {
       if (def?.armorSlot) this.equipHeld(def.armorSlot);
       return;
@@ -712,8 +752,8 @@ export class Simulation {
     if ([18, 19, 25, 26].includes(id)) {
       const y = t.y - (id === 25 || id === 26 ? 1 : 0),
         open = id === 18 || id === 25;
-      this.world.setBlock(t.x, y, t.z, open ? 19 : 18);
-      this.world.setBlock(t.x, y + 1, t.z, open ? 26 : 25);
+      this.setBlock(t.x, y, t.z, open ? 19 : 18);
+      this.setBlock(t.x, y + 1, t.z, open ? 26 : 25);
       this.sound("door");
       return;
     }
@@ -779,9 +819,9 @@ export class Simulation {
       this.toast("床的两端都需要地面支撑");
       return;
     }
-    this.world.setBlock(p.x, p.y, p.z, def.block);
-    if (def.block === 18) this.world.setBlock(p.x, p.y + 1, p.z, 25);
-    if (def.block === 22) this.world.setBlock(p.x, p.y, p.z + 1, 27);
+    this.setBlock(p.x, p.y, p.z, def.block);
+    if (def.block === 18) this.setBlock(p.x, p.y + 1, p.z, 25);
+    if (def.block === 22) this.setBlock(p.x, p.y, p.z + 1, 27);
     if (!this.creative) {
       held.count--;
       if (!held.count) this.player.inventory[this.player.selected] = null;
@@ -1194,12 +1234,13 @@ export class Simulation {
           });
       }
     return {
-      manifest: { ...this.manifest, updatedAt: Date.now() },
+      manifest: { ...this.manifest, version: 2, updatedAt: Date.now() },
       player: p,
       time: this.time,
       changes: this.world.getChanges(),
       containers: clone(this.containers),
       entities: clone(this.entities),
+      farming: this.farming.snapshot(),
       drops,
     };
   }

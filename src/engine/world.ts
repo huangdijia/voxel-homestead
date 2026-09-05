@@ -10,6 +10,7 @@ import {
 import type { ChunkRequest, ChunkResult } from "./protocol";
 import { buildChunk } from "./mesher";
 import { isOpaque } from "./shapes";
+import { BLOCKS } from "../game/registry";
 
 type Chunk = { voxels: Uint16Array; meshes: THREE.Mesh[] };
 const keyOf = (x: number, y: number, z: number) => x + "," + y + "," + z;
@@ -46,6 +47,7 @@ export class VoxelWorld implements WorldPort {
     public readonly seed: string,
     changes: BlockChange[],
     public readonly worldId: string,
+    public readonly generatorVersion: 1 | 2 = 1,
   ) {
     for (const change of changes) {
       if (
@@ -119,7 +121,7 @@ export class VoxelWorld implements WorldPort {
       return chunk.voxels[
         positiveModulo(y) * 256 + positiveModulo(z) * 16 + positiveModulo(x)
       ];
-    return sampleBlock(this.seed, x, y, z);
+    return sampleBlock(this.seed, x, y, z, this.generatorVersion);
   }
   setBlock(x: number, y: number, z: number, id: number): void {
     x = Math.floor(x);
@@ -131,14 +133,14 @@ export class VoxelWorld implements WorldPort {
       y > WORLD_MAX_Y ||
       !Number.isInteger(id) ||
       id < 0 ||
-      id > 27
+      !Object.hasOwn(BLOCKS, id)
     )
       return;
     const previous = this.getBlock(x, y, z);
     if (previous === id) return;
     const key = keyOf(x, y, z),
       ckey = chunkKey(x, y, z);
-    if (id === sampleBlock(this.seed, x, y, z)) {
+    if (id === sampleBlock(this.seed, x, y, z, this.generatorVersion)) {
       this.changes.delete(key);
       this.torches.delete(key);
       this.chunkChanges.get(ckey)?.delete(key);
@@ -318,6 +320,7 @@ export class VoxelWorld implements WorldPort {
     this.queue.set(key, {
       worldId: this.worldId,
       seed: this.seed,
+      generatorVersion: this.generatorVersion,
       key,
       cx,
       cy,

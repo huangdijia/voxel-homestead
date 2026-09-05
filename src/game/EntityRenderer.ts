@@ -8,6 +8,8 @@ interface MobModel {
   head: THREE.Group;
   kind: EntityKind;
   previous: Vec3;
+  fleece?: THREE.Mesh;
+  loveMarker?: THREE.Group;
 }
 export class EntityRenderer {
   private mobs = new Map<string, MobModel>();
@@ -56,11 +58,15 @@ export class EntityRenderer {
     const group = new THREE.Group(),
       head = new THREE.Group();
     const legs: THREE.Mesh[] = [];
+    let fleece: THREE.Mesh | undefined;
+    let loveMarker: THREE.Group | undefined;
+    group.name = `mob:${e.id}`;
+    head.name = "head";
     group.add(head);
     const kind = e.kind;
     if (kind === "pig" || kind === "sheep") {
       const wool = kind === "sheep",
-        body = this.mat(wool ? 0xe5e2d4 : 0xdb9d95),
+        body = this.mat(wool ? 0xbfa18b : 0xdb9d95),
         foot = this.mat(wool ? 0x897c69 : 0xb57872);
       this.block(group, body, 0, 0.74, 0, 0.78, 0.66, 1.05);
       head.position.set(0, 0.98, 0.59);
@@ -72,8 +78,20 @@ export class EntityRenderer {
       face.position.z = 0.245;
       face.scale.set(0.55, 0.55, 1);
       head.add(face);
-      if (wool)
-        this.block(group, this.mat(0xf8f5e7), 0, 0.84, -0.02, 0.86, 0.67, 1.03);
+      if (wool) {
+        fleece = this.block(group, this.mat(0xf8f5e7), 0, 0.84, -0.02, 0.86, 0.67, 1.03);
+        fleece.name = "fleece";
+      }
+      loveMarker = new THREE.Group();
+      loveMarker.name = "love-marker";
+      loveMarker.visible = false;
+      const heart = this.mat(0xda665d);
+      this.block(loveMarker, heart, -0.065, 0.08, 0, 0.1, 0.1, 0.035);
+      this.block(loveMarker, heart, 0.065, 0.08, 0, 0.1, 0.1, 0.035);
+      this.block(loveMarker, heart, 0, 0.015, 0, 0.23, 0.1, 0.035);
+      this.block(loveMarker, heart, 0, -0.06, 0, 0.13, 0.065, 0.035);
+      this.block(loveMarker, heart, 0, -0.11, 0, 0.05, 0.045, 0.035);
+      group.add(loveMarker);
     } else {
       const creepy = kind === "creeper",
         skin = this.mat(creepy ? 0x6f9854 : 0x759460),
@@ -104,7 +122,7 @@ export class EntityRenderer {
       head.add(face);
     }
     this.scene.add(group);
-    return { group, legs, head, kind, previous: { ...e.position } };
+    return { group, legs, head, kind, previous: { ...e.position }, fleece, loveMarker };
   }
   update(
     entities: EntityState[],
@@ -137,10 +155,17 @@ export class EntityRenderer {
           : Math.sin(elapsed * 1.5) * 0.015;
       });
       model.head.rotation.y = Math.sin(elapsed * 0.7) * 0.04;
-      if (e.fuse) {
-        const scale = 1 + Math.sin(elapsed * 30) * 0.035 * e.fuse;
-        model.group.scale.setScalar(scale);
-      } else model.group.scale.setScalar(1);
+      const baby = (e.age ?? 0) < 0;
+      const size = baby ? 0.5 : 1;
+      model.head.scale.setScalar(baby ? 1.12 : 1);
+      if (model.fleece) model.fleece.visible = !e.sheared;
+      if (model.loveMarker) {
+        model.loveMarker.visible = (e.love ?? 0) > 0;
+        model.loveMarker.position.y = 1.62 + Math.sin(elapsed * 3) * 0.055;
+        model.loveMarker.rotation.y = Math.atan2(player.x - p.x, player.z - p.z) - e.yaw;
+      }
+      const pulse = e.fuse ? 1 + Math.sin(elapsed * 30) * 0.035 * e.fuse : 1;
+      model.group.scale.setScalar(size * pulse);
       model.previous = { ...p };
       model.group.visible = Math.hypot(p.x - player.x, p.z - player.z) < 90;
     }
@@ -175,12 +200,14 @@ export class EntityRenderer {
     }
   }
   private disposeModel(object: THREE.Object3D) {
+    const disposed = new Set<THREE.Material>();
     object.traverse((o) => {
       const m = o as THREE.Mesh;
       if (m.isMesh) {
         const mats = Array.isArray(m.material) ? m.material : [m.material];
         for (const mat of mats)
-          if (!this.faceMaterials.includes(mat as THREE.MeshLambertMaterial)) {
+          if (!disposed.has(mat) && !this.faceMaterials.includes(mat as THREE.MeshLambertMaterial)) {
+            disposed.add(mat);
             mat.dispose();
             const i = this.materials.indexOf(mat);
             if (i >= 0) this.materials.splice(i, 1);

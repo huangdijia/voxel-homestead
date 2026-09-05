@@ -52,6 +52,7 @@ for (const material of ["wood", "stone", "iron"]) {
   recipe(`${material}_axe`, ["MM", "MS", " S"], keys, `${material}_axe`);
   recipe(`${material}_shovel`, ["M", "S", "S"], keys, `${material}_shovel`);
   recipe(`${material}_sword`, ["M", "M", "S"], keys, `${material}_sword`);
+  recipe(`${material}_hoe`, ["MM", " S", " S"], keys, `${material}_hoe`);
 }
 recipe("iron_helmet", ["III", "I I"], { I: "iron_ingot" }, "iron_helmet");
 recipe(
@@ -68,7 +69,14 @@ recipe(
 );
 recipe("iron_boots", ["I I", "I I"], { I: "iron_ingot" }, "iron_boots");
 
+recipe("bread", ["WWW"], { W: "wheat" }, "bread");
+recipe("bowl", ["P P", " P "], { P: "planks" }, "bowl", 4);
+recipe("bucket", ["I I", " I "], { I: "iron_ingot" }, "bucket");
+recipe("shears", [" I", "I "], { I: "iron_ingot" }, "shears");
+RECIPES.push({ id: "beetroot_soup", name: "甜菜汤", ingredients: { beetroot: 6, bowl: 1 }, output: { id: "beetroot_soup", count: 1 }, station: "workbench" });
+
 export const SMELTING: Record<string, { output: string; count: number }> = {
+  potato: { output: "baked_potato", count: 1 },
   raw_iron: { output: "iron_ingot", count: 1 },
   log: { output: "charcoal", count: 1 },
   raw_pork: { output: "cooked_pork", count: 1 },

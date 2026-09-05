@@ -1,3 +1,4 @@
+import type { FarmState } from "./farming";
 export type Vec3 = { x: number; y: number; z: number };
 export type GameMode = "survival" | "creative";
 export type ItemStack = { id: string; count: number; durability?: number };
@@ -28,6 +29,13 @@ export interface EntityState {
   yaw: number;
   timer: number;
   fuse?: number;
+  /** Seconds until adulthood (negative), love and breeding cooldown. */
+  age?: number;
+  love?: number;
+  breedCooldown?: number;
+  courtship?: number;
+  sheared?: boolean;
+  woolTimer?: number;
 }
 export interface DropState {
   id: string;
@@ -48,8 +56,8 @@ export type ContainerState =
       progress: number;
     };
 export interface SaveManifest {
-  version: 1;
-  generatorVersion: 1;
+  version: 1 | 2;
+  generatorVersion: 1 | 2;
   id: string;
   name: string;
   seed: string;
@@ -66,6 +74,7 @@ export interface SaveData {
   entities: EntityState[];
   drops: DropState[];
   time: number;
+  farming?: FarmState;
 }
 export interface Settings {
   renderDistance: number;
@@ -87,7 +96,7 @@ export interface BlockDefinition {
   drop?: string;
   tool?: "pickaxe" | "axe" | "shovel";
   tier?: number;
-  shape?: "cube" | "slab" | "door" | "ladder" | "torch" | "bed";
+  shape?: "cube" | "slab" | "door" | "ladder" | "torch" | "bed" | "crop" | "farmland";
 }
 export interface ItemDefinition {
   id: string;
@@ -97,11 +106,12 @@ export interface ItemDefinition {
   block?: number;
   texture?: number;
   color?: string;
-  tool?: "pickaxe" | "axe" | "shovel" | "sword";
+  tool?: "pickaxe" | "axe" | "shovel" | "sword" | "hoe";
   tier?: number;
   maxDurability?: number;
   damage?: number;
   food?: number;
+  foodRemainder?: string;
   fuel?: number;
   armorSlot?: ArmorSlot;
   armorPoints?: number;

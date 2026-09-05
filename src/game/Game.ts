@@ -167,6 +167,7 @@ export class Game implements GameUIBridge {
       data.manifest.seed,
       data.changes,
       data.manifest.id,
+      data.manifest.generatorVersion,
     );
     this.simulation = new Simulation(this.world, data, (e) =>
       this.handleEvent(e),
@@ -549,6 +550,9 @@ export class Game implements GameUIBridge {
           add(metal, 0, 0.24, 0, 0.33, 0.075, 0.055);
         else if (item.tool === "axe") {
           add(metal, 0.08, 0.2, 0, 0.18, 0.18, 0.06);
+        } else if (item.tool === "hoe") {
+          add(metal, 0.06, 0.23, 0, 0.19, 0.07, 0.055);
+          add(metal, 0.14, 0.18, 0, 0.055, 0.11, 0.055);
         } else add(metal, 0, 0.22, 0, 0.14, 0.17, 0.055);
         this.hand.rotation.z = -0.4;
       } else if (item?.block !== undefined) {

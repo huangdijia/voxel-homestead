@@ -118,6 +118,7 @@ export function sampleBlock(
   x: number,
   y: number,
   z: number,
+  generatorVersion: 1 | 2 = 1,
 ): number {
   x = Math.floor(x);
   y = Math.floor(y);
@@ -128,7 +129,11 @@ export function sampleBlock(
   if (y > top) {
     if (y <= SEA_LEVEL) return 6;
     if (y > top + 9) return 0;
-    return treeAt(seed, x, y, z);
+    const tree = treeAt(seed, x, y, z);
+    if (tree) return tree;
+    // Version 1 terrain remains byte-for-byte unchanged for existing saves.
+    if (generatorVersion >= 2 && y === top + 1 && top > SEA_LEVEL + 1 && Math.hypot(x, z) > 2 && hash(seedNumber(seed) + 521, x, y, z) < 0.24) return 58;
+    return 0;
   }
   const s = seedNumber(seed);
   const starterTunnel =
