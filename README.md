@@ -4,6 +4,10 @@
 
 功能参照 Minecraft Java 1.21.1，目标分阶段对齐玩法与内容。当前不是原版全功能实现，也不兼容原版存档、模组或服务器协议。后续内容见 [功能覆盖表](docs/FEATURES.md)。
 
+## 在线体验
+
+[打开在线站点](https://voxel-homestead.huangdijia.chatgpt.site)
+
 ## 本地运行
 
 需要 Node.js 22.12+（本机验证 Node 24）和 pnpm 9+。
