@@ -1,0 +1,1160 @@
+{
+  "status": "complete",
+  "method": "900 wall-clock seconds, automated 4 blocks/s flight; real renderer, worker, simulation and autosave. Camera position is a development fixture, not manual control.",
+  "durationSeconds": 900,
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "dpr": 1,
+    "renderDpr": 1
+  },
+  "settings": {
+    "renderDistance": 6,
+    "quality": "medium",
+    "fov": 75
+  },
+  "world": "性能验证 · 15分钟原野",
+  "samples": [
+    {
+      "seconds": 0,
+      "position": {
+        "x": 0.5,
+        "y": 31,
+        "z": 0.5
+      },
+      "frames": 0,
+      "averageFps": 0,
+      "p95": 0,
+      "geometries": 350,
+      "textures": 3,
+      "saveQueue": 1,
+      "drawCalls": 321,
+      "chunks": 676,
+      "pending": 0,
+      "heapBytes": 114448438
+    },
+    {
+      "seconds": 15.02,
+      "position": {
+        "x": 60.562400000000025,
+        "y": 42,
+        "z": 0.5
+      },
+      "frames": 901,
+      "averageFps": 60.004262233943344,
+      "p95": 18,
+      "geometries": 508,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 249,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 120634024
+    },
+    {
+      "seconds": 30.03,
+      "position": {
+        "x": 120.62440000000004,
+        "y": 42,
+        "z": 0.5
+      },
+      "frames": 1802,
+      "averageFps": 60.00446204101747,
+      "p95": 18.10000000000582,
+      "geometries": 628,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 238,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 117884326
+    },
+    {
+      "seconds": 45.05,
+      "position": {
+        "x": 180.68640000000002,
+        "y": 42,
+        "z": 0.5
+      },
+      "frames": 2703,
+      "averageFps": 60.00452864367122,
+      "p95": 18.10000000000582,
+      "geometries": 645,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 254,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 138087054
+    },
+    {
+      "seconds": 60.06,
+      "position": {
+        "x": 240.74120000000005,
+        "y": 41,
+        "z": 0.5
+      },
+      "frames": 3604,
+      "averageFps": 60.006360274590705,
+      "p95": 18.10000000000582,
+      "geometries": 645,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 289,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 135554204
+    },
+    {
+      "seconds": 75.06,
+      "position": {
+        "x": 300.74520000000007,
+        "y": 42,
+        "z": 0.5
+      },
+      "frames": 4504,
+      "averageFps": 60.00428982711463,
+      "p95": 18.19999999999709,
+      "geometries": 649,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 239,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 123606790
+    },
+    {
+      "seconds": 90.08,
+      "position": {
+        "x": 360.8076,
+        "y": 36,
+        "z": 0.5
+      },
+      "frames": 5405,
+      "averageFps": 60.004285227400146,
+      "p95": 18.199999999982538,
+      "geometries": 639,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 235,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 128133348
+    },
+    {
+      "seconds": 105.09,
+      "position": {
+        "x": 420.8704,
+        "y": 32,
+        "z": 0.5
+      },
+      "frames": 6306,
+      "averageFps": 60.00422484551719,
+      "p95": 18.199999999982538,
+      "geometries": 649,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 265,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 127660978
+    },
+    {
+      "seconds": 120.11,
+      "position": {
+        "x": 480.93280000000004,
+        "y": 38,
+        "z": 0.5
+      },
+      "frames": 7207,
+      "averageFps": 60.004229519716375,
+      "p95": 18.19999999999709,
+      "geometries": 627,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 265,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 123283632
+    },
+    {
+      "seconds": 135.12,
+      "position": {
+        "x": 540.9888000000001,
+        "y": 39,
+        "z": 0.5
+      },
+      "frames": 8108,
+      "averageFps": 60.00494367320838,
+      "p95": 18.29999999998836,
+      "geometries": 653,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 242,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 118948365
+    },
+    {
+      "seconds": 150.12,
+      "position": {
+        "x": 600.992,
+        "y": 35,
+        "z": 0.5
+      },
+      "frames": 9008,
+      "averageFps": 60.004129946777105,
+      "p95": 18.30000000000291,
+      "geometries": 638,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 251,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 113992423
+    },
+    {
+      "seconds": 165.14,
+      "position": {
+        "x": 661.0548,
+        "y": 43,
+        "z": 0.5
+      },
+      "frames": 9909,
+      "averageFps": 60.00410563968364,
+      "p95": 18.29999999998836,
+      "geometries": 607,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 230,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 126444524
+    },
+    {
+      "seconds": 180.15,
+      "position": {
+        "x": 721.1124,
+        "y": 47,
+        "z": 0.5
+      },
+      "frames": 10810,
+      "averageFps": 60.004518379090385,
+      "p95": 18.29999999998836,
+      "geometries": 605,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 243,
+      "chunks": 843,
+      "pending": 2,
+      "heapBytes": 127663319
+    },
+    {
+      "seconds": 195.15,
+      "position": {
+        "x": 781.1136,
+        "y": 46,
+        "z": 0.5
+      },
+      "frames": 11710,
+      "averageFps": 60.00407884259313,
+      "p95": 18.20000000001164,
+      "geometries": 592,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 216,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 128672711
+    },
+    {
+      "seconds": 210.17,
+      "position": {
+        "x": 841.1764000000001,
+        "y": 43,
+        "z": 0.5
+      },
+      "frames": 12611,
+      "averageFps": 60.00406339466703,
+      "p95": 18.20000000001164,
+      "geometries": 637,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 276,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 114783239
+    },
+    {
+      "seconds": 225.18,
+      "position": {
+        "x": 900.5,
+        "y": 36,
+        "z": 1.2395999999999958
+      },
+      "frames": 13512,
+      "averageFps": 60.00402336035904,
+      "p95": 18.20000000001164,
+      "geometries": 686,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 285,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 134023453
+    },
+    {
+      "seconds": 240.2,
+      "position": {
+        "x": 900.5,
+        "y": 35,
+        "z": 61.30320000000006
+      },
+      "frames": 14413,
+      "averageFps": 60.00396335066261,
+      "p95": 18.20000000001164,
+      "geometries": 674,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 234,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 131029417
+    },
+    {
+      "seconds": 255.22,
+      "position": {
+        "x": 900.5,
+        "y": 44,
+        "z": 121.3660000000001
+      },
+      "frames": 15314,
+      "averageFps": 60.00395742438072,
+      "p95": 18.20000000001164,
+      "geometries": 628,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 215,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 135958177
+    },
+    {
+      "seconds": 270.23,
+      "position": {
+        "x": 900.5,
+        "y": 44,
+        "z": 181.42920000000026
+      },
+      "frames": 16215,
+      "averageFps": 60.003929952117446,
+      "p95": 18.20000000001164,
+      "geometries": 610,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 250,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 124456885
+    },
+    {
+      "seconds": 285.25,
+      "position": {
+        "x": 900.5,
+        "y": 43,
+        "z": 241.49239999999986
+      },
+      "frames": 17116,
+      "averageFps": 60.003905372199206,
+      "p95": 18.20000000001164,
+      "geometries": 649,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 317,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 125288421
+    },
+    {
+      "seconds": 300.26,
+      "position": {
+        "x": 900.5,
+        "y": 35,
+        "z": 301.54920000000016
+      },
+      "frames": 18016,
+      "averageFps": 60.00087257041461,
+      "p95": 18.20000000001164,
+      "geometries": 689,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 266,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 108417665
+    },
+    {
+      "seconds": 315.26,
+      "position": {
+        "x": 900.5,
+        "y": 37,
+        "z": 361.5527999999997
+      },
+      "frames": 18916,
+      "averageFps": 60.000659766187,
+      "p95": 18.29999999998836,
+      "geometries": 728,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 262,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 125907060
+    },
+    {
+      "seconds": 330.28,
+      "position": {
+        "x": 900.5,
+        "y": 36,
+        "z": 421.6152000000002
+      },
+      "frames": 19817,
+      "averageFps": 60.00082354665097,
+      "p95": 18.29999999998836,
+      "geometries": 715,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 279,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 111568748
+    },
+    {
+      "seconds": 345.29,
+      "position": {
+        "x": 900.5,
+        "y": 35,
+        "z": 481.6747999999997
+      },
+      "frames": 20718,
+      "averageFps": 60.00109472023163,
+      "p95": 18.29999999998836,
+      "geometries": 703,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 292,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 111887200
+    },
+    {
+      "seconds": 360.31,
+      "position": {
+        "x": 900.5,
+        "y": 36,
+        "z": 541.7427999999998
+      },
+      "frames": 21619,
+      "averageFps": 60.00099358692164,
+      "p95": 18.29999999998836,
+      "geometries": 686,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 237,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 109098650
+    },
+    {
+      "seconds": 375.33,
+      "position": {
+        "x": 900.5,
+        "y": 39,
+        "z": 601.8044
+      },
+      "frames": 22520,
+      "averageFps": 60.00115632778868,
+      "p95": 18.20000000001164,
+      "geometries": 684,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 258,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 108339160
+    },
+    {
+      "seconds": 390.34,
+      "position": {
+        "x": 900.5,
+        "y": 42,
+        "z": 661.8679999999999
+      },
+      "frames": 23421,
+      "averageFps": 60.00122969088453,
+      "p95": 18.20000000001164,
+      "geometries": 683,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 281,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 122623374
+    },
+    {
+      "seconds": 405.36,
+      "position": {
+        "x": 900.5,
+        "y": 40,
+        "z": 721.9332000000002
+      },
+      "frames": 24322,
+      "averageFps": 60.00123841055988,
+      "p95": 18.20000000001164,
+      "geometries": 685,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 283,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 127203939
+    },
+    {
+      "seconds": 420.37,
+      "position": {
+        "x": 900.5,
+        "y": 33,
+        "z": 781.9967999999999
+      },
+      "frames": 25223,
+      "averageFps": 60.001303600457035,
+      "p95": 18.20000000001164,
+      "geometries": 683,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 240,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 112915591
+    },
+    {
+      "seconds": 435.39,
+      "position": {
+        "x": 900.5,
+        "y": 31,
+        "z": 842.058
+      },
+      "frames": 26124,
+      "averageFps": 60.00144698023093,
+      "p95": 18.20000000001164,
+      "geometries": 697,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 259,
+      "chunks": 676,
+      "pending": 0,
+      "heapBytes": 128652043
+    },
+    {
+      "seconds": 450.41,
+      "position": {
+        "x": 898.8763999999999,
+        "y": 34,
+        "z": 900.5
+      },
+      "frames": 27025,
+      "averageFps": 60.00143426185025,
+      "p95": 18.20000000001164,
+      "geometries": 669,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 260,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 121605443
+    },
+    {
+      "seconds": 465.42,
+      "position": {
+        "x": 838.8183999999999,
+        "y": 40,
+        "z": 900.5
+      },
+      "frames": 27926,
+      "averageFps": 60.00166730981173,
+      "p95": 18.20000000001164,
+      "geometries": 664,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 262,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 120340730
+    },
+    {
+      "seconds": 480.42,
+      "position": {
+        "x": 778.8183999999999,
+        "y": 43,
+        "z": 900.5
+      },
+      "frames": 28826,
+      "averageFps": 60.0016152519741,
+      "p95": 18.20000000001164,
+      "geometries": 641,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 264,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 113622474
+    },
+    {
+      "seconds": 495.44,
+      "position": {
+        "x": 718.7523999999999,
+        "y": 46,
+        "z": 900.5
+      },
+      "frames": 29727,
+      "averageFps": 60.00158647851926,
+      "p95": 18.20000000001164,
+      "geometries": 644,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 295,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 111263717
+    },
+    {
+      "seconds": 510.45,
+      "position": {
+        "x": 658.6959999999999,
+        "y": 39,
+        "z": 900.5
+      },
+      "frames": 30628,
+      "averageFps": 60.00184150878243,
+      "p95": 18.20000000001164,
+      "geometries": 673,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 271,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 123251858
+    },
+    {
+      "seconds": 525.45,
+      "position": {
+        "x": 598.6916000000001,
+        "y": 38,
+        "z": 900.5
+      },
+      "frames": 31528,
+      "averageFps": 60.00166332954101,
+      "p95": 18.20000000001164,
+      "geometries": 687,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 287,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 127294716
+    },
+    {
+      "seconds": 540.47,
+      "position": {
+        "x": 538.6280000000002,
+        "y": 39,
+        "z": 900.5
+      },
+      "frames": 32429,
+      "averageFps": 60.001702228442134,
+      "p95": 18.20000000001164,
+      "geometries": 692,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 289,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 115350281
+    },
+    {
+      "seconds": 555.48,
+      "position": {
+        "x": 478.56439999999975,
+        "y": 37,
+        "z": 900.5
+      },
+      "frames": 33330,
+      "averageFps": 60.001739024302005,
+      "p95": 18.20000000001164,
+      "geometries": 688,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 313,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 121011893
+    },
+    {
+      "seconds": 570.5,
+      "position": {
+        "x": 418.50080000000025,
+        "y": 38,
+        "z": 900.5
+      },
+      "frames": 34231,
+      "averageFps": 60.001773883183986,
+      "p95": 18.20000000001164,
+      "geometries": 674,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 246,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 115254771
+    },
+    {
+      "seconds": 585.52,
+      "position": {
+        "x": 358.43680000000046,
+        "y": 40,
+        "z": 900.5
+      },
+      "frames": 35132,
+      "averageFps": 60.00179670642765,
+      "p95": 18.20000000001164,
+      "geometries": 659,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 262,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 120940837
+    },
+    {
+      "seconds": 600.53,
+      "position": {
+        "x": 298.37319999999994,
+        "y": 43,
+        "z": 900.5
+      },
+      "frames": 36033,
+      "averageFps": 60.00182837975345,
+      "p95": 18.29999999993015,
+      "geometries": 662,
+      "textures": 3,
+      "saveQueue": 0,
+      "drawCalls": 283,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 125649473
+    },
+    {
+      "seconds": 615.55,
+      "position": {
+        "x": 238.30960000000007,
+        "y": 36,
+        "z": 900.5
+      },
+      "frames": 36933,
+      "averageFps": 60.000233938044545,
+      "p95": 18.20000000006985,
+      "geometries": 672,
+      "textures": 4,
+      "saveQueue": 0,
+      "drawCalls": 300,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 104729349
+    },
+    {
+      "seconds": 630.56,
+      "position": {
+        "x": 178.24560000000017,
+        "y": 35,
+        "z": 900.5
+      },
+      "frames": 37834,
+      "averageFps": 60.00029180244748,
+      "p95": 18.20000000006985,
+      "geometries": 662,
+      "textures": 4,
+      "saveQueue": 0,
+      "drawCalls": 243,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 103324763
+    },
+    {
+      "seconds": 645.58,
+      "position": {
+        "x": 118.18199999999977,
+        "y": 32,
+        "z": 900.5
+      },
+      "frames": 38735,
+      "averageFps": 60.00035626905976,
+      "p95": 18.20000000001164,
+      "geometries": 657,
+      "textures": 4,
+      "saveQueue": 0,
+      "drawCalls": 249,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 105229655
+    },
+    {
+      "seconds": 660.6,
+      "position": {
+        "x": 58.118399999999795,
+        "y": 39,
+        "z": 900.5
+      },
+      "frames": 39635,
+      "averageFps": 59.998904019013295,
+      "p95": 18.20000000001164,
+      "geometries": 634,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 263,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 121999795
+    },
+    {
+      "seconds": 675.61,
+      "position": {
+        "x": 0.5,
+        "y": 42,
+        "z": 898.0548000000003
+      },
+      "frames": 40535,
+      "averageFps": 59.997516323366725,
+      "p95": 18.20000000001164,
+      "geometries": 646,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 253,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 108703160
+    },
+    {
+      "seconds": 690.63,
+      "position": {
+        "x": 0.5,
+        "y": 46,
+        "z": 837.9912000000004
+      },
+      "frames": 41436,
+      "averageFps": 59.99763693060288,
+      "p95": 18.20000000001164,
+      "geometries": 635,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 248,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 117535475
+    },
+    {
+      "seconds": 705.64,
+      "position": {
+        "x": 0.5,
+        "y": 45,
+        "z": 777.9276
+      },
+      "frames": 42337,
+      "averageFps": 59.997752404861416,
+      "p95": 18.20000000001164,
+      "geometries": 627,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 261,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 133742628
+    },
+    {
+      "seconds": 720.66,
+      "position": {
+        "x": 0.5,
+        "y": 42,
+        "z": 717.8636000000001
+      },
+      "frames": 43238,
+      "averageFps": 59.997854741581826,
+      "p95": 18.20000000001164,
+      "geometries": 650,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 302,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 107524610
+    },
+    {
+      "seconds": 735.68,
+      "position": {
+        "x": 0.5,
+        "y": 38,
+        "z": 657.8000000000002
+      },
+      "frames": 44139,
+      "averageFps": 59.99796105617244,
+      "p95": 18.20000000001164,
+      "geometries": 650,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 256,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 119271195
+    },
+    {
+      "seconds": 750.69,
+      "position": {
+        "x": 0.5,
+        "y": 38,
+        "z": 597.736
+      },
+      "frames": 45040,
+      "averageFps": 59.99805512521252,
+      "p95": 18.20000000001164,
+      "geometries": 646,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 259,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 129566037
+    },
+    {
+      "seconds": 765.71,
+      "position": {
+        "x": 0.5,
+        "y": 40,
+        "z": 537.6723999999998
+      },
+      "frames": 45941,
+      "averageFps": 59.99815334040158,
+      "p95": 18.19999999999709,
+      "geometries": 617,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 259,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 118953428
+    },
+    {
+      "seconds": 780.72,
+      "position": {
+        "x": 0.5,
+        "y": 47,
+        "z": 477.6088000000004
+      },
+      "frames": 46842,
+      "averageFps": 59.99824777758017,
+      "p95": 18.199999999982538,
+      "geometries": 635,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 306,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 134355050
+    },
+    {
+      "seconds": 795.74,
+      "position": {
+        "x": 0.5,
+        "y": 39,
+        "z": 417.54519999999997
+      },
+      "frames": 47743,
+      "averageFps": 59.99833865062592,
+      "p95": 18.199999999982538,
+      "geometries": 658,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 273,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 128810980
+    },
+    {
+      "seconds": 810.75,
+      "position": {
+        "x": 0.5,
+        "y": 39,
+        "z": 357.4816000000001
+      },
+      "frames": 48644,
+      "averageFps": 59.99842615757107,
+      "p95": 18.199999999953434,
+      "geometries": 670,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 263,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 126936120
+    },
+    {
+      "seconds": 825.77,
+      "position": {
+        "x": 0.5,
+        "y": 42,
+        "z": 297.4180000000001
+      },
+      "frames": 49545,
+      "averageFps": 59.99851048204455,
+      "p95": 18.199999999953434,
+      "geometries": 675,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 279,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 123438189
+    },
+    {
+      "seconds": 840.79,
+      "position": {
+        "x": 0.5,
+        "y": 43,
+        "z": 237.35399999999981
+      },
+      "frames": 50446,
+      "averageFps": 59.99858465854918,
+      "p95": 18.199999999953434,
+      "geometries": 674,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 312,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 130647618
+    },
+    {
+      "seconds": 855.8,
+      "position": {
+        "x": 0.5,
+        "y": 40,
+        "z": 177.29039999999983
+      },
+      "frames": 51347,
+      "averageFps": 59.99866324284364,
+      "p95": 18.199999999953434,
+      "geometries": 679,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 279,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 126656065
+    },
+    {
+      "seconds": 870.82,
+      "position": {
+        "x": 0.5,
+        "y": 30,
+        "z": 117.22640000000003
+      },
+      "frames": 52248,
+      "averageFps": 59.998732227085924,
+      "p95": 18.199999999953434,
+      "geometries": 698,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 271,
+      "chunks": 676,
+      "pending": 0,
+      "heapBytes": 132232616
+    },
+    {
+      "seconds": 885.83,
+      "position": {
+        "x": 0.5,
+        "y": 37,
+        "z": 57.16319999999997
+      },
+      "frames": 53149,
+      "averageFps": 59.99881241887196,
+      "p95": 18.199999999953434,
+      "geometries": 679,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 348,
+      "chunks": 845,
+      "pending": 0,
+      "heapBytes": 121297250
+    },
+    {
+      "seconds": 900,
+      "position": {
+        "x": 0.5,
+        "y": 31,
+        "z": 0.5
+      },
+      "frames": 53999,
+      "averageFps": 59.99886888929209,
+      "p95": 18.199999999953434,
+      "geometries": 663,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 243,
+      "chunks": 676,
+      "pending": 0,
+      "heapBytes": 116939439
+    }
+  ],
+  "hiddenFrames": 0,
+  "pausedFrames": 0,
+  "start": "2026-09-05T00:01:31.338Z",
+  "end": "2026-09-05T00:16:31.406Z",
+  "elapsedSeconds": 900.0002999999999,
+  "final": {
+    "seconds": 900,
+    "position": {
+      "x": 0.5,
+      "y": 31,
+      "z": 0.5
+    },
+    "frames": 53999,
+    "averageFps": 59.99886888929209,
+    "p95": 18.199999999953434,
+    "geometries": 663,
+    "textures": 5,
+    "saveQueue": 0,
+    "drawCalls": 243,
+    "chunks": 676,
+    "pending": 0,
+    "heapBytes": 116939439
+  },
+  "returnSettled": {
+    "metrics": {
+      "frames": 54000,
+      "averageFps": 59.996560197239894,
+      "p95": 18.100000000034925,
+      "geometries": 663,
+      "textures": 5,
+      "saveQueue": 0,
+      "drawCalls": 240,
+      "chunks": 676,
+      "pending": 0
+    },
+    "chunks": {
+      "chunks": 676,
+      "pending": 0
+    },
+    "meshes": 658,
+    "secondsAfterEnd": 61.373,
+    "heapBytes": 127488787
+  }
+}

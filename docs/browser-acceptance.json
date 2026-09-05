@@ -1,0 +1,450 @@
+{
+  "version": 1,
+  "passed": true,
+  "verification": "Automated real Game + VoxelWorld integration; explicitly placed developer fixtures; accelerated simulation, not manual playthrough.",
+  "world": {
+    "id": "e6859d29-95c1-4db8-9080-bb9abaf1be3e",
+    "name": "铁器工坊",
+    "seed": "M1-acceptance-20260905",
+    "mode": "survival"
+  },
+  "fixture": {
+    "rawResourceBlocks": {
+      "log": 20,
+      "cobblestone": 11,
+      "raw_iron": 33,
+      "wool": 3
+    },
+    "directInventoryGrants": 0,
+    "shellBlocks": 160,
+    "platform": {
+      "xMin": -6,
+      "xMax": 6,
+      "zMin": -7,
+      "zMax": 4,
+      "floorY": 28
+    },
+    "playerPositionIsDeveloperFixture": true,
+    "interactables": {
+      "workbench": {
+        "x": -2,
+        "y": 29,
+        "z": -3
+      },
+      "furnace": {
+        "x": 0,
+        "y": 29,
+        "z": -4
+      },
+      "chest": {
+        "x": 2,
+        "y": 29,
+        "z": -3
+      },
+      "bed": {
+        "x": -3,
+        "y": 29,
+        "z": -4
+      },
+      "door": {
+        "x": 0,
+        "y": 29,
+        "z": 2
+      }
+    }
+  },
+  "simulation": {
+    "fixedStepSeconds": 0.05,
+    "advancedSeconds": 539.5,
+    "fullIron": true
+  },
+  "stages": [
+    {
+      "name": "empty_inventory",
+      "totals": {},
+      "inventory": [],
+      "armor": {
+        "head": null,
+        "chest": null,
+        "legs": null,
+        "feet": null
+      },
+      "time": 1000,
+      "inventoryEmpty": true
+    },
+    {
+      "name": "wood_tools",
+      "totals": {
+        "log": 6,
+        "planks": 37,
+        "stick": 22,
+        "wood_pickaxe": 1
+      },
+      "inventory": [
+        {
+          "id": "log",
+          "count": 6
+        },
+        {
+          "id": "planks",
+          "count": 37
+        },
+        {
+          "id": "wood_pickaxe",
+          "count": 1,
+          "durability": 59
+        },
+        {
+          "id": "stick",
+          "count": 22
+        }
+      ],
+      "armor": {
+        "head": null,
+        "chest": null,
+        "legs": null,
+        "feet": null
+      },
+      "time": 2500,
+      "workbenchPlaced": true
+    },
+    {
+      "name": "coal_free_torches",
+      "totals": {
+        "log": 5,
+        "planks": 36,
+        "stick": 19,
+        "stone_pickaxe": 1,
+        "torch": 4,
+        "wood_pickaxe": 1
+      },
+      "inventory": [
+        {
+          "id": "log",
+          "count": 5
+        },
+        {
+          "id": "planks",
+          "count": 36
+        },
+        {
+          "id": "wood_pickaxe",
+          "count": 1,
+          "durability": 48
+        },
+        {
+          "id": "stick",
+          "count": 19
+        },
+        {
+          "id": "torch",
+          "count": 4
+        },
+        {
+          "id": "stone_pickaxe",
+          "count": 1,
+          "durability": 131
+        }
+      ],
+      "armor": {
+        "head": null,
+        "chest": null,
+        "legs": null,
+        "feet": null
+      },
+      "time": 3043,
+      "torches": 4,
+      "coal": 0
+    },
+    {
+      "name": "iron_smelting",
+      "totals": {
+        "iron_ingot": 33,
+        "planks": 32,
+        "stick": 19,
+        "stone_pickaxe": 1,
+        "torch": 4,
+        "wood_pickaxe": 1
+      },
+      "inventory": [
+        {
+          "id": "iron_ingot",
+          "count": 33
+        },
+        {
+          "id": "planks",
+          "count": 32
+        },
+        {
+          "id": "wood_pickaxe",
+          "count": 1,
+          "durability": 48
+        },
+        {
+          "id": "stick",
+          "count": 19
+        },
+        {
+          "id": "torch",
+          "count": 4
+        },
+        {
+          "id": "stone_pickaxe",
+          "count": 1,
+          "durability": 98
+        }
+      ],
+      "armor": {
+        "head": null,
+        "chest": null,
+        "legs": null,
+        "feet": null
+      },
+      "time": 11670,
+      "smeltedIngots": 33
+    },
+    {
+      "name": "iron_equipment_earned",
+      "totals": {
+        "iron_axe": 1,
+        "iron_boots": 1,
+        "iron_chestplate": 1,
+        "iron_helmet": 1,
+        "iron_leggings": 1,
+        "iron_pickaxe": 1,
+        "iron_shovel": 1,
+        "iron_sword": 1,
+        "planks": 32,
+        "stick": 12,
+        "stone_pickaxe": 1,
+        "torch": 4,
+        "wood_pickaxe": 1
+      },
+      "inventory": [
+        {
+          "id": "planks",
+          "count": 32
+        },
+        {
+          "id": "wood_pickaxe",
+          "count": 1,
+          "durability": 48
+        },
+        {
+          "id": "stick",
+          "count": 12
+        },
+        {
+          "id": "torch",
+          "count": 4
+        },
+        {
+          "id": "stone_pickaxe",
+          "count": 1,
+          "durability": 98
+        },
+        {
+          "id": "iron_pickaxe",
+          "count": 1,
+          "durability": 250
+        },
+        {
+          "id": "iron_axe",
+          "count": 1,
+          "durability": 250
+        },
+        {
+          "id": "iron_shovel",
+          "count": 1,
+          "durability": 250
+        },
+        {
+          "id": "iron_sword",
+          "count": 1,
+          "durability": 250
+        }
+      ],
+      "armor": {
+        "head": {
+          "id": "iron_helmet",
+          "count": 1,
+          "durability": 165
+        },
+        "chest": {
+          "id": "iron_chestplate",
+          "count": 1,
+          "durability": 240
+        },
+        "legs": {
+          "id": "iron_leggings",
+          "count": 1,
+          "durability": 225
+        },
+        "feet": {
+          "id": "iron_boots",
+          "count": 1,
+          "durability": 195
+        }
+      },
+      "time": 11670,
+      "armorEquipped": 4
+    },
+    {
+      "name": "shelter_bed_chest",
+      "totals": {
+        "door": 2,
+        "iron_axe": 1,
+        "iron_boots": 1,
+        "iron_chestplate": 1,
+        "iron_helmet": 1,
+        "iron_leggings": 1,
+        "iron_pickaxe": 1,
+        "iron_shovel": 1,
+        "iron_sword": 1,
+        "planks": 15,
+        "stick": 12,
+        "stone_pickaxe": 1,
+        "torch": 2,
+        "wood_pickaxe": 1
+      },
+      "inventory": [
+        {
+          "id": "door",
+          "count": 2
+        },
+        {
+          "id": "planks",
+          "count": 15
+        },
+        {
+          "id": "stick",
+          "count": 12
+        },
+        {
+          "id": "torch",
+          "count": 2
+        },
+        {
+          "id": "iron_pickaxe",
+          "count": 1,
+          "durability": 247
+        },
+        {
+          "id": "iron_axe",
+          "count": 1,
+          "durability": 250
+        },
+        {
+          "id": "iron_shovel",
+          "count": 1,
+          "durability": 250
+        },
+        {
+          "id": "iron_sword",
+          "count": 1,
+          "durability": 250
+        }
+      ],
+      "armor": {
+        "head": {
+          "id": "iron_helmet",
+          "count": 1,
+          "durability": 165
+        },
+        "chest": {
+          "id": "iron_chestplate",
+          "count": 1,
+          "durability": 240
+        },
+        "legs": {
+          "id": "iron_leggings",
+          "count": 1,
+          "durability": 225
+        },
+        "feet": {
+          "id": "iron_boots",
+          "count": 1,
+          "durability": 195
+        }
+      },
+      "time": 1000,
+      "note": "Shelter shell is a developer screenshot fixture; earned bed/chest/door/torches are placed by game rules.",
+      "sleptToMorning": true
+    }
+  ],
+  "saves": [
+    {
+      "label": "charcoal_mid_smelting",
+      "identical": true,
+      "totals": {
+        "log": 6,
+        "planks": 36,
+        "stick": 20,
+        "stone_pickaxe": 1,
+        "wood_pickaxe": 1
+      },
+      "changes": 166,
+      "containers": [
+        "0,29,-4"
+      ],
+      "savedAt": 1788566299223
+    },
+    {
+      "label": "iron_mid_smelting",
+      "identical": true,
+      "totals": {
+        "charcoal": 4,
+        "planks": 32,
+        "raw_iron": 33,
+        "stick": 19,
+        "stone_pickaxe": 1,
+        "torch": 4,
+        "wood_pickaxe": 1
+      },
+      "changes": 166,
+      "containers": [
+        "0,29,-4"
+      ],
+      "savedAt": 1788566300264
+    },
+    {
+      "label": "finished_fixture",
+      "identical": true,
+      "totals": {
+        "door": 2,
+        "iron_axe": 1,
+        "iron_boots": 1,
+        "iron_chestplate": 1,
+        "iron_helmet": 1,
+        "iron_leggings": 1,
+        "iron_pickaxe": 1,
+        "iron_shovel": 1,
+        "iron_sword": 1,
+        "planks": 15,
+        "stick": 12,
+        "stone_pickaxe": 1,
+        "torch": 2,
+        "wood_pickaxe": 1
+      },
+      "changes": 333,
+      "containers": [
+        "0,29,-4",
+        "2,29,-3"
+      ],
+      "savedAt": 1788566304604
+    }
+  ],
+  "settings": {
+    "renderDistance": 2
+  },
+  "errors": [],
+  "renderer": {
+    "chunks": 100,
+    "pending": 0,
+    "drawCalls": 64,
+    "geometries": 57,
+    "realMeshesReady": true
+  },
+  "nextUIActions": "Continue the game to inspect the earned iron tool and shelter. Open the chest, furnace or inventory for actual UI screenshots. This acceptance did not simulate DOM clicks or manual play.",
+  "wallMilliseconds": 6442
+}
