@@ -1,3 +1,5 @@
+import type { FluidState } from "./fluids";
+import type { NaturalState } from "./natural-updates";
 import type { FarmState } from "./farming";
 export type Vec3 = { x: number; y: number; z: number };
 export type GameMode = "survival" | "creative";
@@ -56,8 +58,8 @@ export type ContainerState =
       progress: number;
     };
 export interface SaveManifest {
-  version: 1 | 2;
-  generatorVersion: 1 | 2;
+  version: 1 | 2 | 3;
+  generatorVersion: 1 | 2 | 3;
   id: string;
   name: string;
   seed: string;
@@ -76,6 +78,8 @@ export interface SaveData {
   time: number;
   farming?: FarmState;
   composters?: Record<string, number>;
+  fluids?: FluidState;
+  natural?: NaturalState;
 }
 export interface Settings {
   renderDistance: number;
@@ -115,6 +119,7 @@ export interface ItemDefinition {
   food?: number;
   foodRemainder?: string;
   fuel?: number;
+  fuelRemainder?: string;
   armorSlot?: ArmorSlot;
   armorPoints?: number;
 }

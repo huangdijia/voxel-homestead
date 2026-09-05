@@ -64,6 +64,26 @@ describe("chunk job ownership", () => {
     expect(world.getBlock(1, 23, 1)).toBe(11);
     world.dispose();
   });
+  it("refreshes all eight sections sharing an edited fluid corner", () => {
+    const world = new VoxelWorld(
+      new THREE.Scene(),
+      "corner-fluid",
+      [],
+      "corner-fluid",
+    );
+    world.update({ x: -0.5, y: 16, z: -0.5 }, 1);
+    const worker = WorkerDouble.latest;
+    while (world.stats.pending) worker.respond();
+    const before = worker.requests.length;
+    world.setBlock(-1, 15, -1, 6);
+    while (world.stats.pending) worker.respond();
+    const keys = new Set(worker.requests.slice(before).map((r) => r.key));
+    for (const cx of [-1, 0])
+      for (const cy of [0, 1])
+        for (const cz of [-1, 0])
+          expect(keys.has(`${cx},${cy},${cz}`)).toBe(true);
+    world.dispose();
+  });
   it("bounds queued chunks during fast exploration and ignores unloaded results", () => {
     const world = new VoxelWorld(new THREE.Scene(), "test", [], "world-a");
     world.update({ x: 0, y: 23, z: 0 }, 1);

@@ -1,0 +1,56 @@
+{
+  "advancedSeconds": 29.49999999999961,
+  "checkpoints": [
+    {
+      "changes": 780,
+      "fluidTasks": 14,
+      "name": "spreading",
+      "naturalQueue": 0,
+      "same": true,
+      "worldId": "de327a03-2224-4ca9-8309-562c617456ba"
+    }
+  ],
+  "errors": [
+    "Error: Growing tree duplicated sapling"
+  ],
+  "finishedAt": "2026-09-05T01:57:14.067Z",
+  "fixtureGrants": [
+    "Creative test world; elevated platform and lined fluid channels at y=40",
+    "Water/lava sources, sand/gravel, soil and saplings placed through Simulation.setBlock",
+    "Player position and hotbar developer fixtures; fixed steps accelerated at 60 Hz"
+  ],
+  "limitations": [
+    "Programmatic game rule integration, not manual survival acquisition or a frame-rate benchmark",
+    "Page reload and screenshots are recorded separately by the browser operator"
+  ],
+  "passed": false,
+  "stages": [
+    {
+      "generator": 3,
+      "mode": "creative",
+      "name": "preflight",
+      "passed": true,
+      "saveVersion": 3
+    },
+    {
+      "lavaCells": 15,
+      "name": "propagation",
+      "passed": true,
+      "waterCells": 27
+    },
+    {
+      "name": "source-removal",
+      "passed": true
+    },
+    {
+      "name": "contact-obsidian",
+      "passed": true
+    },
+    {
+      "name": "gravity",
+      "passed": true
+    }
+  ],
+  "startedAt": "2026-09-05T01:57:12.676Z",
+  "version": 1
+}

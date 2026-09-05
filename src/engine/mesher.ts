@@ -4,7 +4,14 @@ import {
   CHUNK_SIZE,
   WORLD_MIN_Y,
 } from "./generator";
-import { isOpaque, plantHeight, plantStage } from "./shapes";
+import {
+  fluidSurfaceHeights,
+  fluidSurfaceQuads,
+  isOpaque,
+  plantHeight,
+  plantStage,
+} from "./shapes";
+import { fluidInfo } from "../game/fluid-blocks";
 import type { BlockBox } from "./shapes";
 import type { ChunkRequest, ChunkResult, MeshArrays } from "./protocol";
 
@@ -83,6 +90,8 @@ const tiles: Record<number, number> = {
   25: 11,
   26: 11,
   27: 15,
+  81: 3,
+  82: 8,
 };
 export interface PlantVisualPart {
   box: BlockBox;
@@ -90,6 +99,28 @@ export interface PlantVisualPart {
   tile: number;
 }
 const plantCache = new Map<number, readonly PlantVisualPart[]>();
+/** A bounded seven-part sapling silhouette: stem, crossed branches and leaf clusters. */
+export const saplingVisualParts: readonly PlantVisualPart[] = [
+  { box: [0.47, 0, 0.47, 0.53, 0.72, 0.53], tint: [0.64, 0.49, 0.3], tile: 6 },
+  {
+    box: [0.26, 0.31, 0.47, 0.73, 0.35, 0.53],
+    tint: [0.7, 0.54, 0.32],
+    tile: 6,
+  },
+  {
+    box: [0.47, 0.51, 0.23, 0.53, 0.55, 0.77],
+    tint: [0.7, 0.54, 0.32],
+    tile: 6,
+  },
+  {
+    box: [0.16, 0.32, 0.34, 0.41, 0.51, 0.66],
+    tint: [0.76, 0.95, 0.59],
+    tile: 8,
+  },
+  { box: [0.6, 0.32, 0.35, 0.84, 0.5, 0.65], tint: [0.83, 1, 0.68], tile: 8 },
+  { box: [0.32, 0.53, 0.16, 0.69, 0.69, 0.84], tint: [0.87, 1, 0.67], tile: 8 },
+  { box: [0.34, 0.67, 0.34, 0.66, 0.84, 0.66], tint: [0.95, 1, 0.73], tile: 8 },
+];
 /** Small cached voxel models: no per-frame meshes, textures or materials per plant. */
 export function plantVisualParts(id: number): readonly PlantVisualPart[] {
   const cached = plantCache.get(id);
@@ -397,7 +428,8 @@ export function buildChunk(request: ChunkRequest): ChunkResult {
       if (
         edge &&
         (isOpaque(neighbor) ||
-          (neighbor === id && (id === 6 || id === 8 || id === 17)))
+          (neighbor === id && id === 17) ||
+          ((id === 8 || id === 82) && (neighbor === 8 || neighbor === 82)))
       )
         continue;
       let tile = tileOverride ?? tiles[id] ?? 3;
@@ -443,13 +475,67 @@ export function buildChunk(request: ChunkRequest): ChunkResult {
       b.i.push(base, base + 1, base + 2, base + 2, base + 1, base + 3);
     }
   }
+  function addFluid(x: number, y: number, z: number, id: number) {
+    const info = fluidInfo(id)!;
+    const heights = fluidSurfaceHeights(id, x, y, z, get),
+      quads = fluidSurfaceQuads(heights),
+      lava = info.kind === "lava",
+      b = layers[lava ? 3 : 2];
+    for (let face = 0; face < 6; face++) {
+      const d = directions[face],
+        neighbor = get(x + d[0], y + d[1], z + d[2]),
+        other = fluidInfo(neighbor),
+        atBoundary = face !== 2 || heights.every((height) => height === 1);
+      // All levels of a connected liquid share their corner heights, so the
+      // shared wall is entirely internal. Lava owns any temporary mixed edge.
+      if (
+        other?.kind === info.kind ||
+        (!lava && other?.kind === "lava") ||
+        (atBoundary && isOpaque(neighbor))
+      )
+        continue;
+      const base = b.p.length / 3,
+        depth = roofs[roofOffset(x + d[0], z + d[2])] - (oy + y + d[1]) + 1,
+        sky = depth <= 0 ? 1 : 0.18 + 0.82 * Math.exp(-depth / 2.5),
+        shade = lava
+          ? 1
+          : (face === 2 ? 1 : face === 3 ? 0.52 : face < 2 ? 0.82 : 0.69) * sky;
+      for (let corner = 0; corner < 4; corner++) {
+        const p = quads[face][corner];
+        b.p.push(x + p[0], y + p[1], z + p[2]);
+        b.n.push(...d);
+        const u = corner % 2,
+          v = face === 2 || face === 3 ? (corner >= 2 ? 1 : 0) : p[1],
+          inset = 0.001;
+        b.u.push(
+          (3 + inset + u * (1 - inset * 2)) / 4,
+          1 - (4 - inset - v * (1 - inset * 2)) / 4,
+        );
+        // Existing mottled atlas tile, with hot and cooler corners on an unlit
+        // material. Bright lava remains readable at night and below a cave roof.
+        const heat = lava
+          ? ((((ox + x + oz + z + corner) % 3) + 3) % 3) / 2
+          : 0;
+        const tint = lava
+          ? [1, 0.29 + heat * 0.23, 0.025 + heat * 0.04]
+          : [0.23, 0.61, 0.85];
+        b.c.push(tint[0] * shade, tint[1] * shade, tint[2] * shade);
+      }
+      b.i.push(base, base + 1, base + 2, base + 2, base + 1, base + 3);
+    }
+  }
   for (let y = 0; y < 16; y++)
     for (let z = 0; z < 16; z++)
       for (let x = 0; x < 16; x++) {
         const id = get(x, y, z);
         voxels[y * 256 + z * 16 + x] = id;
         if (!id) continue;
-        if (id >= 59 && id <= 67) {
+        if (fluidInfo(id)) {
+          addFluid(x, y, z, id);
+        } else if (id === 83) {
+          for (const part of saplingVisualParts)
+            addBox(x, y, z, id, part.box, 1, part.tint, part.tile);
+        } else if (id >= 59 && id <= 67) {
           const wood = [0.8, 0.67, 0.46];
           addBox(x, y, z, id, [0.04, 0, 0.04, 0.96, 0.13, 0.96], 0, wood, 11);
           addBox(
@@ -640,16 +726,6 @@ export function buildChunk(request: ChunkRequest): ChunkResult {
               );
         } else if (id === 21) {
           addBox(x, y, z, id, [0, 0, 0, 1, 0.5, 1]);
-        } else if (id === 6) {
-          addBox(
-            x,
-            y,
-            z,
-            id,
-            [0, 0, 0, 1, get(x, y + 1, z) === 6 ? 1 : 0.87, 1],
-            2,
-            [0.23, 0.61, 0.85],
-          );
         } else if (id === 17) {
           addBox(x, y, z, id, [0, 0, 0, 1, 1, 1], 2, [0.75, 0.94, 1]);
         } else {
@@ -659,8 +735,12 @@ export function buildChunk(request: ChunkRequest): ChunkResult {
             z,
             id,
             [0, 0, 0, 1, 1, 1],
-            id === 8 ? 1 : 0,
-            id === 24 ? [0.45, 0.45, 0.48] : [1, 1, 1],
+            id === 8 || id === 82 ? 1 : 0,
+            id === 81
+              ? [0.19, 0.11, 0.28]
+              : id === 24
+                ? [0.45, 0.45, 0.48]
+                : [1, 1, 1],
           );
         }
       }

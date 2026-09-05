@@ -1,3 +1,7 @@
+import { FluidSystem } from "./fluids";
+import { NaturalUpdatesSystem } from "./natural-updates";
+import { fluidSurfaceHeights } from "../engine/shapes";
+import { fluidInfo, isFluid, isWater, isLava } from "./fluid-blocks";
 import type {
   ArmorSlot,
   BlockChange,
@@ -59,8 +63,8 @@ export function createNewSave(
   const spawn = { x: 0.5, y: surfaceHeight(worldSeed, 0, 0) + 1.05, z: 0.5 };
   return {
     manifest: {
-      version: 2,
-      generatorVersion: 2,
+      version: 3,
+      generatorVersion: 3,
       id: uid(),
       name: name.trim() || "新的世界",
       seed: worldSeed,
@@ -98,6 +102,15 @@ export function createNewSave(
       plots: [],
     },
     composters: {},
+    fluids: { version: 1, clock: 0, scanCursor: 0, tasks: [] },
+    natural: {
+      version: 1,
+      randomState: seedNumber(worldSeed),
+      accumulator: 0,
+      scanCursor: 0,
+      queue: [],
+      falling: [],
+    },
   };
 }
 
@@ -110,6 +123,8 @@ export class Simulation {
   drops: DropState[];
   containers: Record<string, ContainerState>;
   readonly farming: FarmingSystem;
+  readonly fluids: FluidSystem;
+  readonly natural: NaturalUpdatesSystem;
   composters: Record<string, number>;
   craftSlots: Slot[] = Array(4).fill(null);
   cursor: Slot = null;
@@ -152,6 +167,24 @@ export class Simulation {
         this.dirty = true;
       },
     });
+    const setBlock = (x: number, y: number, z: number, id: number) =>
+      this.updateNaturalBlock(x, y, z, id);
+    this.fluids = new FluidSystem(world, data.fluids, { setBlock });
+    this.natural = new NaturalUpdatesSystem(
+      world,
+      data.manifest.seed,
+      data.natural,
+      {
+        setBlock,
+        dropItem: (position, stack) => this.spawnDrop(stack, position),
+      },
+    );
+    if (!data.fluids || !data.natural)
+      for (const change of world.getChanges()) {
+        if (!data.fluids) this.fluids.notifyBlockChanged(change, 0, change.id);
+        if (!data.natural)
+          this.natural.notifyBlockChanged(change, 0, change.id);
+      }
     if (!data.farming)
       for (const change of world.getChanges())
         if (change.id === 28 || change.id === 29)
@@ -173,16 +206,57 @@ export class Simulation {
   sound(sound: string) {
     this.emit({ type: "sound", sound });
   }
-  /** All player-originated block changes notify block-dependent simulation systems. */
-  setBlock(x: number, y: number, z: number, id: number) {
-    if (y < -16 || y >= 96 || !this.world.isReady(x, z) || !BLOCKS[id]) return;
+  /** Every authoritative edit wakes neighboring block rules after the write succeeds. */
+  setBlock(x: number, y: number, z: number, id: number): boolean {
+    if (y < -16 || y >= 96 || !this.world.isReady(x, z) || !BLOCKS[id])
+      return false;
     const position = { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) };
     const oldId = this.world.getBlock(position.x, position.y, position.z);
-    if (oldId === id) return;
+    if (oldId === id) return true;
     this.world.setBlock(position.x, position.y, position.z, id);
-    if (this.world.getBlock(position.x, position.y, position.z) === id)
-      this.farming.notifyBlockChanged(position, oldId, id);
+    if (this.world.getBlock(position.x, position.y, position.z) !== id)
+      return false;
+    this.farming.notifyBlockChanged(position, oldId, id);
+    this.fluids?.notifyBlockChanged(position, oldId, id);
+    this.natural?.notifyBlockChanged(position, oldId, id);
     this.dirty = true;
+    return true;
+  }
+  private updateNaturalBlock(
+    x: number,
+    y: number,
+    z: number,
+    id: number,
+  ): boolean {
+    const old = this.world.getBlock(x, y, z);
+    if (!this.setBlock(x, y, z, id)) return false;
+    if (old !== id && old !== 0 && isFluid(id)) {
+      if (cropAt(old))
+        for (const stack of harvestCrop(old, () => this.farming.nextRandom()))
+          this.spawnDrop(stack, { x, y, z });
+      else if (old === 58 && this.farming.nextRandom() < 0.125)
+        this.spawnDrop({ id: "wheat_seeds", count: 1 }, { x, y, z });
+      else if ([16, 20, 83].includes(old)) {
+        const drop = BLOCKS[old].drop;
+        if (drop) this.spawnDrop({ id: drop, count: 1 }, { x, y, z });
+      }
+    }
+    return true;
+  }
+  private fluidAt(position: Vec3) {
+    const x = Math.floor(position.x),
+      y = Math.floor(position.y),
+      z = Math.floor(position.z);
+    const id = this.world.getBlock(x, y, z);
+    if (!isFluid(id)) return undefined;
+    const [a, b, c, d] = fluidSurfaceHeights(id, x, y, z, (x, y, z) =>
+      this.world.getBlock(x, y, z),
+    );
+    const u = position.x - x,
+      v = position.z - z;
+    const height =
+      u >= v ? a + (b - a) * u + (d - b) * v : a + (d - c) * u + (c - a) * v;
+    return position.y - y < height ? fluidInfo(id) : undefined;
   }
   eye(): Vec3 {
     return {
@@ -222,6 +296,8 @@ export class Simulation {
       this.move(dt, input);
       this.updateNeeds(dt, input);
     }
+    this.fluids.step(dt, this.player.position);
+    this.natural.step(dt, this.player.position, this.night ? 4 : 15);
     this.updateFurnaces(dt);
     this.farming.step(dt, this.player.position, this.night ? 4 : 15);
     for (const [key, remaining] of Object.entries(this.composters)) {
@@ -244,12 +320,8 @@ export class Simulation {
   private move(dt: number, input: PlayerInput) {
     const p = this.player,
       body = p.position;
-    const wet =
-      this.world.getBlock(
-        Math.floor(body.x),
-        Math.floor(body.y + 0.6),
-        Math.floor(body.z),
-      ) === 6;
+    const fluid = this.fluidAt({ ...body, y: body.y + 0.3 });
+    const wet = !!fluid;
     const ladder =
       this.world.getBlock(
         Math.floor(body.x),
@@ -266,7 +338,9 @@ export class Simulation {
         ? 12
         : 7
       : wet
-        ? 2.4
+        ? fluid?.kind === "lava"
+          ? 1.2
+          : 2.4
         : input.sneak
           ? 1.6
           : input.sprint && p.hunger > 6
@@ -365,9 +439,9 @@ export class Simulation {
       } else if (p.hunger === 0 && p.health > 1) this.damage(1, "hunger");
     }
     const e = this.eye();
-    const underwater =
-      this.world.getBlock(Math.floor(e.x), Math.floor(e.y), Math.floor(e.z)) ===
-      6;
+    const underwater = this.fluidAt(e)?.kind === "water";
+    if (this.fluidAt({ ...p.position, y: p.position.y + 0.1 })?.kind === "lava")
+      this.damage(4, "lava");
     p.oxygen = underwater
       ? Math.max(0, p.oxygen - dt * 2)
       : Math.min(20, p.oxygen + dt * 8);
@@ -415,7 +489,7 @@ export class Simulation {
       (v, s) => v + (s ? ITEMS[s.id]?.armorPoints || 0 : 0),
       0,
     );
-    const protectedHit = ["attack", "explosion"].includes(reason);
+    const protectedHit = ["attack", "explosion", "lava"].includes(reason);
     const dealt = protectedHit
       ? amount * (1 - Math.min(0.8, armor * 0.04))
       : amount;
@@ -483,6 +557,8 @@ export class Simulation {
   private safeSpawn(preferred: Vec3): Vec3 {
     const safe = (p: Vec3) =>
       !this.hasCollision(p) &&
+      !this.fluidAt(p) &&
+      !this.fluidAt({ ...p, y: p.y + 1.6 }) &&
       !!BLOCKS[
         this.world.getBlock(
           Math.floor(p.x),
@@ -505,7 +581,12 @@ export class Simulation {
           }
     for (let y = Math.floor(preferred.y) + 1; y < 94; y++) {
       const p = { x: preferred.x, y: y + 0.05, z: preferred.z };
-      if (!this.hasCollision(p)) return p;
+      if (
+        !this.hasCollision(p) &&
+        !this.fluidAt(p) &&
+        !this.fluidAt({ ...p, y: p.y + 1.6 })
+      )
+        return p;
     }
     return { ...this.player.spawn, y: 95 };
   }
@@ -525,13 +606,14 @@ export class Simulation {
   private updateDrops(dt: number) {
     this.drops = this.drops.filter((drop) => {
       if (!this.world.isReady(drop.position.x, drop.position.z)) return true;
+      if (this.fluidAt(drop.position)?.kind === "lava") return false;
       drop.age += dt;
       const ground = this.world.getBlock(
         Math.floor(drop.position.x),
         Math.floor(drop.position.y - 0.2),
         Math.floor(drop.position.z),
       );
-      if (!BLOCKS[ground]?.solid && ground !== 6)
+      if (!BLOCKS[ground]?.solid && !isWater(ground))
         drop.position.y -= Math.min(3 * dt, 0.15);
       if (
         !this.player.dead &&
@@ -584,7 +666,7 @@ export class Simulation {
       return false;
     }
     const def = BLOCKS[target.id];
-    if (!def || target.id === 6 || (target.id === 24 && !this.creative))
+    if (!def || isFluid(target.id) || (target.id === 24 && !this.creative))
       return false;
     const key = posKey(target.position);
     if (key !== this.miningKey) {
@@ -632,7 +714,7 @@ export class Simulation {
       return;
     const pairedZ = id === 22 ? blockZ + 1 : id === 27 ? blockZ - 1 : blockZ;
     if (!this.world.isReady(blockX, pairedZ)) return;
-    if (id === 0 || id === 6 || (id === 24 && (!this.creative || exploded)))
+    if (id === 0 || isFluid(id) || (id === 24 && (!this.creative || exploded)))
       return;
     const def = BLOCKS[id],
       tool = this.held ? ITEMS[this.held.id] : null;
@@ -682,6 +764,17 @@ export class Simulation {
         this.spawnDrop({ id: "short_grass", count: 1 }, p);
       else if (this.farming.nextRandom() < 0.125)
         this.spawnDrop({ id: "wheat_seeds", count: 1 }, p);
+    } else if (!this.creative && (id === 8 || id === 82)) {
+      if (!exploded && this.held?.id === "shears")
+        this.spawnDrop({ id: "leaves", count: 1 }, p);
+      else {
+        if (this.farming.nextRandom() < 0.05)
+          this.spawnDrop({ id: "oak_sapling", count: 1 }, p);
+        if (this.farming.nextRandom() < 0.02)
+          this.spawnDrop({ id: "stick", count: 1 }, p);
+        if (this.farming.nextRandom() < 0.005)
+          this.spawnDrop({ id: "apple", count: 1 }, p);
+      }
     } else if (drop && !this.creative && (exploded || eligible))
       this.spawnDrop(
         { id: drop, count: 1 },
@@ -762,6 +855,10 @@ export class Simulation {
       def = held ? ITEMS[held.id] : null;
     const target = this.target();
     if (held && this.interactAnimal(held.id)) return;
+    if (held?.id === "bucket") {
+      this.interactFarm(held.id, null);
+      return;
+    }
     if (target && !this.world.isReady(target.position.x, target.position.z)) {
       this.toast("请等待目标地形加载完成");
       return;
@@ -830,7 +927,7 @@ export class Simulation {
       return;
     }
     const p =
-      id === 58 || cropAt(id)
+      id === 58 || id === 83 || cropAt(id)
         ? { ...t }
         : {
             x: t.x + target.normal.x,
@@ -838,7 +935,8 @@ export class Simulation {
             z: t.z + target.normal.z,
           };
     if (p.y < -16 || p.y >= 96 || !this.world.isReady(p.x, p.z)) return;
-    const replaceable = (id: number) => [0, 6, 58].includes(id) || !!cropAt(id);
+    const replaceable = (id: number) =>
+      [0, 58, 83].includes(id) || isFluid(id) || !!cropAt(id);
     if (!replaceable(this.world.getBlock(p.x, p.y, p.z))) return;
     const boxes = [p];
     if (def.block === 18) boxes.push({ x: p.x, y: p.y + 1, z: p.z });
@@ -883,11 +981,18 @@ export class Simulation {
       this.toast("床的两端都需要地面支撑");
       return;
     }
+    if (
+      def.block === 83 &&
+      ![1, 2].includes(this.world.getBlock(p.x, p.y - 1, p.z))
+    ) {
+      this.toast("树苗需要种在泥土或草方块上");
+      return;
+    }
     for (const b of boxes) {
       const old = this.world.getBlock(b.x, b.y, b.z);
-      if (old === 58 || cropAt(old)) this.breakBlock(b, old);
+      if (old === 58 || old === 83 || cropAt(old)) this.breakBlock(b, old);
     }
-    this.setBlock(p.x, p.y, p.z, def.block);
+    if (!this.setBlock(p.x, p.y, p.z, def.block)) return;
     if (def.block === 18) this.setBlock(p.x, p.y + 1, p.z, 25);
     if (def.block === 22) this.setBlock(p.x, p.y, p.z + 1, 27);
     if (!this.creative) {
@@ -930,6 +1035,7 @@ export class Simulation {
         wheat_seeds: 0.3,
         beetroot_seeds: 0.3,
         leaves: 0.3,
+        oak_sapling: 0.3,
         short_grass: 0.3,
         wheat: 0.65,
         carrot: 0.65,
@@ -966,14 +1072,23 @@ export class Simulation {
         true,
       );
       if (
-        water?.id === 6 &&
+        water &&
+        (water.id === 6 || water.id === 76) &&
         this.world.isReady(water.position.x, water.position.z)
       ) {
-        this.setBlock(water.position.x, water.position.y, water.position.z, 0);
-        this.useHeld("water_bucket");
+        if (
+          !this.setBlock(
+            water.position.x,
+            water.position.y,
+            water.position.z,
+            0,
+          )
+        )
+          return true;
+        this.useHeld(water.id === 6 ? "water_bucket" : "lava_bucket");
         this.sound("place");
-        this.toast("装了一桶水");
-      } else this.toast("对着水源使用铁桶装水");
+        this.toast(water.id === 6 ? "装了一桶水" : "装了一桶熔岩");
+      } else this.toast("对着水源或熔岩源使用铁桶");
       return true;
     }
     if (!target) return false;
@@ -1011,6 +1126,13 @@ export class Simulation {
       } else this.toast("耕地上方已经有东西了");
       return true;
     }
+    if (item === "bone_meal" && id === 83) {
+      if (this.natural.fertilize(p, this.night ? 4 : 15)) {
+        this.useHeld();
+        this.sound("place");
+      } else this.toast("树苗需要充足光照和生长空间");
+      return true;
+    }
     if (item === "bone_meal" && (id === 1 || cropAt(id))) {
       if (this.farming.fertilize(p)) {
         this.useHeld();
@@ -1041,7 +1163,7 @@ export class Simulation {
       }
       return true;
     }
-    if (item === "water_bucket") {
+    if (item === "water_bucket" || item === "lava_bucket") {
       const at = {
         x: p.x + target.normal.x,
         y: p.y + target.normal.y,
@@ -1052,10 +1174,21 @@ export class Simulation {
         at.y >= -16 &&
         at.y < 96 &&
         this.world.isReady(at.x, at.z) &&
-        (old === 0 || old === 58 || !!cropAt(old))
+        (old === 0 || old === 58 || old === 83 || isFluid(old) || !!cropAt(old))
       ) {
-        if (old) this.breakBlock(at, old);
-        this.setBlock(at.x, at.y, at.z, 6);
+        if (old && !isFluid(old)) this.breakBlock(at, old);
+        const lava = item === "lava_bucket";
+        const placed =
+          lava && isWater(old)
+            ? 3
+            : !lava && isLava(old)
+              ? old === 76
+                ? 81
+                : 12
+              : lava
+                ? 76
+                : 6;
+        if (!this.setBlock(at.x, at.y, at.z, placed)) return true;
         this.useHeld("bucket");
         this.sound("place");
       }
@@ -1325,8 +1458,10 @@ export class Simulation {
       ) {
         container.burn = ITEMS[fuel.id].fuel!;
         container.burnTotal = container.burn;
+        const remainder = ITEMS[fuel.id].fuelRemainder;
         fuel.count--;
-        if (!fuel.count) container.slots[1] = null;
+        if (!fuel.count)
+          container.slots[1] = remainder ? { id: remainder, count: 1 } : null;
       }
       if (recipe && room && container.burn > 0) {
         container.progress += dt;
@@ -1511,7 +1646,14 @@ export class Simulation {
       if (!this.night && e.kind === "zombie" && this.skyVisible(e.position)) {
         e.health -= dt * 0.8;
       }
-      const vel = (this.entityVel.get(e.id) ?? 0) - 20 * dt;
+      const fluid = this.fluidAt({ ...e.position, y: e.position.y + 0.2 });
+      if (fluid?.kind === "lava") {
+        e.health -= dt * 8;
+        if (e.health <= 0) continue;
+      }
+      const vel = fluid
+        ? Math.min(2, (this.entityVel.get(e.id) ?? 0) + dt * 6)
+        : (this.entityVel.get(e.id) ?? 0) - 20 * dt;
       const dx = moving ? Math.sin(e.yaw) * speed * dt : 0,
         dz = moving ? Math.cos(e.yaw) * speed * dt : 0;
       const baby = (e.age ?? 0) < 0;
@@ -1622,7 +1764,7 @@ export class Simulation {
           )
             continue;
           const id = this.world.getBlock(x, y, z);
-          if (id && id !== 24 && id !== 6)
+          if (id && id !== 24 && id !== 81 && !isFluid(id))
             this.breakBlock({ x, y, z }, id, true);
         }
   }
@@ -1642,7 +1784,7 @@ export class Simulation {
           });
       }
     return {
-      manifest: { ...this.manifest, version: 2, updatedAt: Date.now() },
+      manifest: { ...this.manifest, version: 3, updatedAt: Date.now() },
       player: p,
       time: this.time,
       changes: this.world.getChanges(),
@@ -1650,6 +1792,8 @@ export class Simulation {
       entities: clone(this.entities),
       farming: this.farming.snapshot(),
       composters: clone(this.composters),
+      fluids: this.fluids.snapshot(),
+      natural: this.natural.snapshot(),
       drops,
     };
   }

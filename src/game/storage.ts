@@ -1,3 +1,8 @@
+import { sampleBlock } from "../engine/generator";
+import type { FluidState } from "./fluids";
+import type { NaturalState } from "./natural-updates";
+import { FLUID_SCAN_SIZE } from "./fluids";
+import { NATURAL_SCAN_SIZE } from "./natural-updates";
 import { BLOCKS, ENTITIES, ITEMS } from "./registry";
 import type { FarmState } from "./farming";
 import type {
@@ -125,6 +130,8 @@ export function validateSave(value: unknown): SaveData {
       "time",
       "farming",
       "composters",
+      "fluids",
+      "natural",
     ],
     "根对象",
   );
@@ -145,8 +152,8 @@ export function validateSave(value: unknown): SaveData {
     "manifest",
   );
   if (
-    ![1, 2].includes(manifest.version as number) ||
-    ![1, 2].includes(manifest.generatorVersion as number)
+    ![1, 2, 3].includes(manifest.version as number) ||
+    ![1, 2, 3].includes(manifest.generatorVersion as number)
   )
     return bad("不支持此存档或地形生成器版本；原始文件未被修改");
   if (
@@ -156,11 +163,18 @@ export function validateSave(value: unknown): SaveData {
       data.composters !== undefined)
   )
     return bad("版本 1 不支持农业扩展");
+  if (Number(manifest.generatorVersion) > Number(manifest.version))
+    bad("生成器版本超出存档版本");
+  if (
+    Number(manifest.version) < 3 &&
+    (data.fluids !== undefined || data.natural !== undefined)
+  )
+    bad("旧版本不支持自然更新状态");
   if (manifest.mode !== "survival" && manifest.mode !== "creative")
     return bad("游戏模式无效");
   const validatedManifest: SaveManifest = {
-    version: manifest.version as 1 | 2,
-    generatorVersion: manifest.generatorVersion as 1 | 2,
+    version: manifest.version as 1 | 2 | 3,
+    generatorVersion: manifest.generatorVersion as 1 | 2 | 3,
     id: string(manifest.id, "manifest.id"),
     name: string(manifest.name, "manifest.name", 80),
     seed: string(manifest.seed, "manifest.seed", 128),
@@ -214,7 +228,7 @@ export function validateSave(value: unknown): SaveData {
         change.id,
         "changes.id",
         0,
-        manifest.version === 1 ? 27 : 65535,
+        manifest.version === 1 ? 27 : manifest.version === 2 ? 67 : 65535,
         true,
       );
       if (!BLOCKS[id]) bad("未知方块");
@@ -373,7 +387,7 @@ export function validateSave(value: unknown): SaveData {
     };
   });
   let farming: FarmState | undefined;
-  if (manifest.version === 2) {
+  if (Number(manifest.version) >= 2) {
     const farm = record(data.farming, "farming");
     fields(
       farm,
@@ -449,7 +463,7 @@ export function validateSave(value: unknown): SaveData {
     };
   }
   const composters: Record<string, number> = {};
-  if (manifest.version === 2) {
+  if (Number(manifest.version) >= 2) {
     const timers = record(data.composters ?? {}, "composters");
     if (Object.keys(timers).length > 50_000) bad("堆肥桶数量过大");
     for (const [key, timer] of Object.entries(timers)) {
@@ -459,6 +473,115 @@ export function validateSave(value: unknown): SaveData {
     for (const [key, id] of occupied)
       if (id === 66 && !Object.hasOwn(composters, key))
         bad("堆肥桶缺少熟成记录");
+  }
+  let fluids: FluidState | undefined;
+  let natural: NaturalState | undefined;
+  const blockPosition = (entry: Record<string, unknown>, path: string) => {
+    const at = vector({ x: entry.x, y: entry.y, z: entry.z }, path, true);
+    if (at.y < -16 || at.y > 95) bad(`${path} 高度无效`);
+    return at;
+  };
+  if (manifest.version === 3) {
+    const input = record(data.fluids, "fluids");
+    fields(input, ["version", "clock", "scanCursor", "tasks"], "fluids");
+    if (input.version !== 1) bad("流体状态版本无效");
+    const clock = number(input.clock, "fluids.clock", 0);
+    const seen = new Set<string>();
+    const tasks = array(input.tasks, "fluids.tasks", 8192).map((value) => {
+      const task = record(value, "fluid task");
+      fields(task, ["x", "y", "z", "kind", "due"], "fluid task");
+      const at = blockPosition(task, "fluid task");
+      if (task.kind !== "water" && task.kind !== "lava") bad("流体种类无效");
+      const kind = task.kind as "water" | "lava";
+      const key = `${at.x},${at.y},${at.z},${kind}`;
+      if (seen.has(key)) bad("流体更新重复");
+      seen.add(key);
+      return {
+        ...at,
+        kind,
+        due: number(task.due, "fluid task.due", 0, clock + 1.5 + 1e-9),
+      };
+    });
+    fluids = {
+      version: 1,
+      clock,
+      scanCursor: number(
+        input.scanCursor,
+        "fluids.scanCursor",
+        0,
+        FLUID_SCAN_SIZE - 1,
+        true,
+      ),
+      tasks,
+    };
+    const state = record(data.natural, "natural");
+    fields(
+      state,
+      [
+        "version",
+        "randomState",
+        "accumulator",
+        "scanCursor",
+        "queue",
+        "falling",
+      ],
+      "natural",
+    );
+    if (state.version !== 1) bad("自然更新版本无效");
+    const queued = new Set<string>();
+    const queue = array(state.queue, "natural.queue", 4096).map((value) => {
+      const entry = record(value, "natural queue");
+      fields(entry, ["x", "y", "z"], "natural queue");
+      const at = blockPosition(entry, "natural queue"),
+        key = `${at.x},${at.y},${at.z}`;
+      if (queued.has(key)) bad("自然更新队列重复");
+      queued.add(key);
+      return at;
+    });
+    const fallingSeen = new Set<string>();
+    const falling = array(state.falling, "natural.falling", 128).map(
+      (value) => {
+        const entry = record(value, "falling");
+        fields(entry, ["x", "y", "z", "id"], "falling");
+        const at = blockPosition(entry, "falling"),
+          key = `${at.x},${at.y},${at.z}`;
+        if (fallingSeen.has(key)) bad("下落方块重复");
+        fallingSeen.add(key);
+        if (entry.id !== 4 && entry.id !== 5) bad("下落方块类型无效");
+        if (
+          (occupied.get(key) ??
+            sampleBlock(
+              validatedManifest.seed,
+              at.x,
+              at.y,
+              at.z,
+              validatedManifest.generatorVersion,
+            )) === entry.id
+        )
+          bad("下落方块与世界方块重复");
+        return { ...at, id: entry.id as 4 | 5 };
+      },
+    );
+    natural = {
+      version: 1,
+      randomState: number(
+        state.randomState,
+        "natural.randomState",
+        0,
+        0xffffffff,
+        true,
+      ),
+      accumulator: below(state.accumulator, "natural.accumulator", 0.1),
+      scanCursor: number(
+        state.scanCursor,
+        "natural.scanCursor",
+        0,
+        NATURAL_SCAN_SIZE - 1,
+        true,
+      ),
+      queue,
+      falling,
+    };
   }
   return {
     manifest: validatedManifest,
@@ -486,6 +609,7 @@ export function validateSave(value: unknown): SaveData {
     drops,
     time: number(data.time, "time", 0),
     ...(farming ? { farming, composters } : {}),
+    ...(fluids && natural ? { fluids, natural } : {}),
   };
 }
 function openDatabase(): Promise<IDBDatabase> {
@@ -642,13 +766,32 @@ export async function deleteWorld(id: string): Promise<void> {
 }
 export async function loadMigrationBackup(
   id: string,
+  version?: number,
 ): Promise<SaveData | null> {
-  const result = await transaction<{ data: SaveData } | undefined>(
+  const results = await transaction<{ version: number; data: SaveData }[]>(
     "readonly",
-    (_store, tx) => tx.objectStore(BACKUPS).get(`${id}:v1`),
+    (_store, tx) => tx.objectStore(BACKUPS).index("worldId").getAll(id),
     [BACKUPS],
   );
+  const result =
+    version === undefined
+      ? results.sort((a, b) => b.version - a.version)[0]
+      : results.find((result) => result.version === version);
   return result ? validateSave(result.data) : null;
+}
+export async function migrationBackupVersions(): Promise<
+  Record<string, number[]>
+> {
+  const results = await transaction<{ worldId: string; version: number }[]>(
+    "readonly",
+    (_store, tx) => tx.objectStore(BACKUPS).getAll(),
+    [BACKUPS],
+  );
+  const versions: Record<string, number[]> = Object.create(null);
+  for (const result of results)
+    (versions[result.worldId] ??= []).push(result.version);
+  for (const values of Object.values(versions)) values.sort((a, b) => a - b);
+  return versions;
 }
 export async function migrationBackupIds(): Promise<string[]> {
   const result = await transaction<{ worldId: string }[]>(
@@ -658,8 +801,11 @@ export async function migrationBackupIds(): Promise<string[]> {
   );
   return [...new Set(result.map((b) => b.worldId))];
 }
-export async function exportMigrationBackup(id: string): Promise<void> {
-  const backup = await loadMigrationBackup(id);
+export async function exportMigrationBackup(
+  id: string,
+  version?: number,
+): Promise<void> {
+  const backup = await loadMigrationBackup(id, version);
   if (!backup) throw new Error("没有找到升级前备份");
   downloadSave(backup, `${backup.manifest.name}（升级前备份）`);
 }

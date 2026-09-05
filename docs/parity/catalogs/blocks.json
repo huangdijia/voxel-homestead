@@ -1243,8 +1243,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "83",
+          "key": "oak_sapling",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/blocks/minecraft:oak_sapling",
@@ -1865,8 +1871,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "76",
+          "key": "lava",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/blocks/minecraft:lava",
@@ -10090,8 +10102,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "81",
+          "key": "obsidian",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/blocks/minecraft:obsidian",

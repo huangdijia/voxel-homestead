@@ -14,7 +14,7 @@ import {
   listWorlds,
   loadWorld,
   saveWorld,
-  migrationBackupIds,
+  migrationBackupVersions,
   exportMigrationBackup,
 } from "./game/storage";
 import { ITEMS } from "./game/registry";
@@ -73,7 +73,9 @@ export default function App() {
   const previewDispose = useRef<null | (() => void)>(null);
   const [game, setGame] = useState<GameUIBridge | null>(null);
   const [worlds, setWorlds] = useState<SaveManifest[]>([]);
-  const [backupIds, setBackupIds] = useState<string[]>([]);
+  const [backupVersions, setBackupVersions] = useState<
+    Record<string, number[]>
+  >({});
   const [settings, setSettings] = useState<Settings>(readSettings);
   const [modal, setModal] = useState<"create" | "settings" | "help" | null>(
     null,
@@ -88,10 +90,10 @@ export default function App() {
     try {
       const [worldList, backups] = await Promise.all([
         listWorlds(),
-        migrationBackupIds(),
+        migrationBackupVersions(),
       ]);
       setWorlds(worldList);
-      setBackupIds(backups);
+      setBackupVersions(backups);
     } catch (e) {
       setError(String(e));
     } finally {
@@ -336,19 +338,21 @@ export default function App() {
                             本机存档
                           </span>
                           <div>
-                            {backupIds.includes(world.id) && (
+                            {(backupVersions[world.id] ?? []).map((version) => (
                               <button
-                                title={`导出 ${world.name} 升级前备份`}
+                                key={version}
+                                title={`导出 ${world.name} 升级前备份 v${version}`}
                                 onClick={() => {
-                                  void exportMigrationBackup(world.id).catch(
-                                    (e) => setError(String(e)),
-                                  );
+                                  void exportMigrationBackup(
+                                    world.id,
+                                    version,
+                                  ).catch((e) => setError(String(e)));
                                 }}
                               >
                                 <Icon name="download" size={14} />
-                                升级前备份
+                                升级前备份 v{version}
                               </button>
-                            )}
+                            ))}
                             <button
                               title={`导出 ${world.name}`}
                               onClick={() => {

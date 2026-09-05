@@ -1620,8 +1620,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "oak_sapling",
+          "key": "oak_sapling",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/items/minecraft:oak_sapling",
@@ -9672,8 +9678,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "obsidian",
+          "key": "obsidian",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/items/minecraft:obsidian",
@@ -26593,8 +26605,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "apple",
+          "key": "apple",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/items/minecraft:apple",
@@ -31057,8 +31075,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "lava_bucket",
+          "key": "lava_bucket",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/items/minecraft:lava_bucket",

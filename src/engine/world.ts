@@ -47,7 +47,7 @@ export class VoxelWorld implements WorldPort {
     public readonly seed: string,
     changes: BlockChange[],
     public readonly worldId: string,
-    public readonly generatorVersion: 1 | 2 = 1,
+    public readonly generatorVersion: 1 | 2 | 3 = 1,
   ) {
     for (const change of changes) {
       if (
@@ -153,15 +153,11 @@ export class VoxelWorld implements WorldPort {
         positiveModulo(y) * 256 + positiveModulo(z) * 16 + positiveModulo(x)
       ] = id;
     const affected = new Set([ckey]);
-    for (const [dx, dy, dz] of [
-      [1, 0, 0],
-      [-1, 0, 0],
-      [0, 1, 0],
-      [0, -1, 0],
-      [0, 0, 1],
-      [0, 0, -1],
-    ])
-      affected.add(chunkKey(x + dx, y + dy, z + dz));
+    // Smooth fluid corners read diagonal cells, including the layer above.
+    for (const dx of [-1, 0, 1])
+      for (const dy of [-1, 0, 1])
+        for (const dz of [-1, 0, 1])
+          affected.add(chunkKey(x + dx, y + dy, z + dz));
     if (isOpaque(previous) !== isOpaque(id)) {
       // Roof edits also invalidate the sky shading of already loaded sections below.
       const columns = new Set([

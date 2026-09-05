@@ -6,8 +6,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "apple",
+          "key": "apple",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/foods/minecraft:apple",

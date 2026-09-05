@@ -1,6 +1,12 @@
 import type { Vec3, WorldPort } from "../game/types";
-import { collisionBoxes, selectionBoxes } from "./shapes";
-import type { BlockBox } from "./shapes";
+import { isFluid } from "../game/fluid-blocks";
+import {
+  collisionBoxes,
+  selectionBoxes,
+  fluidSurfaceHeights,
+  fluidSurfaceQuads,
+} from "./shapes";
+import type { BlockBox, ShapeVertex } from "./shapes";
 
 type WorldReader = Pick<WorldPort, "getBlock">;
 const EPSILON = 0.00001;
@@ -176,7 +182,98 @@ function rayBox(
   return { distance: Math.max(0, near), normal };
 }
 
-/** Grid traversal uses actual partial block bounds and ignores water. */
+function rayTriangle(
+  origin: Vec3,
+  d: Vec3,
+  a: ShapeVertex,
+  b: ShapeVertex,
+  c: ShapeVertex,
+): number | null {
+  const e1 = [b[0] - a[0], b[1] - a[1], b[2] - a[2]],
+    e2 = [c[0] - a[0], c[1] - a[1], c[2] - a[2]],
+    p = [
+      d.y * e2[2] - d.z * e2[1],
+      d.z * e2[0] - d.x * e2[2],
+      d.x * e2[1] - d.y * e2[0],
+    ],
+    determinant = e1[0] * p[0] + e1[1] * p[1] + e1[2] * p[2];
+  if (Math.abs(determinant) < EPSILON) return null;
+  const inverse = 1 / determinant,
+    t = [origin.x - a[0], origin.y - a[1], origin.z - a[2]],
+    u = (t[0] * p[0] + t[1] * p[1] + t[2] * p[2]) * inverse;
+  if (u < -EPSILON || u > 1 + EPSILON) return null;
+  const q = [
+      t[1] * e1[2] - t[2] * e1[1],
+      t[2] * e1[0] - t[0] * e1[2],
+      t[0] * e1[1] - t[1] * e1[0],
+    ],
+    v = (d.x * q[0] + d.y * q[1] + d.z * q[2]) * inverse;
+  if (v < -EPSILON || u + v > 1 + EPSILON) return null;
+  const distance = (e2[0] * q[0] + e2[1] * q[1] + e2[2] * q[2]) * inverse;
+  return distance >= -EPSILON ? Math.max(0, distance) : null;
+}
+
+function rayFluid(
+  world: WorldReader,
+  origin: Vec3,
+  d: Vec3,
+  voxel: Vec3,
+  id: number,
+): { distance: number; normal: Vec3 } | null {
+  const heights = fluidSurfaceHeights(
+      id,
+      voxel.x,
+      voxel.y,
+      voxel.z,
+      (x, y, z) => world.getBlock(x, y, z),
+    ),
+    local = {
+      x: origin.x - voxel.x,
+      y: origin.y - voxel.y,
+      z: origin.z - voxel.z,
+    },
+    [a, b, c, e] = heights;
+  const surface =
+    local.z >= local.x
+      ? a + (e - c) * local.x + (c - a) * local.z
+      : a + (b - a) * local.x + (e - b) * local.z;
+  if (
+    local.x >= 0 &&
+    local.x <= 1 &&
+    local.z >= 0 &&
+    local.z <= 1 &&
+    local.y >= 0 &&
+    local.y <= surface
+  )
+    return { distance: 0, normal: { x: 0, y: 1, z: 0 } };
+  let hit: { distance: number; normal: Vec3 } | null = null;
+  const normals: Vec3[] = [
+    { x: 1, y: 0, z: 0 },
+    { x: -1, y: 0, z: 0 },
+    { x: 0, y: 1, z: 0 },
+    { x: 0, y: -1, z: 0 },
+    { x: 0, y: 0, z: 1 },
+    { x: 0, y: 0, z: -1 },
+  ];
+  for (const [face, quad] of fluidSurfaceQuads(heights).entries())
+    for (const indices of [
+      [0, 1, 2],
+      [2, 1, 3],
+    ]) {
+      const distance = rayTriangle(
+        local,
+        d,
+        quad[indices[0]],
+        quad[indices[1]],
+        quad[indices[2]],
+      );
+      if (distance !== null && (!hit || distance < hit.distance))
+        hit = { distance, normal: normals[face] };
+    }
+  return hit;
+}
+
+/** Actual partial geometry; includeWater also opts into lava and flowing fluid. */
 export function raycastVoxel(
   world: WorldReader,
   origin: Vec3,
@@ -217,9 +314,12 @@ export function raycastVoxel(
     iterations++
   ) {
     const id = world.getBlock(voxel.x, voxel.y, voxel.z);
-    let hit: { distance: number; normal: Vec3 } | null = null;
-    for (const box of includeWater && id === 6
-      ? [[0, 0, 0, 1, 1, 1] as BlockBox]
+    let hit =
+      includeWater && isFluid(id)
+        ? rayFluid(world, origin, d, voxel, id)
+        : null;
+    for (const box of isFluid(id)
+      ? []
       : solidOnly
         ? collisionBoxes(id)
         : selectionBoxes(id)) {
@@ -231,7 +331,7 @@ export function raycastVoxel(
       )
         hit = candidate;
     }
-    if (hit)
+    if (hit && hit.distance <= max)
       return {
         position: { ...voxel },
         normal: hit.normal,
