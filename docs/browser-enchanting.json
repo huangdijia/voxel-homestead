@@ -1,0 +1,242 @@
+{
+  "advancedSeconds": 541.0999999998365,
+  "beforePurchase": {
+    "lapis": 6,
+    "offers": [
+      {
+        "available": true,
+        "hint": {
+          "id": "unbreaking",
+          "level": 1
+        },
+        "lapisCost": 1,
+        "levelCost": 1,
+        "option": 0,
+        "requiredLevel": 8
+      },
+      {
+        "available": true,
+        "hint": {
+          "id": "silk_touch",
+          "level": 1
+        },
+        "lapisCost": 2,
+        "levelCost": 2,
+        "option": 1,
+        "requiredLevel": 13
+      },
+      {
+        "available": true,
+        "hint": {
+          "id": "efficiency",
+          "level": 4
+        },
+        "lapisCost": 3,
+        "levelCost": 3,
+        "option": 2,
+        "requiredLevel": 30
+      }
+    ],
+    "points": 1395,
+    "seed": 0
+  },
+  "checkpoints": [
+    {
+      "name": "cane-farm",
+      "passed": true,
+      "points": 0,
+      "version": 6
+    },
+    {
+      "name": "unclaimed-furnace-xp",
+      "passed": true,
+      "points": 20,
+      "version": 6
+    },
+    {
+      "name": "enchanted-equipment",
+      "passed": true,
+      "points": 1089,
+      "version": 6
+    }
+  ],
+  "earnedExperience": 21,
+  "errors": [],
+  "finishedAt": "2026-09-05T03:22:03.234Z",
+  "fixture": [
+    "Fresh survival world; grants diamond pickaxe/sword, workbench, furnace, coal2, planks30, diamond2, obsidian4, lapis6",
+    "Natural cane is harvested then planted and grown; leather/beef come from eight spawned adult cows killed using attack",
+    "Teleports, cleared workshop/water trench, hunger10 eating fixture and accelerated 60Hz ticks",
+    "After resource-chain proof, grants 14 shelves and supplements XP to level30; seed0 for UI validation"
+  ],
+  "initialPlayedSeconds": 0,
+  "limitations": [
+    "Not an unassisted survival playthrough, full Minecraft parity, native-fullscreen proof or FPS benchmark"
+  ],
+  "passed": true,
+  "prepared": true,
+  "stages": [
+    {
+      "collected": 6,
+      "coordinates": [
+        [
+          0,
+          63,
+          -181
+        ],
+        [
+          -1,
+          63,
+          -181
+        ]
+      ],
+      "name": "natural-cane",
+      "passed": true
+    },
+    {
+      "activeSeconds": 490,
+      "harvested": 12,
+      "name": "cane-plant-and-grow",
+      "passed": true,
+      "rootCount": 2
+    },
+    {
+      "experienceEarned": 20,
+      "leather": 12,
+      "name": "hunting-and-xp",
+      "passed": true,
+      "rawBeef": 15
+    },
+    {
+      "booksMade": 4,
+      "bookshelf": 1,
+      "name": "paper-book-table",
+      "passed": true,
+      "table": 1
+    },
+    {
+      "bankAfter": 0,
+      "bankBefore": 0.7,
+      "cookedRemaining": 1,
+      "name": "cook-eat-and-claim",
+      "passed": true
+    },
+    {
+      "name": "enchanting-ui-ready",
+      "passed": true,
+      "view": {
+        "bookshelves": 15,
+        "level": 30,
+        "offers": [
+          {
+            "available": true,
+            "hint": {
+              "id": "unbreaking",
+              "level": 1
+            },
+            "lapisCost": 1,
+            "levelCost": 1,
+            "option": 0,
+            "requiredLevel": 8
+          },
+          {
+            "available": true,
+            "hint": {
+              "id": "silk_touch",
+              "level": 1
+            },
+            "lapisCost": 2,
+            "levelCost": 2,
+            "option": 1,
+            "requiredLevel": 13
+          },
+          {
+            "available": true,
+            "hint": {
+              "id": "efficiency",
+              "level": 4
+            },
+            "lapisCost": 3,
+            "levelCost": 3,
+            "option": 2,
+            "requiredLevel": 30
+          }
+        ],
+        "progress": 0
+      }
+    },
+    {
+      "enchantments": {
+        "efficiency": 4,
+        "unbreaking": 3
+      },
+      "lapis": 3,
+      "name": "actual-offer-button",
+      "passed": true,
+      "points": 1089
+    }
+  ],
+  "startedAt": "2026-09-05T03:20:05.429Z",
+  "supplementedExperience": 1374,
+  "version": 1,
+  "workshopY": 69,
+  "worldId": "17bef178-4d29-453d-b798-1175e7f4b885",
+  "reload": {
+    "worldId": "17bef178-4d29-453d-b798-1175e7f4b885",
+    "expectedWorldId": "17bef178-4d29-453d-b798-1175e7f4b885",
+    "passed": true,
+    "comparisons": {
+      "player": true,
+      "changes": true,
+      "containers": true,
+      "entities": true,
+      "drops": true,
+      "time": true,
+      "farming": true,
+      "composters": true,
+      "fluids": true,
+      "natural": true,
+      "progression": true,
+      "sugarCane": true
+    }
+  },
+  "checkpointPlayedSeconds": 630.8666666664216,
+  "screenshots": {
+    "offers": "screenshots/enchanting-offers.png",
+    "result": "screenshots/enchanting-result.png",
+    "day": "screenshots/enchanting-workshop.png",
+    "night": "screenshots/enchanting-workshop-night.png",
+    "photoFixture": "Day/night scene shots use paused test camera; day time temporarily 4000; player/time restored before reload"
+  },
+  "migration": {
+    "worldId": "2f2caf4b-89e2-4ee0-93cf-4200de8fc35b",
+    "from": 5,
+    "to": 6,
+    "generator": 5,
+    "backupExact": true,
+    "comparisons": {
+      "player": true,
+      "changes": true,
+      "containers": true,
+      "entities": true,
+      "drops": true,
+      "time": true,
+      "farming": true,
+      "composters": true,
+      "fluids": true,
+      "natural": true
+    },
+    "newProgression": {
+      "enchantmentSeed": 2495883075,
+      "orbs": [],
+      "points": 0
+    },
+    "newCane": {
+      "accumulator": 0,
+      "growth": [],
+      "queue": [],
+      "scanCursor": 0,
+      "version": 1
+    }
+  }
+}

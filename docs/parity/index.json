@@ -9,17 +9,21 @@
   "generatedBy": "node scripts/build-parity-catalog.mjs",
   "deterministic": true,
   "localSourceSnapshot": {
+    "src/game/enchantments.ts": {
+      "sha256": "39eed1f86b8929f85782b9cf0f13ed94ffbebabba2ab46d94074bea746535049",
+      "bytes": 7584
+    },
     "src/game/inventory.ts": {
-      "sha256": "9bdb268484d6d4ead19a194637b2213f4aaee1797328ca762b6d92cead820402",
-      "bytes": 3438
+      "sha256": "316ff3be2390b976b8ef27386cfa2e281e5525895fc0563130b8a6aa59972e11",
+      "bytes": 3759
     },
     "src/game/recipes.ts": {
-      "sha256": "0ae9d48384e7946de8a2b0c449895655252bcdf3fec6e2a0cfab2f40509e8e29",
-      "bytes": 8748
+      "sha256": "dbbb310170219b1b61763b84e167f515a9fe8d19405928c0ee1b69aaa16da54a",
+      "bytes": 9227
     },
     "src/game/registry.ts": {
-      "sha256": "54039e163c29decaaf8ade016b5858a4863552f2c12a9dc2096301757189cd6a",
-      "bytes": 13035
+      "sha256": "2c08f7650343da43adb3a6370ed04049d295b8428e8bf215e34ef79b8f5f3bb2",
+      "bytes": 14274
     }
   },
   "totals": {
@@ -32,7 +36,7 @@
     "file": "behavior-cases.json",
     "count": 43,
     "acceptedCases": 0,
-    "sourceSha256": "e9d21caa9ea02bd0fc19fae65bd2c7a95d90d4bf440aa53a1ef4212c806e41db"
+    "sourceSha256": "9ed9594473e9000b19e9d4dfeb576d65b30c6dd392e9e9d44701456ff1c9f0c9"
   },
   "domains": {
     "blocks": {
@@ -42,12 +46,12 @@
       "mappedVersion": "1.21.1",
       "stageCounts": {
         "M1": 24,
-        "M2": 837,
-        "M3": 199
+        "M2": 839,
+        "M3": 197
       },
       "implementationCounts": {
-        "not-mapped": 999,
-        "partial-unverified": 61
+        "not-mapped": 996,
+        "partial-unverified": 64
       },
       "acceptancePassed": 0
     },
@@ -58,12 +62,12 @@
       "mappedVersion": "1.21.1",
       "stageCounts": {
         "M1": 47,
-        "M2": 1065,
-        "M3": 221
+        "M2": 1067,
+        "M3": 219
       },
       "implementationCounts": {
-        "not-mapped": 1206,
-        "partial-unverified": 127
+        "not-mapped": 1198,
+        "partial-unverified": 135
       },
       "acceptancePassed": 0
     },
@@ -78,8 +82,8 @@
         "M3": 19
       },
       "implementationCounts": {
-        "not-mapped": 126,
-        "partial-unverified": 4
+        "not-mapped": 125,
+        "partial-unverified": 5
       },
       "acceptancePassed": 0
     },
@@ -108,8 +112,8 @@
         "M3": 1
       },
       "implementationCounts": {
-        "not-mapped": 29,
-        "partial-unverified": 12
+        "not-mapped": 27,
+        "partial-unverified": 14
       },
       "acceptancePassed": 0
     },
@@ -119,10 +123,11 @@
       "referenceCoverage": "all-records-in-pinned-third-party-file",
       "mappedVersion": "1.21.1",
       "stageCounts": {
-        "M3": 42
+        "M2": 42
       },
       "implementationCounts": {
-        "not-mapped": 42
+        "not-mapped": 34,
+        "partial-unverified": 8
       },
       "acceptancePassed": 0
     },
@@ -132,7 +137,7 @@
       "referenceCoverage": "all-records-in-pinned-third-party-file",
       "mappedVersion": "1.20.5",
       "stageCounts": {
-        "M3": 39
+        "M2": 39
       },
       "implementationCounts": {
         "not-mapped": 39
@@ -200,13 +205,13 @@
       "mappedVersion": "1.21.1",
       "stageCounts": {
         "M1": 125,
-        "M2": 1137,
-        "M3": 208
+        "M2": 1141,
+        "M3": 204
       },
       "implementationCounts": {
-        "definition-match-unverified": 72,
-        "not-mapped": 1265,
-        "output-candidate-unverified": 133
+        "definition-match-unverified": 76,
+        "not-mapped": 1251,
+        "output-candidate-unverified": 143
       },
       "acceptancePassed": 0
     }

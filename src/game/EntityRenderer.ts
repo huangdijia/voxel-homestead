@@ -2,6 +2,13 @@ import * as THREE from "three";
 import type { DropState, EntityKind, EntityState, Vec3 } from "./types";
 import { ITEMS } from "./registry";
 
+export interface ExperienceOrbVisual {
+  id: string;
+  position: Vec3;
+  value: number;
+  age: number;
+}
+
 interface MobModel {
   group: THREE.Group;
   legs: THREE.Mesh[];
@@ -14,12 +21,27 @@ interface MobModel {
 export class EntityRenderer {
   private mobs = new Map<string, MobModel>();
   private drops = new Map<string, THREE.Group>();
+  private orbs = new Map<string, THREE.Group>();
   private box = new THREE.BoxGeometry(1, 1, 1);
   private plane = new THREE.PlaneGeometry(1, 1);
+  private orbGeometry = new THREE.OctahedronGeometry(1, 0);
+  private orbCore = new THREE.MeshBasicMaterial({
+    color: 0xc6f665,
+    toneMapped: false,
+  });
+  private orbGlow = new THREE.MeshBasicMaterial({
+    color: 0xa2ed48,
+    transparent: true,
+    opacity: 0.16,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    toneMapped: false,
+  });
   private textures: THREE.Texture[] = [];
   private materials: THREE.Material[] = [];
   private faceMaterials: THREE.MeshLambertMaterial[] = [];
   constructor(private scene: THREE.Scene) {
+    this.materials.push(this.orbCore, this.orbGlow);
     for (let i = 0; i < 4; i++) {
       const tex = new THREE.TextureLoader().load("/assets/mob-atlas.png");
       tex.colorSpace = THREE.SRGBColorSpace;
@@ -64,20 +86,97 @@ export class EntityRenderer {
     head.name = "head";
     group.add(head);
     const kind = e.kind;
-    if (kind === "pig" || kind === "sheep") {
+    if (kind === "pig" || kind === "sheep" || kind === "cow") {
       const wool = kind === "sheep",
-        body = this.mat(wool ? 0xbfa18b : 0xdb9d95),
-        foot = this.mat(wool ? 0x897c69 : 0xb57872);
-      this.block(group, body, 0, 0.74, 0, 0.78, 0.66, 1.05);
-      head.position.set(0, 0.98, 0.59);
+        cow = kind === "cow",
+        body = this.mat(cow ? 0xe3ded0 : wool ? 0xbfa18b : 0xdb9d95),
+        foot = this.mat(cow ? 0x4d453f : wool ? 0x897c69 : 0xb57872);
+      this.block(
+        group,
+        body,
+        0,
+        cow ? 0.86 : 0.74,
+        0,
+        cow ? 0.86 : 0.78,
+        cow ? 0.72 : 0.66,
+        cow ? 1.23 : 1.05,
+      );
+      head.position.set(0, cow ? 1.09 : 0.98, cow ? 0.7 : 0.59);
       this.block(head, body, 0, 0, 0, 0.55, 0.55, 0.48);
       for (const x of [-0.25, 0.25])
         for (const z of [-0.33, 0.33])
           legs.push(this.block(group, foot, x, 0.26, z, 0.22, 0.52, 0.24));
-      const face = new THREE.Mesh(this.plane, this.faceMaterials[wool ? 1 : 0]);
-      face.position.z = 0.245;
-      face.scale.set(0.55, 0.55, 1);
-      head.add(face);
+      if (cow) {
+        const dark = this.mat(0x302f2b),
+          nose = this.mat(0xb69a91),
+          horn = this.mat(0xd4c4a0);
+        for (const side of [-1, 1]) {
+          this.block(
+            group,
+            dark,
+            side * 0.434,
+            0.98,
+            -0.28,
+            0.014,
+            0.37,
+            0.46,
+          ).name = "cow-patch";
+          this.block(
+            group,
+            dark,
+            side * 0.434,
+            0.66,
+            0.3,
+            0.014,
+            0.25,
+            0.31,
+          ).name = "cow-patch";
+          this.block(
+            group,
+            dark,
+            side * 0.3,
+            1.225,
+            -0.18,
+            0.26,
+            0.015,
+            0.55,
+          ).name = "cow-patch";
+          this.block(
+            head,
+            dark,
+            side * 0.19,
+            0.05,
+            0.245,
+            0.085,
+            0.085,
+            0.018,
+          ).name = "cow-eye";
+          this.block(head, body, side * 0.34, 0.1, 0, 0.15, 0.13, 0.18);
+          this.block(
+            head,
+            horn,
+            side * 0.19,
+            0.34,
+            -0.055,
+            0.075,
+            0.18,
+            0.085,
+          ).name = "cow-horn";
+          this.block(head, dark, side * 0.13, -0.15, 0.359, 0.07, 0.055, 0.015);
+        }
+        this.block(head, nose, 0, -0.14, 0.29, 0.46, 0.2, 0.12).name =
+          "cow-muzzle";
+        this.block(group, nose, 0, 0.46, -0.2, 0.32, 0.14, 0.34);
+        this.block(group, dark, 0, 0.79, -0.66, 0.06, 0.53, 0.065);
+      } else {
+        const face = new THREE.Mesh(
+          this.plane,
+          this.faceMaterials[wool ? 1 : 0],
+        );
+        face.position.z = 0.245;
+        face.scale.set(0.55, 0.55, 1);
+        head.add(face);
+      }
       if (wool) {
         fleece = this.block(
           group,
@@ -146,6 +245,7 @@ export class EntityRenderer {
     drops: DropState[],
     player: Vec3,
     elapsed: number,
+    orbs: readonly ExperienceOrbVisual[] = [],
   ) {
     const live = new Set(entities.map((e) => e.id));
     for (const [id, m] of this.mobs) {
@@ -178,7 +278,8 @@ export class EntityRenderer {
       if (model.fleece) model.fleece.visible = !e.sheared;
       if (model.loveMarker) {
         model.loveMarker.visible = (e.love ?? 0) > 0;
-        model.loveMarker.position.y = 1.62 + Math.sin(elapsed * 3) * 0.055;
+        model.loveMarker.position.y =
+          (e.kind === "cow" ? 1.75 : 1.62) + Math.sin(elapsed * 3) * 0.055;
         model.loveMarker.rotation.y =
           Math.atan2(player.x - p.x, player.z - p.z) - e.yaw;
       }
@@ -216,6 +317,49 @@ export class EntityRenderer {
       );
       m.rotation.y = elapsed * 1.1;
     }
+    const orbIds = new Set(orbs.map((orb) => orb.id));
+    for (const [id, group] of this.orbs)
+      if (!orbIds.has(id)) {
+        this.scene.remove(group);
+        this.orbs.delete(id);
+      }
+    this.orbCore.color.setHSL(
+      0.235 + Math.sin(elapsed * 2) * 0.025,
+      0.86,
+      0.65,
+    );
+    for (const orb of orbs) {
+      let group = this.orbs.get(orb.id);
+      if (!group) {
+        group = new THREE.Group();
+        group.name = `xp:${orb.id}`;
+        const core = new THREE.Mesh(this.orbGeometry, this.orbCore),
+          glow = new THREE.Mesh(this.orbGeometry, this.orbGlow);
+        glow.scale.setScalar(1.8);
+        group.add(core, glow);
+        this.orbs.set(orb.id, group);
+        this.scene.add(group);
+      }
+      const size = Math.min(
+        0.17,
+        0.08 + Math.log2(Math.max(1, orb.value) + 1) * 0.014,
+      );
+      group.scale.setScalar(
+        size * (1 + Math.sin(elapsed * 4 + orb.age) * 0.07),
+      );
+      group.rotation.y = elapsed * 1.8;
+      group.position.set(
+        orb.position.x,
+        orb.position.y + Math.sin(elapsed * 3 + orb.age) * 0.035,
+        orb.position.z,
+      );
+      group.visible =
+        Math.hypot(
+          orb.position.x - player.x,
+          orb.position.y - player.y,
+          orb.position.z - player.z,
+        ) < 90;
+    }
   }
   private disposeModel(object: THREE.Object3D) {
     const disposed = new Set<THREE.Material>();
@@ -247,8 +391,11 @@ export class EntityRenderer {
     }
     this.mobs.clear();
     this.drops.clear();
+    for (const group of this.orbs.values()) this.scene.remove(group);
+    this.orbs.clear();
     this.box.dispose();
     this.plane.dispose();
+    this.orbGeometry.dispose();
     this.materials.forEach((m) => m.dispose());
     this.textures.forEach((t) => t.dispose());
   }

@@ -3,8 +3,8 @@
     "id": "minecraft:speed",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 0,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -36,8 +36,8 @@
     "id": "minecraft:slowness",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 1,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -69,8 +69,8 @@
     "id": "minecraft:haste",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 2,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -102,8 +102,8 @@
     "id": "minecraft:mining_fatigue",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 3,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -135,8 +135,8 @@
     "id": "minecraft:strength",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 4,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -168,8 +168,8 @@
     "id": "minecraft:instant_health",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 5,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -201,8 +201,8 @@
     "id": "minecraft:instant_damage",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 6,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -234,8 +234,8 @@
     "id": "minecraft:jump_boost",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 7,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -267,8 +267,8 @@
     "id": "minecraft:nausea",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 8,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -300,8 +300,8 @@
     "id": "minecraft:regeneration",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 9,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -333,8 +333,8 @@
     "id": "minecraft:resistance",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 10,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -366,8 +366,8 @@
     "id": "minecraft:fire_resistance",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 11,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -399,8 +399,8 @@
     "id": "minecraft:water_breathing",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 12,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -432,8 +432,8 @@
     "id": "minecraft:invisibility",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 13,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -465,8 +465,8 @@
     "id": "minecraft:blindness",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 14,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -498,8 +498,8 @@
     "id": "minecraft:night_vision",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 15,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -531,8 +531,8 @@
     "id": "minecraft:hunger",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 16,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -564,8 +564,8 @@
     "id": "minecraft:weakness",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 17,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -597,8 +597,8 @@
     "id": "minecraft:poison",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 18,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -630,8 +630,8 @@
     "id": "minecraft:wither",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 19,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -663,8 +663,8 @@
     "id": "minecraft:health_boost",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 20,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -696,8 +696,8 @@
     "id": "minecraft:absorption",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 21,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -729,8 +729,8 @@
     "id": "minecraft:saturation",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 22,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -762,8 +762,8 @@
     "id": "minecraft:glowing",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 23,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -795,8 +795,8 @@
     "id": "minecraft:levitation",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 24,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -828,8 +828,8 @@
     "id": "minecraft:luck",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 25,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -861,8 +861,8 @@
     "id": "minecraft:unluck",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 26,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -894,8 +894,8 @@
     "id": "minecraft:slow_falling",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 27,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -927,8 +927,8 @@
     "id": "minecraft:conduit_power",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 28,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -960,8 +960,8 @@
     "id": "minecraft:dolphins_grace",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 29,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -993,8 +993,8 @@
     "id": "minecraft:bad_omen",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 30,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1026,8 +1026,8 @@
     "id": "minecraft:hero_of_the_village",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 31,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1059,8 +1059,8 @@
     "id": "minecraft:darkness",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 32,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1092,8 +1092,8 @@
     "id": "minecraft:trial_omen",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 33,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1125,8 +1125,8 @@
     "id": "minecraft:raid_omen",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 34,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1158,8 +1158,8 @@
     "id": "minecraft:wind_charged",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 35,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1191,8 +1191,8 @@
     "id": "minecraft:weaving",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 36,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1224,8 +1224,8 @@
     "id": "minecraft:oozing",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 37,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1257,8 +1257,8 @@
     "id": "minecraft:infested",
     "idBasis": "normalized-third-party-name-not-official-registry-report",
     "upstreamNumericId": 38,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []

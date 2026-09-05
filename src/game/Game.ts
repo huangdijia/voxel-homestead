@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import type {
   ContainerState,
+  EnchantingView,
   GameCommand,
   GameSnapshot,
   GameUIBridge,
@@ -13,7 +14,7 @@ import type {
   WorldEvent,
 } from "./types";
 import { VoxelWorld } from "../engine/world";
-import { selectionBoxes } from "../engine/shapes";
+import { selectionBoxes, progressionBlockParts } from "../engine/shapes";
 import { Simulation, createNewSave } from "./Simulation";
 import { GameAudio } from "./audio";
 import { EntityRenderer } from "./EntityRenderer";
@@ -291,7 +292,7 @@ export class Game implements GameUIBridge {
     if (e.code === "Escape") {
       if (
         !this.paused ||
-        ["inventory", "workbench", "chest", "furnace"].includes(
+        ["inventory", "workbench", "chest", "furnace", "enchanting"].includes(
           this.overlay ?? "",
         )
       ) {
@@ -402,6 +403,7 @@ export class Game implements GameUIBridge {
       "workbench",
       "chest",
       "furnace",
+      "enchanting",
     ].includes(this.overlay ?? "");
     if ((!this.paused || inventoryOpen) && this.world.ready) {
       this.accumulator = Math.min(0.12, this.accumulator + dt);
@@ -532,16 +534,22 @@ export class Game implements GameUIBridge {
       sim.drops,
       p.position,
       this.elapsed,
+      sim.progression.orbs,
     );
     this.updateHand(dt);
   }
   private updateHand(dt: number) {
     const sim = this.simulation,
       held = sim.held,
-      id = held?.id ?? "empty";
-    if (id !== this.handId) {
-      this.handId = id;
+      id = held?.id ?? "empty",
+      enchanted =
+        !!held?.enchantments &&
+        Object.values(held.enchantments).some((level) => level > 0),
+      appearanceId = id + (enchanted ? ":enchanted" : "");
+    if (appearanceId !== this.handId) {
+      this.handId = appearanceId;
       this.hand.clear();
+      this.hand.rotation.set(0, 0, 0);
       this.handMaterials.forEach((m) => m.dispose());
       this.handMaterials = [];
       const add = (
@@ -575,6 +583,39 @@ export class Game implements GameUIBridge {
           add(metal, 0.14, 0.18, 0, 0.055, 0.11, 0.055);
         } else add(metal, 0, 0.22, 0, 0.14, 0.17, 0.055);
         this.hand.rotation.z = -0.4;
+      } else if (
+        item?.block !== undefined &&
+        progressionBlockParts(item.block).length
+      ) {
+        const materials = new Map<string, THREE.MeshLambertMaterial>();
+        for (const part of progressionBlockParts(item.block)) {
+          const key = `${part.tile}:${part.tint.join(",")}`;
+          let material = materials.get(key);
+          if (!material) {
+            material = new THREE.MeshLambertMaterial({
+              map: atlasTile(part.tile),
+              color: new THREE.Color(...part.tint),
+              depthTest: false,
+            });
+            materials.set(key, material);
+            this.handMaterials.push(material);
+          }
+          const mesh = new THREE.Mesh(this.handGeometry, material),
+            b = part.box;
+          mesh.position.set(
+            ((b[0] + b[3]) / 2 - 0.5) * 0.32,
+            ((b[1] + b[4]) / 2 - 0.5) * 0.32,
+            ((b[2] + b[5]) / 2 - 0.5) * 0.32,
+          );
+          mesh.scale.set(
+            (b[3] - b[0]) * 0.32,
+            (b[4] - b[1]) * 0.32,
+            (b[5] - b[2]) * 0.32,
+          );
+          mesh.renderOrder = 100;
+          this.hand.add(mesh);
+        }
+        this.hand.rotation.set(0.12, 0.4, -0.16);
       } else if (item?.block !== undefined) {
         const block = BLOCKS[item.block],
           mineral = mineralAppearance(item.block);
@@ -723,6 +764,13 @@ export class Game implements GameUIBridge {
         this.hand.rotation.z = -0.28;
       }
     }
+    for (const material of this.handMaterials)
+      if (material instanceof THREE.MeshLambertMaterial) {
+        material.emissive.setHex(enchanted ? 0x542478 : 0x000000);
+        material.emissiveIntensity = enchanted
+          ? 0.2 + (Math.sin(this.elapsed * 2.4) + 1) * 0.12
+          : 0;
+      }
     this.handSwing = Math.max(0, this.handSwing - dt * 4);
     const moving =
       !this.paused &&
@@ -740,6 +788,7 @@ export class Game implements GameUIBridge {
     const sim = this.simulation,
       t = sim.target();
     return {
+      progression: { points: sim.progression.points },
       manifest: { ...sim.manifest },
       player: structuredClone(sim.player),
       time: sim.time,
@@ -789,6 +838,9 @@ export class Game implements GameUIBridge {
         break;
       case "craft":
         sim.craft(command.recipeId);
+        break;
+      case "enchant":
+        sim.enchant(command.option);
         break;
       case "setTime":
         if (sim.creative) sim.time = ((command.time % 24000) + 24000) % 24000;
@@ -998,6 +1050,9 @@ export class Game implements GameUIBridge {
   getCraftSlots() {
     return this.simulation.craftSlots;
   }
+  getEnchanting(): EnchantingView | null {
+    return this.simulation.getEnchanting();
+  }
   getContainer(): ContainerState | null {
     return this.simulation.container;
   }
@@ -1014,10 +1069,12 @@ export class Game implements GameUIBridge {
     return this.simulation.cursor;
   }
   takeCraftOutput() {
+    if (this.simulation.station === "enchanting") return;
     this.simulation.takeCraftOutput();
     this.publish();
   }
   getCraftOutput(): Slot {
+    if (this.simulation.station === "enchanting") return null;
     return this.simulation.craftOutput;
   }
   giveItem(id: string) {
@@ -1025,6 +1082,7 @@ export class Game implements GameUIBridge {
     this.publish();
   }
   getRecipes(): RecipeDefinition[] {
+    if (this.simulation.station === "enchanting") return [];
     return RECIPES.filter(
       (r) =>
         this.simulation.station === "workbench" || r.station === "inventory",

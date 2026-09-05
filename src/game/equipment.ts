@@ -1,4 +1,5 @@
-import type { BlockDefinition, ItemDefinition } from "./types";
+import type { BlockDefinition, ItemDefinition, Slot } from "./types";
+import { efficiencySpeed } from "./enchantments";
 
 /** Material speed and harvest eligibility are independent (notably for gold). */
 export function canHarvest(
@@ -13,6 +14,7 @@ export function canHarvest(
 export function miningDuration(
   block: BlockDefinition,
   item?: ItemDefinition | null,
+  stack: Slot = null,
 ): number {
   if (!Number.isFinite(block.hardness)) return Infinity;
   if (block.hardness <= 0) return 0.05;
@@ -26,7 +28,8 @@ export function miningDuration(
   // 30 ticks for a harvestable hardness-1 block at speed 1; 100 otherwise.
   return Math.max(
     0.05,
-    (block.hardness * (canHarvest(block, item) ? 1.5 : 5)) / speed,
+    (block.hardness * (canHarvest(block, item) ? 1.5 : 5)) /
+      efficiencySpeed(speed, stack),
   );
 }
 

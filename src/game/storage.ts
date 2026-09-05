@@ -4,6 +4,16 @@ import type { FluidState } from "./fluids";
 import type { NaturalState } from "./natural-updates";
 import { FLUID_SCAN_SIZE } from "./fluids";
 import { NATURAL_SCAN_SIZE } from "./natural-updates";
+import { validateEnchantments } from "./enchantments";
+import { MAX_EXPERIENCE } from "./experience";
+import {
+  SUGAR_CANE_SCAN_SIZE,
+  SUGAR_CANE_SCAN_INTERVAL,
+  SUGAR_CANE_QUEUE_MAX,
+  SUGAR_CANE_GROWTH_MAX,
+  SUGAR_CANE_GROW_MAX_SECONDS,
+} from "./sugar-cane";
+import type { SugarCaneState } from "./sugar-cane";
 import { BLOCKS, ENTITIES, ITEMS } from "./registry";
 import type { FarmState } from "./farming";
 import type {
@@ -13,6 +23,7 @@ import type {
   GameMode,
   ItemStack,
   SaveData,
+  ProgressionState,
   SaveManifest,
   Slot,
   Vec3,
@@ -86,10 +97,10 @@ function vector(value: unknown, path: string, integer = false): Vec3 {
     z: number(v.z, `${path}.z`, -30_000_000, 30_000_000, integer),
   };
 }
-function stack(value: unknown, path: string, saveVersion = 5): Slot {
+function stack(value: unknown, path: string, saveVersion = 6): Slot {
   if (value === null) return null;
   const v = record(value, path);
-  fields(v, ["id", "count", "durability"], path);
+  fields(v, ["id", "count", "durability", "enchantments"], path);
   const id = string(v.id, `${path}.id`);
   const item = ITEMS[id];
   if (!item || !Object.hasOwn(ITEMS, id)) return bad(`${path} 物品不存在`);
@@ -109,13 +120,20 @@ function stack(value: unknown, path: string, saveVersion = 5): Slot {
       true,
     );
   } else if (item.maxDurability) result.durability = item.maxDurability;
+  if (v.enchantments !== undefined) {
+    if (saveVersion < 6) bad(`${path} 旧版本不支持附魔`);
+    if (!validateEnchantments(id, v.enchantments)) bad(`${path} 附魔数据无效`);
+    result.enchantments = {
+      ...record(v.enchantments, `${path}.enchantments`),
+    } as Record<string, number>;
+  }
   return result;
 }
 function slots(
   value: unknown,
   count: number,
   path: string,
-  saveVersion = 5,
+  saveVersion = 6,
 ): Slot[] {
   const values = array(value, path, count);
   if (values.length !== count) return bad(`${path} 必须有 ${count} 格`);
@@ -140,6 +158,8 @@ export function validateSave(value: unknown): SaveData {
       "composters",
       "fluids",
       "natural",
+      "progression",
+      "sugarCane",
     ],
     "根对象",
   );
@@ -160,8 +180,8 @@ export function validateSave(value: unknown): SaveData {
     "manifest",
   );
   if (
-    ![1, 2, 3, 4, 5].includes(manifest.version as number) ||
-    ![1, 2, 3, 4, 5].includes(manifest.generatorVersion as number)
+    ![1, 2, 3, 4, 5, 6].includes(manifest.version as number) ||
+    ![1, 2, 3, 4, 5, 6].includes(manifest.generatorVersion as number)
   )
     return bad("不支持此存档或地形生成器版本；原始文件未被修改");
   if (
@@ -178,11 +198,16 @@ export function validateSave(value: unknown): SaveData {
     (data.fluids !== undefined || data.natural !== undefined)
   )
     bad("旧版本不支持自然更新状态");
+  if (
+    Number(manifest.version) < 6 &&
+    (data.progression !== undefined || data.sugarCane !== undefined)
+  )
+    bad("旧版本不支持经验与甘蔗状态");
   if (manifest.mode !== "survival" && manifest.mode !== "creative")
     return bad("游戏模式无效");
   const validatedManifest: SaveManifest = {
-    version: manifest.version as 1 | 2 | 3 | 4 | 5,
-    generatorVersion: manifest.generatorVersion as 1 | 2 | 3 | 4 | 5,
+    version: manifest.version as 1 | 2 | 3 | 4 | 5 | 6,
+    generatorVersion: manifest.generatorVersion as 1 | 2 | 3 | 4 | 5 | 6,
     id: string(manifest.id, "manifest.id"),
     name: string(manifest.name, "manifest.name", 80),
     seed: string(manifest.seed, "manifest.seed", 128),
@@ -248,7 +273,9 @@ export function validateSave(value: unknown): SaveData {
             ? 67
             : manifest.version === 3
               ? 83
-              : 65535,
+              : Number(manifest.version) < 6
+                ? 110
+                : 65535,
         true,
       );
       if (!BLOCKS[id]) bad("未知方块");
@@ -287,9 +314,11 @@ export function validateSave(value: unknown): SaveData {
     } else if (container.kind === "furnace") {
       fields(
         container,
-        ["kind", "slots", "burn", "burnTotal", "progress"],
+        ["kind", "slots", "burn", "burnTotal", "progress", "experience"],
         "furnace",
       );
+      if (container.experience !== undefined && validatedManifest.version < 6)
+        bad("旧版本不支持熔炉经验");
       if (occupied.get(key) !== 14) bad("熔炉数据没有对应熔炉方块");
       const burnTotal = number(
         container.burnTotal,
@@ -308,6 +337,16 @@ export function validateSave(value: unknown): SaveData {
         burn: number(container.burn, "furnace.burn", 0, burnTotal),
         burnTotal,
         progress: number(container.progress, "furnace.progress", 0, 1_000_000),
+        ...(container.experience === undefined
+          ? {}
+          : {
+              experience: number(
+                container.experience,
+                "furnace.experience",
+                0,
+                MAX_EXPERIENCE,
+              ),
+            }),
       };
     } else bad("未知容器类型");
   }
@@ -331,11 +370,17 @@ export function validateSave(value: unknown): SaveData {
           "courtship",
           "sheared",
           "woolTimer",
+          "playerHitTimer",
         ],
         "entity",
       );
       const kind = string(entity.kind, "entity.kind") as EntityKind;
       if (!Object.hasOwn(ENTITIES, kind)) return bad("未知生物种类");
+      if (
+        validatedManifest.version < 6 &&
+        (kind === "cow" || entity.playerHitTimer !== undefined)
+      )
+        bad("旧版本不支持此生物状态");
       const breedingFields = [
         "age",
         "love",
@@ -394,6 +439,16 @@ export function validateSave(value: unknown): SaveData {
         ...(entity.woolTimer === undefined
           ? {}
           : { woolTimer: number(entity.woolTimer, "entity.woolTimer", 0, 30) }),
+        ...(entity.playerHitTimer === undefined
+          ? {}
+          : {
+              playerHitTimer: number(
+                entity.playerHitTimer,
+                "entity.playerHitTimer",
+                0,
+                5,
+              ),
+            }),
         ...(entity.fuse === undefined
           ? {}
           : { fuse: number(entity.fuse, "entity.fuse", 0) }),
@@ -613,6 +668,99 @@ export function validateSave(value: unknown): SaveData {
       falling,
     };
   }
+  let progression: ProgressionState | undefined;
+  let sugarCane: SugarCaneState | undefined;
+  if (validatedManifest.version >= 6) {
+    const input = record(data.progression, "progression");
+    fields(input, ["points", "enchantmentSeed", "orbs"], "progression");
+    const ids = new Set<string>();
+    progression = {
+      points: number(input.points, "progression.points", 0, MAX_EXPERIENCE),
+      enchantmentSeed: number(
+        input.enchantmentSeed,
+        "progression.enchantmentSeed",
+        0,
+        0xffffffff,
+        true,
+      ),
+      orbs: array(input.orbs, "progression.orbs", 4096).map((value) => {
+        const orb = record(value, "experience orb");
+        fields(orb, ["id", "position", "value", "age"], "experience orb");
+        const id = string(orb.id, "experience orb.id");
+        if (ids.has(id)) bad("经验球标识重复");
+        ids.add(id);
+        return {
+          id,
+          position: vector(orb.position, "experience orb.position"),
+          value: number(
+            orb.value,
+            "experience orb.value",
+            1,
+            MAX_EXPERIENCE,
+            true,
+          ),
+          age: number(orb.age, "experience orb.age", -1, 300),
+        };
+      }),
+    };
+    const cane = record(data.sugarCane, "sugarCane");
+    fields(
+      cane,
+      ["version", "accumulator", "scanCursor", "queue", "growth"],
+      "sugarCane",
+    );
+    if (cane.version !== 1) bad("甘蔗存档版本无效");
+    const positions = (
+      value: unknown,
+      name: string,
+      max: number,
+      growing: boolean,
+    ) => {
+      const seen = new Set<string>();
+      return array(value, name, max).map((value) => {
+        const entry = record(value, name);
+        fields(entry, growing ? ["x", "y", "z", "age"] : ["x", "y", "z"], name);
+        const at = vector({ x: entry.x, y: entry.y, z: entry.z }, name, true);
+        if (at.y < WORLD_MIN_Y || at.y > WORLD_MAX_Y) bad("甘蔗记录高度无效");
+        const key = `${at.x},${at.y},${at.z}`;
+        if (seen.has(key)) bad("甘蔗记录重复");
+        seen.add(key);
+        return {
+          ...at,
+          age: growing
+            ? number(entry.age, `${name}.age`, 0, SUGAR_CANE_GROW_MAX_SECONDS)
+            : 0,
+        };
+      });
+    };
+    sugarCane = {
+      version: 1,
+      accumulator: below(
+        cane.accumulator,
+        "sugarCane.accumulator",
+        SUGAR_CANE_SCAN_INTERVAL,
+      ),
+      scanCursor: number(
+        cane.scanCursor,
+        "sugarCane.scanCursor",
+        0,
+        SUGAR_CANE_SCAN_SIZE - 1,
+        true,
+      ),
+      queue: positions(
+        cane.queue,
+        "sugarCane.queue",
+        SUGAR_CANE_QUEUE_MAX,
+        false,
+      ).map(({ x, y, z }) => ({ x, y, z })),
+      growth: positions(
+        cane.growth,
+        "sugarCane.growth",
+        SUGAR_CANE_GROWTH_MAX,
+        true,
+      ),
+    };
+  }
   return {
     manifest: validatedManifest,
     player: {
@@ -645,6 +793,7 @@ export function validateSave(value: unknown): SaveData {
     time: number(data.time, "time", 0),
     ...(farming ? { farming, composters } : {}),
     ...(fluids && natural ? { fluids, natural } : {}),
+    ...(progression && sugarCane ? { progression, sugarCane } : {}),
   };
 }
 function openDatabase(): Promise<IDBDatabase> {

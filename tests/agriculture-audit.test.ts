@@ -129,6 +129,7 @@ describe("agriculture integration independent audit", () => {
     delete legacy.farming;
     delete legacy.composters;
     delete legacy.fluids; delete legacy.natural;
+    delete legacy.progression; delete legacy.sugarCane;
     await saveWorld(legacy);
     const upgraded = new Simulation(new AuditWorld(), legacy).snapshot();
     await saveWorld(upgraded);

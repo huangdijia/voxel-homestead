@@ -2,6 +2,30 @@ import { WORLD_MIN_Y, WORLD_MAX_Y } from "../engine/world-height";
 import { canHarvest, miningDuration, damageAfterArmor } from "./equipment";
 import { FluidSystem } from "./fluids";
 import { NaturalUpdatesSystem } from "./natural-updates";
+import { SugarCaneSystem } from "./sugar-cane";
+import {
+  experienceStatus,
+  deathExperience,
+  miningExperience,
+  mobExperience,
+  SMELTING_EXPERIENCE,
+  rollFractionalExperience,
+  MAX_EXPERIENCE,
+} from "./experience";
+import {
+  durabilityConsumed,
+  fortuneDropCount,
+  silkTouchDrop,
+  sharpnessBonus,
+  enchantmentDamageMultiplier,
+  consumesOxygen,
+  enchantability,
+} from "./enchantments";
+import {
+  countBookshelves,
+  getEnchantingOffers,
+  applyEnchantment,
+} from "./enchanting";
 import { fluidSurfaceHeights } from "../engine/shapes";
 import { fluidInfo, isFluid, isWater, isLava } from "./fluid-blocks";
 import type {
@@ -11,6 +35,8 @@ import type {
   DropState,
   EntityKind,
   EntityState,
+  ProgressionState,
+  EnchantingView,
   GameMode,
   ItemStack,
   PlayerState,
@@ -21,8 +47,13 @@ import type {
   WorldEvent,
   WorldPort,
 } from "./types";
-import { BLOCKS, ITEMS, ENTITIES } from "./registry";
-import { addItem, clickInventorySlot, createInventory } from "./inventory";
+import { BLOCKS, ITEMS, ENTITIES, COW_DROP_RANGES } from "./registry";
+import {
+  addItem,
+  clickInventorySlot,
+  createInventory,
+  compatibleStacks,
+} from "./inventory";
 import {
   RECIPES,
   canCraft,
@@ -62,11 +93,11 @@ export function createNewSave(
 ): SaveData {
   const worldSeed =
     seed.trim() || String(Math.floor(Math.random() * 2147483647));
-  const spawn = { x: 0.5, y: surfaceHeight(worldSeed, 0, 0, 5) + 1.05, z: 0.5 };
+  const spawn = { x: 0.5, y: surfaceHeight(worldSeed, 0, 0, 6) + 1.05, z: 0.5 };
   return {
     manifest: {
-      version: 5,
-      generatorVersion: 5,
+      version: 6,
+      generatorVersion: 6,
       id: uid(),
       name: name.trim() || "新的世界",
       seed: worldSeed,
@@ -95,6 +126,18 @@ export function createNewSave(
     entities: [],
     drops: [],
     time: 1000,
+    progression: {
+      points: 0,
+      enchantmentSeed: seedNumber(worldSeed),
+      orbs: [],
+    },
+    sugarCane: {
+      version: 1,
+      accumulator: 0,
+      scanCursor: 0,
+      queue: [],
+      growth: [],
+    },
     farming: {
       version: 1,
       randomState: seedNumber(worldSeed),
@@ -127,10 +170,13 @@ export class Simulation {
   readonly farming: FarmingSystem;
   readonly fluids: FluidSystem;
   readonly natural: NaturalUpdatesSystem;
+  readonly sugarCane: SugarCaneSystem;
+  progression: ProgressionState;
   composters: Record<string, number>;
   craftSlots: Slot[] = Array(4).fill(null);
   cursor: Slot = null;
-  station: "inventory" | "workbench" = "inventory";
+  station: "inventory" | "workbench" | "enchanting" = "inventory";
+  enchantingPosition: Vec3 | null = null;
   containerKey: string | null = null;
   mining = 0;
   miningKey = "";
@@ -150,7 +196,7 @@ export class Simulation {
   private mobPulse = 0;
   private age = 0;
   private entityVel = new Map<string, number>();
-  onOpen?: (kind: "workbench" | "chest" | "furnace") => void;
+  onOpen?: (kind: "workbench" | "chest" | "furnace" | "enchanting") => void;
   constructor(
     public world: WorldPort,
     data: SaveData,
@@ -163,6 +209,13 @@ export class Simulation {
     this.drops = clone(data.drops);
     this.containers = clone(data.containers);
     this.composters = clone(data.composters ?? {});
+    this.progression = clone(
+      data.progression ?? {
+        points: 0,
+        enchantmentSeed: seedNumber(data.manifest.seed),
+        orbs: [],
+      },
+    );
     this.farming = new FarmingSystem(world, data.manifest.seed, data.farming, {
       dropItem: (stack, position) => this.spawnDrop(stack, position),
       changed: () => {
@@ -176,6 +229,15 @@ export class Simulation {
       world,
       data.manifest.seed,
       data.natural,
+      {
+        setBlock,
+        dropItem: (position, stack) => this.spawnDrop(stack, position),
+      },
+    );
+    this.sugarCane = new SugarCaneSystem(
+      world,
+      data.manifest.seed,
+      data.sugarCane,
       {
         setBlock,
         dropItem: (position, stack) => this.spawnDrop(stack, position),
@@ -226,6 +288,7 @@ export class Simulation {
     this.farming.notifyBlockChanged(position, oldId, id);
     this.fluids?.notifyBlockChanged(position, oldId, id);
     this.natural?.notifyBlockChanged(position, oldId, id);
+    this.sugarCane?.notifyBlockChanged(position, oldId, id);
     this.dirty = true;
     return true;
   }
@@ -243,7 +306,7 @@ export class Simulation {
           this.spawnDrop(stack, { x, y, z });
       else if (old === 58 && this.farming.nextRandom() < 0.125)
         this.spawnDrop({ id: "wheat_seeds", count: 1 }, { x, y, z });
-      else if ([16, 20, 83].includes(old)) {
+      else if ([16, 20, 83, 111].includes(old)) {
         const drop = BLOCKS[old].drop;
         if (drop) this.spawnDrop({ id: drop, count: 1 }, { x, y, z });
       }
@@ -311,6 +374,7 @@ export class Simulation {
     }
     this.fluids.step(dt, this.player.position);
     this.natural.step(dt, this.player.position, this.night ? 4 : 15);
+    this.sugarCane.step(dt, this.player.position);
     this.updateFurnaces(dt);
     this.farming.step(dt, this.player.position, this.night ? 4 : 15);
     for (const [key, remaining] of Object.entries(this.composters)) {
@@ -327,6 +391,7 @@ export class Simulation {
       }
     }
     this.updateDrops(dt);
+    this.updateExperience(dt);
     this.updateMobs(dt);
     this.dirty = true;
   }
@@ -455,11 +520,14 @@ export class Simulation {
     const underwater = this.fluidAt(e)?.kind === "water";
     if (this.fluidAt({ ...p.position, y: p.position.y + 0.1 })?.kind === "lava")
       this.damage(4, "lava");
+    const oxygenTick =
+      underwater &&
+      consumesOxygen(p.armor.head, () => this.farming.nextRandom());
     p.oxygen = underwater
-      ? Math.max(0, p.oxygen - dt * 2)
+      ? Math.max(0, p.oxygen - (oxygenTick ? dt * 2 : 0))
       : Math.min(20, p.oxygen + dt * 8);
     if (underwater && p.oxygen === 0) {
-      this.drownTimer += dt;
+      this.drownTimer += oxygenTick ? dt : 0;
       if (this.drownTimer >= 1) {
         this.damage(2, "drown");
         this.drownTimer = 0;
@@ -515,9 +583,19 @@ export class Simulation {
       0,
     );
     const protectedHit = ["attack", "explosion", "lava"].includes(reason);
-    const dealt = protectedHit
+    const physical = protectedHit
       ? damageAfterArmor(amount, armor, toughness)
       : amount;
+    const dealt =
+      physical *
+      enchantmentDamageMultiplier(
+        Object.values(this.player.armor),
+        reason === "fall"
+          ? "fall"
+          : ["hunger", "void"].includes(reason)
+            ? "bypass"
+            : "other",
+      );
     this.player.health = Math.max(0, this.player.health - dealt);
     this.hurtCooldown = 0.45;
     this.sound("hurt");
@@ -528,7 +606,9 @@ export class Simulation {
         if (s) {
           s.durability =
             (s.durability ?? ITEMS[s.id].maxDurability ?? 100) -
-            Math.max(1, Math.floor(amount / 4));
+            durabilityConsumed(s, Math.max(1, Math.floor(amount / 4)), () =>
+              this.farming.nextRandom(),
+            );
           if (s.durability <= 0) this.player.armor[key] = null;
         }
       }
@@ -538,6 +618,8 @@ export class Simulation {
     this.closeContainer();
     const p = this.player;
     p.dead = true;
+    this.spawnExperience(deathExperience(this.progression.points), p.position);
+    this.progression.points = 0;
     p.velocity = { x: 0, y: 0, z: 0 };
     p.inventory.forEach((s) => {
       if (s) this.spawnDrop(s, p.position);
@@ -638,6 +720,87 @@ export class Simulation {
       age: -0.65,
     });
   }
+  /** XP remains separate from inventory and never consumes an item slot. */
+  spawnExperience(value: number, position: Vec3) {
+    if (!Number.isSafeInteger(value) || value <= 0 || value > MAX_EXPERIENCE)
+      return;
+    const at = { x: position.x, y: position.y + 0.45, z: position.z };
+    // Bound entity overhead by combining colocated orbs, retaining their total value.
+    const candidates = this.progression.orbs.filter(
+      (o) => o.value + value <= MAX_EXPERIENCE,
+    );
+    const nearby =
+      candidates.find((o) => distance(o.position, at) < 1.5) ??
+      (this.progression.orbs.length >= 4096
+        ? candidates.reduce<ProgressionState["orbs"][number] | undefined>(
+            (closest, orb) =>
+              !closest ||
+              distance(orb.position, at) < distance(closest.position, at)
+                ? orb
+                : closest,
+            undefined,
+          )
+        : undefined);
+    if (nearby) {
+      nearby.value += value;
+      nearby.age = Math.min(nearby.age, -0.5);
+    } else if (this.progression.orbs.length < 4096)
+      this.progression.orbs.push({ id: uid(), position: at, value, age: -0.5 });
+    else this.toast("经验球已达到存档上限，新增经验未生成");
+    this.dirty = true;
+  }
+  private updateExperience(dt: number) {
+    const player = { ...this.player.position, y: this.player.position.y + 0.7 };
+    this.progression.orbs = this.progression.orbs.filter((orb) => {
+      if (!this.world.isReady(orb.position.x, orb.position.z, orb.position.y))
+        return true;
+      orb.age += dt;
+      if (
+        orb.age >= 300 ||
+        orb.position.y < WORLD_MIN_Y - 64 ||
+        this.fluidAt(orb.position)?.kind === "lava"
+      )
+        return false;
+      const dist = distance(orb.position, player);
+      if (!this.player.dead && orb.age >= 0 && dist < 1.3) {
+        const collected = Math.min(
+          orb.value,
+          Math.floor(MAX_EXPERIENCE - this.progression.points),
+        );
+        this.progression.points += collected;
+        orb.value -= collected;
+        if (collected) this.sound("pickup");
+        if (!orb.value) return false;
+      }
+      const attracted = !this.player.dead && orb.age >= 0 && dist < 8;
+      const movement = attracted
+        ? {
+            x: (player.x - orb.position.x) * Math.min(1, dt * 3),
+            y: (player.y - orb.position.y) * Math.min(1, dt * 3),
+            z: (player.z - orb.position.z) * Math.min(1, dt * 3),
+          }
+        : { x: 0, y: -Math.min(dt * 3, 0.15), z: 0 };
+      orb.position = moveBody(
+        this.world,
+        orb.position,
+        movement,
+        0.15,
+        0.15,
+      ).position;
+      return true;
+    });
+  }
+  private claimFurnaceExperience(
+    container: ContainerState,
+    position = this.player.position,
+  ) {
+    if (container.kind !== "furnace" || !container.experience) return;
+    const points = rollFractionalExperience(container.experience, () =>
+      this.farming.nextRandom(),
+    );
+    container.experience = 0;
+    this.spawnExperience(points, position);
+  }
   private updateDrops(dt: number) {
     this.drops = this.drops.filter((drop) => {
       if (
@@ -694,7 +857,9 @@ export class Simulation {
   private wearTool() {
     const held = this.held;
     if (this.creative || !held || !ITEMS[held.id]?.maxDurability) return;
-    held.durability = (held.durability ?? ITEMS[held.id].maxDurability!) - 1;
+    held.durability =
+      (held.durability ?? ITEMS[held.id].maxDurability!) -
+      durabilityConsumed(held, 1, () => this.farming.nextRandom());
     if (held.durability <= 0) {
       this.player.inventory[this.player.selected] = null;
       this.sound("break");
@@ -718,7 +883,9 @@ export class Simulation {
       this.mining = 0;
     }
     const tool = this.held ? ITEMS[this.held.id] : null;
-    const duration = this.creative ? 0.14 : miningDuration(def, tool);
+    const duration = this.creative
+      ? 0.14
+      : miningDuration(def, tool, this.held);
     const old = this.mining;
     this.mining = Math.min(1, this.mining + dt / duration);
     if (Math.floor(this.mining * 4) > Math.floor(old * 4)) this.sound("dig");
@@ -790,12 +957,16 @@ export class Simulation {
     }
     const container = this.containers[posKey(p)];
     if (container) {
+      this.claimFurnaceExperience(container, p);
       container.slots.forEach((s) => {
         if (s) this.spawnDrop(s, { x: p.x + 0.5, y: p.y + 0.1, z: p.z + 0.5 });
       });
       delete this.containers[posKey(p)];
     }
-    if (!this.creative && cropAt(id)) {
+    const silk = !exploded && eligible ? silkTouchDrop(id, this.held) : null;
+    if (!this.creative && silk) {
+      this.spawnDrop(silk, p);
+    } else if (!this.creative && cropAt(id)) {
       for (const stack of harvestCrop(id, () => this.farming.nextRandom()))
         this.spawnDrop(stack, { x: p.x + 0.5, y: p.y + 0.1, z: p.z + 0.5 });
     } else if (!this.creative && id === 58) {
@@ -822,11 +993,23 @@ export class Simulation {
           ? 0
           : Math.floor(this.farming.nextRandom() * (range[1] - range[0] + 1)));
       this.spawnDrop(
-        { id: drop, count },
+        {
+          id: drop,
+          count: exploded
+            ? count
+            : fortuneDropCount(id, count, this.held, () =>
+                this.farming.nextRandom(),
+              ),
+        },
         { x: p.x + 0.5, y: p.y + 0.1, z: p.z + 0.5 },
       );
     }
     if (!exploded) {
+      if (!this.creative && eligible)
+        this.spawnExperience(
+          miningExperience(id, !!silk, () => this.farming.nextRandom()),
+          p,
+        );
       if (wear) this.wearTool();
       this.exhaustion += 0.025;
       this.sound("break");
@@ -866,7 +1049,10 @@ export class Simulation {
     }
     if (!victim) return false;
     this.attackCooldown = 0.5;
-    victim.health -= this.held ? (ITEMS[this.held.id]?.damage ?? 2) : 1;
+    victim.health -=
+      (this.held ? (ITEMS[this.held.id]?.damage ?? 2) : 1) +
+      sharpnessBonus(this.held);
+    victim.playerHitTimer = 5;
     this.wearTool();
     this.sound("hit");
     const knock = moveBody(
@@ -878,7 +1064,20 @@ export class Simulation {
     );
     victim.position = knock.position;
     if (victim.health <= 0) {
-      if ((victim.age ?? 0) >= 0)
+      this.spawnExperience(
+        mobExperience(victim.kind, (victim.age ?? 0) < 0, () =>
+          this.farming.nextRandom(),
+        ),
+        victim.position,
+      );
+      if (victim.kind === "cow" && (victim.age ?? 0) >= 0) {
+        for (const [id, range] of Object.entries(COW_DROP_RANGES)) {
+          const count =
+            range[0] +
+            Math.floor(this.farming.nextRandom() * (range[1] - range[0] + 1));
+          if (count) this.spawnDrop({ id, count }, victim.position);
+        }
+      } else if ((victim.age ?? 0) >= 0)
         ENTITIES[victim.kind].drops.forEach((s) => {
           if (s.id !== "wool" || !victim!.sheared)
             this.spawnDrop(s, victim!.position);
@@ -940,6 +1139,14 @@ export class Simulation {
     if (id === 13) {
       this.startCraft("workbench");
       this.onOpen?.("workbench");
+      return;
+    }
+    if (id === 112) {
+      this.closeContainer();
+      this.station = "enchanting";
+      this.enchantingPosition = { ...t };
+      this.craftSlots = [null, null];
+      this.onOpen?.("enchanting");
       return;
     }
     if (id === 14 || id === 15) {
@@ -1011,6 +1218,10 @@ export class Simulation {
     const replaceable = (id: number) =>
       [0, 58, 83].includes(id) || isFluid(id) || !!cropAt(id);
     if (!replaceable(this.world.getBlock(p.x, p.y, p.z))) return;
+    if (def.block === 111 && !this.sugarCane.canPlace(p)) {
+      this.toast("甘蔗需种在水边的草地、泥土或沙上，最高三格");
+      return;
+    }
     const boxes = [p];
     if (def.block === 18) boxes.push({ x: p.x, y: p.y + 1, z: p.z });
     if (def.block === 22) boxes.push({ x: p.x, y: p.y, z: p.z + 1 });
@@ -1247,7 +1458,12 @@ export class Simulation {
         at.y >= WORLD_MIN_Y &&
         at.y <= WORLD_MAX_Y &&
         this.world.isReady(at.x, at.z, at.y) &&
-        (old === 0 || old === 58 || old === 83 || isFluid(old) || !!cropAt(old))
+        (old === 0 ||
+          old === 58 ||
+          old === 83 ||
+          old === 111 ||
+          isFluid(old) ||
+          !!cropAt(old))
       ) {
         if (old && !isFluid(old)) this.breakBlock(at, old);
         const lava = item === "lava_bucket";
@@ -1270,7 +1486,7 @@ export class Simulation {
     return false;
   }
   private animalFood(kind: EntityKind, item: string) {
-    return kind === "sheep"
+    return kind === "sheep" || kind === "cow"
       ? item === "wheat"
       : kind === "pig" && ["carrot", "potato", "beetroot"].includes(item);
   }
@@ -1374,6 +1590,7 @@ export class Simulation {
     this.cursor = null;
     this.craftSlots = Array(4).fill(null);
     this.station = "inventory";
+    this.enchantingPosition = null;
     this.containerKey = null;
   }
   get container() {
@@ -1382,6 +1599,7 @@ export class Simulation {
       : null;
   }
   get craftOutput() {
+    if (this.station === "enchanting") return null;
     return (
       matchRecipe(this.craftSlots, this.station === "workbench" ? 3 : 2)
         ?.output ?? null
@@ -1393,9 +1611,8 @@ export class Simulation {
     const max = ITEMS[output.id].maxStack;
     if (
       this.cursor &&
-      (this.cursor.id !== output.id ||
-        this.cursor.count + output.count > max ||
-        this.cursor.durability !== output.durability)
+      (!compatibleStacks(this.cursor, output) ||
+        this.cursor.count + output.count > max)
     )
       return;
     const result = consumeRecipe(
@@ -1408,6 +1625,7 @@ export class Simulation {
     this.sound("craft");
   }
   craft(recipeId: string) {
+    if (this.station === "enchanting") return;
     const recipe = RECIPES.find((r) => r.id === recipeId);
     if (!recipe) return;
     if (recipe.station === "workbench" && this.station !== "workbench") {
@@ -1418,6 +1636,73 @@ export class Simulation {
       this.sound("craft");
       this.toast(`制作了 ${ITEMS[recipe.output.id]?.name ?? recipe.name}`);
     } else this.toast("材料不足，或背包没有足够空间");
+  }
+  getEnchanting(): EnchantingView | null {
+    const at = this.enchantingPosition;
+    if (
+      this.station !== "enchanting" ||
+      !at ||
+      this.player.dead ||
+      distance(this.eye(), { x: at.x + 0.5, y: at.y + 0.5, z: at.z + 0.5 }) >
+        6 ||
+      !this.world.isReady(at.x, at.z, at.y) ||
+      this.world.getBlock(at.x, at.y, at.z) !== 112
+    )
+      return null;
+    const bookshelves = countBookshelves(this.world, at);
+    const status = experienceStatus(this.progression.points);
+    return {
+      bookshelves,
+      level: status.level,
+      progress: status.progress,
+      offers: getEnchantingOffers(
+        this.craftSlots[0],
+        bookshelves,
+        this.progression.enchantmentSeed,
+        this.creative ? MAX_EXPERIENCE : this.progression.points,
+        this.creative
+          ? 3
+          : this.craftSlots[1]?.id === "lapis_lazuli"
+            ? this.craftSlots[1].count
+            : 0,
+      ).map((offer) =>
+        this.creative ? { ...offer, levelCost: 0, lapisCost: 0 } : offer,
+      ),
+    };
+  }
+  enchant(option: 0 | 1 | 2) {
+    const view = this.getEnchanting(),
+      stack = this.craftSlots[0],
+      lapis = this.craftSlots[1];
+    if (
+      !view ||
+      !stack ||
+      stack.count !== 1 ||
+      (!this.creative && lapis?.id !== "lapis_lazuli")
+    )
+      return;
+    const result = applyEnchantment(
+      stack,
+      view.bookshelves,
+      this.progression.enchantmentSeed,
+      this.creative ? MAX_EXPERIENCE : this.progression.points,
+      this.creative ? 3 : lapis!.count,
+      option,
+    );
+    if (!result) {
+      this.toast("附魔条件不足，物品和经验未消耗");
+      return;
+    }
+    this.craftSlots[0] = clone(result.stack);
+    if (!this.creative) {
+      lapis!.count -= result.lapisCost;
+      if (!lapis!.count) this.craftSlots[1] = null;
+      this.progression.points = result.points;
+    }
+    this.progression.enchantmentSeed = result.seed;
+    this.dirty = true;
+    this.sound("craft");
+    this.toast("附魔完成，新的力量已注入装备");
   }
   clickSlot(
     source: "inventory" | "craft" | "container" | "armor",
@@ -1442,15 +1727,26 @@ export class Simulation {
           ? this.craftSlots
           : this.container?.slots;
     const i = Number(index);
-    if (!slots || i < 0 || i >= slots.length) return;
+    if (!slots || !Number.isInteger(i) || i < 0 || i >= slots.length) return;
+    if (
+      source === "craft" &&
+      this.station === "enchanting" &&
+      this.cursor &&
+      (i === 1
+        ? this.cursor.id !== "lapis_lazuli"
+        : this.cursor.count !== 1 || enchantability(this.cursor.id) <= 0)
+    )
+      return;
     if (source === "container" && this.container?.kind === "furnace") {
       if (i === 2 && this.cursor) {
         if (
-          slots[2]?.id === this.cursor.id &&
+          slots[2] &&
+          compatibleStacks(slots[2], this.cursor) &&
           this.cursor.count + slots[2]!.count <= ITEMS[this.cursor.id].maxStack
         ) {
           this.cursor.count += slots[2]!.count;
           slots[2] = null;
+          this.claimFurnaceExperience(this.container);
         }
         return;
       }
@@ -1462,6 +1758,19 @@ export class Simulation {
       if (!stack) return;
       if (source === "inventory") {
         const item = ITEMS[stack.id];
+        if (this.station === "enchanting") {
+          const dest =
+            stack.id === "lapis_lazuli"
+              ? 1
+              : enchantability(stack.id) > 0
+                ? 0
+                : -1;
+          if (dest < 0) return;
+          const subset = [this.craftSlots[dest]];
+          slots[i] = addItem(subset, stack);
+          this.craftSlots[dest] = subset[0];
+          return;
+        }
         if (item.armorSlot && !this.player.armor[item.armorSlot]) {
           this.player.armor[item.armorSlot] = stack;
           slots[i] = null;
@@ -1485,10 +1794,28 @@ export class Simulation {
           for (let j = start; j < end; j++) slots[j] = subset[j - start];
           slots[i] = leftover;
         }
-      } else slots[i] = addItem(this.player.inventory, stack);
+      } else {
+        const before = stack.count;
+        slots[i] = addItem(this.player.inventory, stack);
+        if (
+          source === "container" &&
+          i === 2 &&
+          this.container?.kind === "furnace" &&
+          (slots[i]?.count ?? 0) < before
+        )
+          this.claimFurnaceExperience(this.container);
+      }
       return;
     }
+    const before = slots[i]?.count ?? 0;
     this.cursor = clickInventorySlot(slots, i, this.cursor, right);
+    if (
+      source === "container" &&
+      i === 2 &&
+      this.container?.kind === "furnace" &&
+      (slots[i]?.count ?? 0) < before
+    )
+      this.claimFurnaceExperience(this.container);
     this.dirty = true;
   }
   private equipHeld(slot: ArmorSlot) {
@@ -1540,6 +1867,10 @@ export class Simulation {
         container.progress += dt;
         if (container.progress >= 10) {
           container.progress -= 10;
+          container.experience = Math.min(
+            MAX_EXPERIENCE,
+            (container.experience ?? 0) + (SMELTING_EXPERIENCE[input!.id] ?? 0),
+          );
           input!.count--;
           if (!input!.count) container.slots[0] = null;
           if (output) output.count += recipe.count;
@@ -1585,7 +1916,7 @@ export class Simulation {
       for (let i = 0; i < 6; i++) {
         const angle = (i * Math.PI) / 3 + 0.7;
         this.spawnEntity(
-          i % 2 ? "sheep" : "pig",
+          (["pig", "sheep", "cow"] as const)[i % 3],
           p.x + Math.cos(angle) * 10,
           p.z + Math.sin(angle) * 10,
         );
@@ -1612,6 +1943,8 @@ export class Simulation {
     for (const e of [...this.entities]) {
       if (!this.world.isReady(e.position.x, e.position.z, e.position.y))
         continue;
+      if (e.playerHitTimer !== undefined)
+        e.playerHitTimer = Math.max(0, e.playerHitTimer - dt);
       const def = ENTITIES[e.kind],
         dist = distance(e.position, this.player.position);
       if (!def.hostile) {
@@ -1637,6 +1970,7 @@ export class Simulation {
         }
       }
       if (dist > 96 && def.hostile) {
+        e.playerHitTimer = 0;
         e.health = 0;
         continue;
       }
@@ -1718,6 +2052,10 @@ export class Simulation {
                 parent.breedCooldown = 300;
               }
               this.sound("pickup");
+              this.spawnExperience(
+                1 + Math.floor(this.farming.nextRandom() * 7),
+                position,
+              );
               this.toast("一只幼崽出生了！");
             }
           }
@@ -1766,11 +2104,22 @@ export class Simulation {
         else e.fuse = Math.max(0, (e.fuse ?? 0) - dt * 2);
         if ((e.fuse ?? 0) > 1.5) {
           this.explode(e.position);
+          e.playerHitTimer = 0;
           e.health = 0;
         }
       }
     }
-    this.entities = this.entities.filter((e) => e.health > 0);
+    this.entities = this.entities.filter((e) => {
+      if (e.health > 0) return true;
+      if ((e.playerHitTimer ?? 0) > 0)
+        this.spawnExperience(
+          mobExperience(e.kind, (e.age ?? 0) < 0, () =>
+            this.farming.nextRandom(),
+          ),
+          e.position,
+        );
+      return false;
+    });
     const livingIds = new Set(this.entities.map((e) => e.id));
     for (const id of this.entityVel.keys())
       if (!livingIds.has(id)) this.entityVel.delete(id);
@@ -1870,7 +2219,7 @@ export class Simulation {
           });
       }
     return {
-      manifest: { ...this.manifest, version: 5, updatedAt: Date.now() },
+      manifest: { ...this.manifest, version: 6, updatedAt: Date.now() },
       player: p,
       time: this.time,
       changes: this.world.getChanges(),
@@ -1880,6 +2229,8 @@ export class Simulation {
       composters: clone(this.composters),
       fluids: this.fluids.snapshot(),
       natural: this.natural.snapshot(),
+      sugarCane: this.sugarCane.snapshot(),
+      progression: clone(this.progression),
       drops,
     };
   }

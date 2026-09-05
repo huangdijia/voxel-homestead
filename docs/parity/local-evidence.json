@@ -1,16 +1,20 @@
 {
   "sourceSnapshot": {
+    "src/game/enchantments.ts": {
+      "sha256": "39eed1f86b8929f85782b9cf0f13ed94ffbebabba2ab46d94074bea746535049",
+      "bytes": 7584
+    },
     "src/game/inventory.ts": {
-      "sha256": "9bdb268484d6d4ead19a194637b2213f4aaee1797328ca762b6d92cead820402",
-      "bytes": 3438
+      "sha256": "316ff3be2390b976b8ef27386cfa2e281e5525895fc0563130b8a6aa59972e11",
+      "bytes": 3759
     },
     "src/game/recipes.ts": {
-      "sha256": "0ae9d48384e7946de8a2b0c449895655252bcdf3fec6e2a0cfab2f40509e8e29",
-      "bytes": 8748
+      "sha256": "dbbb310170219b1b61763b84e167f515a9fe8d19405928c0ee1b69aaa16da54a",
+      "bytes": 9227
     },
     "src/game/registry.ts": {
-      "sha256": "54039e163c29decaaf8ade016b5858a4863552f2c12a9dc2096301757189cd6a",
-      "bytes": 13035
+      "sha256": "2c08f7650343da43adb3a6370ed04049d295b8428e8bf215e34ef79b8f5f3bb2",
+      "bytes": 14274
     }
   },
   "statusRule": "Definition matches and existing test names are leads, not executed per-entry acceptance. No acceptance is promoted by this generator.",
@@ -31,6 +35,7 @@
     "raw_pork": "porkchop",
     "cooked_pork": "cooked_porkchop",
     "raw_mutton": "mutton",
+    "raw_beef": "beef",
     "wet_farmland": "farmland"
   },
   "cropAliases": {
@@ -41,11 +46,12 @@
   },
   "composterAlias": "composter_1..composter_8 -> minecraft:composter; state acceptance remains unverified",
   "counts": {
-    "blocks": 111,
-    "items": 129,
-    "entities": 4,
-    "craftingRecipes": 86,
-    "smeltingRecipes": 26
+    "blocks": 114,
+    "items": 137,
+    "entities": 5,
+    "enchantments": 8,
+    "craftingRecipes": 90,
+    "smeltingRecipes": 27
   },
   "unmatchedLocal": {
     "blocks": [
@@ -217,8 +223,83 @@
         "status": "no-reference-entry-review-required"
       }
     ],
-    "entities": []
+    "entities": [],
+    "enchantments": []
   },
+  "enchantmentDefinitions": [
+    {
+      "id": "efficiency",
+      "key": "efficiency",
+      "maxLevel": 5,
+      "source": "src/game/enchantments.ts",
+      "export": "ENCHANTMENTS",
+      "declaration": "ENCHANTMENTS.efficiency",
+      "line": 49
+    },
+    {
+      "id": "feather_falling",
+      "key": "feather_falling",
+      "maxLevel": 4,
+      "source": "src/game/enchantments.ts",
+      "export": "ENCHANTMENTS",
+      "declaration": "ENCHANTMENTS.feather_falling",
+      "line": 50
+    },
+    {
+      "id": "fortune",
+      "key": "fortune",
+      "maxLevel": 3,
+      "source": "src/game/enchantments.ts",
+      "export": "ENCHANTMENTS",
+      "declaration": "ENCHANTMENTS.fortune",
+      "line": 51
+    },
+    {
+      "id": "protection",
+      "key": "protection",
+      "maxLevel": 4,
+      "source": "src/game/enchantments.ts",
+      "export": "ENCHANTMENTS",
+      "declaration": "ENCHANTMENTS.protection",
+      "line": 52
+    },
+    {
+      "id": "respiration",
+      "key": "respiration",
+      "maxLevel": 3,
+      "source": "src/game/enchantments.ts",
+      "export": "ENCHANTMENTS",
+      "declaration": "ENCHANTMENTS.respiration",
+      "line": 53
+    },
+    {
+      "id": "sharpness",
+      "key": "sharpness",
+      "maxLevel": 5,
+      "source": "src/game/enchantments.ts",
+      "export": "ENCHANTMENTS",
+      "declaration": "ENCHANTMENTS.sharpness",
+      "line": 54
+    },
+    {
+      "id": "silk_touch",
+      "key": "silk_touch",
+      "maxLevel": 1,
+      "source": "src/game/enchantments.ts",
+      "export": "ENCHANTMENTS",
+      "declaration": "ENCHANTMENTS.silk_touch",
+      "line": 55
+    },
+    {
+      "id": "unbreaking",
+      "key": "unbreaking",
+      "maxLevel": 3,
+      "source": "src/game/enchantments.ts",
+      "export": "ENCHANTMENTS",
+      "declaration": "ENCHANTMENTS.unbreaking",
+      "line": 58
+    }
+  ],
   "craftingRecipes": [
     {
       "id": "planks",
@@ -2131,6 +2212,93 @@
       "station": "workbench"
     },
     {
+      "id": "paper",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:sugar_cane",
+          "minecraft:sugar_cane",
+          "minecraft:sugar_cane"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:paper",
+        "count": 3
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "book",
+      "source": "src/game/recipes.ts",
+      "kind": "shapeless",
+      "ingredients": [
+        "minecraft:paper",
+        "minecraft:paper",
+        "minecraft:paper",
+        "minecraft:leather"
+      ],
+      "output": {
+        "id": "minecraft:book",
+        "count": 1
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "bookshelf",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ],
+        [
+          "minecraft:book",
+          "minecraft:book",
+          "minecraft:book"
+        ],
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:bookshelf",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "enchanting_table",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          null,
+          "minecraft:book",
+          null
+        ],
+        [
+          "minecraft:diamond",
+          "minecraft:obsidian",
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:obsidian",
+          "minecraft:obsidian",
+          "minecraft:obsidian"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:enchanting_table",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
       "id": "beetroot_soup",
       "source": "src/game/recipes.ts",
       "kind": "shapeless",
@@ -2222,6 +2390,17 @@
       "input": "minecraft:mutton",
       "output": {
         "id": "minecraft:cooked_mutton",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/raw_beef",
+      "input": "minecraft:beef",
+      "output": {
+        "id": "minecraft:cooked_beef",
         "count": 1
       },
       "source": "src/game/recipes.ts",
@@ -3007,6 +3186,34 @@
       "acceptance": "not-run"
     },
     {
+      "id": "paper",
+      "exactSourceRecords": [
+        "prismarine:recipe/924/403c8e9d2e735a0ca659"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "book",
+      "exactSourceRecords": [
+        "prismarine:recipe/925/7a9688e0b6ac7a441f6a"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "bookshelf",
+      "exactSourceRecords": [
+        "prismarine:recipe/286/bd2b35a7a0555893f47f"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "enchanting_table",
+      "exactSourceRecords": [
+        "prismarine:recipe/375/fa5072efa9e6e4738baf"
+      ],
+      "acceptance": "not-run"
+    },
+    {
       "id": "beetroot_soup",
       "exactSourceRecords": [
         "prismarine:recipe/1156/91f602f10227f4e49ee0"
@@ -3020,7 +3227,13 @@
     "tests/survival-systems.test.ts",
     "tests/engine.test.ts",
     "tests/engine-world.test.ts",
-    "tests/storage.test.ts"
+    "tests/storage.test.ts",
+    "tests/enchantments.test.ts",
+    "tests/experience.test.ts",
+    "tests/enchanting-resources.test.ts",
+    "tests/enchanting-resources-generator.test.ts",
+    "tests/sugar-cane.test.ts",
+    "tests/enchanting-integration.test.ts"
   ],
-  "candidateTestRule": "Locate relevant cases in these files; file existence does not certify any catalog row. Agriculture additions in this snapshot remain unverified."
+  "candidateTestRule": "Locate relevant cases in these files; file existence does not certify any catalog row. Enchantment, resource, livestock and other partial definitions remain unverified until entry-specific acceptance is linked."
 }

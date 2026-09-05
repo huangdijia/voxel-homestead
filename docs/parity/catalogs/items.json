@@ -8271,8 +8271,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "sugar_cane",
+          "key": "sugar_cane",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/items/minecraft:sugar_cane",
@@ -9696,8 +9702,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "bookshelf",
+          "key": "bookshelf",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/items/minecraft:bookshelf",
@@ -12676,11 +12688,17 @@
     "id": "minecraft:enchanting_table",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 375,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "enchanting_table",
+          "key": "enchanting_table",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/items/minecraft:enchanting_table",
@@ -31498,8 +31516,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "leather",
+          "key": "leather",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/items/minecraft:leather",
@@ -31861,8 +31885,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "paper",
+          "key": "paper",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/items/minecraft:paper",
@@ -31894,8 +31924,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "book",
+          "key": "book",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/items/minecraft:book",
@@ -34006,8 +34042,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "raw_beef",
+          "key": "raw_beef",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/items/minecraft:beef",
@@ -34039,8 +34081,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "cooked_beef",
+          "key": "cooked_beef",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/items/minecraft:cooked_beef",
@@ -34537,8 +34585,8 @@
     "id": "minecraft:brewing_stand",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 1004,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []

@@ -3,8 +3,8 @@
     "id": "minecraft:aqua_affinity",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 0,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -51,8 +51,8 @@
     "id": "minecraft:bane_of_arthropods",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 1,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -105,8 +105,8 @@
     "id": "minecraft:binding_curse",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 2,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -153,8 +153,8 @@
     "id": "minecraft:blast_protection",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 3,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -205,8 +205,8 @@
     "id": "minecraft:breach",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 4,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -259,8 +259,8 @@
     "id": "minecraft:channeling",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 5,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -309,8 +309,8 @@
     "id": "minecraft:density",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 6,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -363,8 +363,8 @@
     "id": "minecraft:depth_strider",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 7,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -413,11 +413,21 @@
     "id": "minecraft:efficiency",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 8,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "efficiency",
+          "key": "efficiency",
+          "maxLevel": 5,
+          "source": "src/game/enchantments.ts",
+          "export": "ENCHANTMENTS",
+          "declaration": "ENCHANTMENTS.efficiency",
+          "line": 49
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/enchantments/minecraft:efficiency",
@@ -461,11 +471,21 @@
     "id": "minecraft:feather_falling",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 9,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "feather_falling",
+          "key": "feather_falling",
+          "maxLevel": 4,
+          "source": "src/game/enchantments.ts",
+          "export": "ENCHANTMENTS",
+          "declaration": "ENCHANTMENTS.feather_falling",
+          "line": 50
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/enchantments/minecraft:feather_falling",
@@ -509,8 +529,8 @@
     "id": "minecraft:fire_aspect",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 10,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -557,8 +577,8 @@
     "id": "minecraft:fire_protection",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 11,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -609,8 +629,8 @@
     "id": "minecraft:flame",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 12,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -657,11 +677,21 @@
     "id": "minecraft:fortune",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 13,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "fortune",
+          "key": "fortune",
+          "maxLevel": 3,
+          "source": "src/game/enchantments.ts",
+          "export": "ENCHANTMENTS",
+          "declaration": "ENCHANTMENTS.fortune",
+          "line": 51
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/enchantments/minecraft:fortune",
@@ -707,8 +737,8 @@
     "id": "minecraft:frost_walker",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 14,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -757,8 +787,8 @@
     "id": "minecraft:impaling",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 15,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -811,8 +841,8 @@
     "id": "minecraft:infinity",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 16,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -861,8 +891,8 @@
     "id": "minecraft:knockback",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 17,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -909,8 +939,8 @@
     "id": "minecraft:looting",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 18,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -957,8 +987,8 @@
     "id": "minecraft:loyalty",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 19,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1007,8 +1037,8 @@
     "id": "minecraft:luck_of_the_sea",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 20,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1055,8 +1085,8 @@
     "id": "minecraft:lure",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 21,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1103,8 +1133,8 @@
     "id": "minecraft:mending",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 22,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1153,8 +1183,8 @@
     "id": "minecraft:multishot",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 23,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1203,8 +1233,8 @@
     "id": "minecraft:piercing",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 24,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1253,8 +1283,8 @@
     "id": "minecraft:power",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 25,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1301,8 +1331,8 @@
     "id": "minecraft:projectile_protection",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 26,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1353,11 +1383,21 @@
     "id": "minecraft:protection",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 27,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "protection",
+          "key": "protection",
+          "maxLevel": 4,
+          "source": "src/game/enchantments.ts",
+          "export": "ENCHANTMENTS",
+          "declaration": "ENCHANTMENTS.protection",
+          "line": 52
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/enchantments/minecraft:protection",
@@ -1405,8 +1445,8 @@
     "id": "minecraft:punch",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 28,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1453,8 +1493,8 @@
     "id": "minecraft:quick_charge",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 29,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1501,11 +1541,21 @@
     "id": "minecraft:respiration",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 30,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "respiration",
+          "key": "respiration",
+          "maxLevel": 3,
+          "source": "src/game/enchantments.ts",
+          "export": "ENCHANTMENTS",
+          "declaration": "ENCHANTMENTS.respiration",
+          "line": 53
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/enchantments/minecraft:respiration",
@@ -1549,8 +1599,8 @@
     "id": "minecraft:riptide",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 31,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1600,11 +1650,21 @@
     "id": "minecraft:sharpness",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 32,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "sharpness",
+          "key": "sharpness",
+          "maxLevel": 5,
+          "source": "src/game/enchantments.ts",
+          "export": "ENCHANTMENTS",
+          "declaration": "ENCHANTMENTS.sharpness",
+          "line": 54
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/enchantments/minecraft:sharpness",
@@ -1654,11 +1714,21 @@
     "id": "minecraft:silk_touch",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 33,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "silk_touch",
+          "key": "silk_touch",
+          "maxLevel": 1,
+          "source": "src/game/enchantments.ts",
+          "export": "ENCHANTMENTS",
+          "declaration": "ENCHANTMENTS.silk_touch",
+          "line": 55
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/enchantments/minecraft:silk_touch",
@@ -1704,8 +1774,8 @@
     "id": "minecraft:smite",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 34,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1758,8 +1828,8 @@
     "id": "minecraft:soul_speed",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 35,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1806,8 +1876,8 @@
     "id": "minecraft:sweeping_edge",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 36,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1854,8 +1924,8 @@
     "id": "minecraft:swift_sneak",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 37,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1902,8 +1972,8 @@
     "id": "minecraft:thorns",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 38,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -1950,11 +2020,21 @@
     "id": "minecraft:unbreaking",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 39,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "unbreaking",
+          "key": "unbreaking",
+          "maxLevel": 3,
+          "source": "src/game/enchantments.ts",
+          "export": "ENCHANTMENTS",
+          "declaration": "ENCHANTMENTS.unbreaking",
+          "line": 58
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/enchantments/minecraft:unbreaking",
@@ -1998,8 +2078,8 @@
     "id": "minecraft:vanishing_curse",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 40,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []
@@ -2046,8 +2126,8 @@
     "id": "minecraft:wind_burst",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 41,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []

@@ -74,11 +74,41 @@ const { BLOCKS, ITEMS, ENTITIES } = await loadLocal('src/game/registry.ts');
 const { RECIPES, SMELTING } = await loadLocal('src/game/recipes.ts');
 assert(Object.keys(BLOCKS).length > 0 && RECIPES.length > 0, 'Empty local registries');
 
+// Read the definition table only; do not execute the enchantments/equipment
+// runtime cycle or infer that an exported definition passed its behavior cases.
+const enchantmentSource = 'src/game/enchantments.ts';
+const enchantmentText = await fs.readFile(path.join(root, enchantmentSource), 'utf8');
+localSources[enchantmentSource] = { sha256: hash(enchantmentText), bytes: Buffer.byteLength(enchantmentText) };
+const enchantmentAst = ts.createSourceFile(enchantmentSource, enchantmentText, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+const enchantmentDeclaration = enchantmentAst.statements
+  .filter(ts.isVariableStatement)
+  .flatMap((statement) => [...statement.declarationList.declarations])
+  .find((declaration) => ts.isIdentifier(declaration.name) && declaration.name.text === 'ENCHANTMENTS');
+const enchantmentInitializer = enchantmentDeclaration?.initializer;
+assert(enchantmentInitializer && ts.isCallExpression(enchantmentInitializer)
+  && enchantmentInitializer.expression.getText(enchantmentAst) === 'Object.freeze'
+  && enchantmentInitializer.arguments.length === 1
+  && ts.isObjectLiteralExpression(enchantmentInitializer.arguments[0]), 'Unsupported ENCHANTMENTS definition table');
+const localEnchantments = enchantmentInitializer.arguments[0].properties.map((property) => {
+  assert(ts.isPropertyAssignment(property) && (ts.isIdentifier(property.name) || ts.isStringLiteral(property.name)), 'Unsupported enchantment property');
+  const call = property.initializer;
+  assert(ts.isCallExpression(call) && ts.isIdentifier(call.expression) && call.expression.text === 'definition', 'Unsupported enchantment definition call');
+  const [id, , maximum] = call.arguments;
+  assert(id && ts.isStringLiteral(id) && id.text === property.name.text && maximum && ts.isNumericLiteral(maximum), 'Enchantment key/ID/level mismatch');
+  return {
+    id: id.text, key: property.name.text, maxLevel: Number(maximum.text),
+    source: enchantmentSource, export: 'ENCHANTMENTS',
+    declaration: `ENCHANTMENTS.${property.name.text}`,
+    line: enchantmentAst.getLineAndCharacterOfPosition(property.getStart(enchantmentAst)).line + 1,
+  };
+});
+assert(localEnchantments.length > 0 && new Set(localEnchantments.map((entry) => entry.id)).size === localEnchantments.length, 'Empty/duplicate local enchantments');
+
 const aliases = {
   grass: 'grass_block', log: 'oak_log', leaves: 'oak_leaves', planks: 'oak_planks', workbench: 'crafting_table',
   door: 'oak_door', door_open: 'oak_door', door_top: 'oak_door', door_top_open: 'oak_door',
   slab: 'oak_slab', bed: 'white_bed', bed_head: 'white_bed', wool: 'white_wool',
-  raw_pork: 'porkchop', cooked_pork: 'cooked_porkchop', raw_mutton: 'mutton', wet_farmland: 'farmland',
+  raw_pork: 'porkchop', cooked_pork: 'cooked_porkchop', raw_mutton: 'mutton', raw_beef: 'beef', wet_farmland: 'farmland',
 };
 const cropNames = { wheat: 'wheat', carrot: 'carrots', potato: 'potatoes', beetroot: 'beetroots' };
 function canonical(localId) {
@@ -92,17 +122,19 @@ const baselineItems = new Set([
   ...['wood', 'stone', 'iron'].flatMap((material) => ['pickaxe', 'axe', 'shovel', 'sword'].map((tool) => canonical(`${material}_${tool}`))),
 ]);
 const baselineEntities = new Set(['minecraft:pig', 'minecraft:sheep', 'minecraft:zombie', 'minecraft:creeper']);
-const advancedPattern = /(?:^|_)(?:nether|netherite|netherrack|crimson|warped|basalt|blackstone|soul|quartz|glowstone|blaze|ghast|piglin|hoglin|zoglin|magma|wither|end|ender|purpur|chorus|shulker|elytra|dragon|redstone|repeater|comparator|piston|observer|dispenser|dropper|hopper|lever|button|pressure_plate|tripwire|target|daylight_detector|crafter|sculk|enchanting|brewing|beacon|conduit)(?:_|$)/;
+const advancedPattern = /(?:^|_)(?:nether|netherite|netherrack|crimson|warped|basalt|blackstone|soul|quartz|glowstone|blaze|ghast|piglin|hoglin|zoglin|magma|wither|end|ender|purpur|chorus|shulker|elytra|dragon|redstone|repeater|comparator|piston|observer|dispenser|dropper|hopper|lever|button|pressure_plate|tripwire|target|daylight_detector|crafter|sculk|beacon|conduit)(?:_|$)/;
 function stageFor(domain, id, reference = {}) {
   if ((domain === 'blocks' && baselineBlocks.has(id)) || (['items', 'foods'].includes(domain) && baselineItems.has(id)) || (domain === 'entities' && baselineEntities.has(id)))
     return { stage: 'M1', stageBasis: 'existing-iron-survival-scope' };
-  if (['enchantments', 'effects', 'attributes', 'instruments'].includes(domain) || reference.dimension === 'nether' || reference.dimension === 'end' || advancedPattern.test(id.replace('minecraft:', '')))
+  if (['enchantments', 'effects'].includes(domain) || /(?:^|_)(?:enchanting|brewing)(?:_|$)/.test(id.replace('minecraft:', '')))
+    return { stage: 'M2', stageBasis: 'planned-m2-enchanting-and-brewing-scope' };
+  if (['attributes', 'instruments'].includes(domain) || reference.dimension === 'nether' || reference.dimension === 'end' || advancedPattern.test(id.replace('minecraft:', '')))
     return { stage: 'M3', stageBasis: 'planned-advanced-systems-review-required' };
   if (['sounds', 'particles'].includes(domain)) return { stage: 'M4', stageBasis: 'cross-stage-presentation-final-audit' };
   return { stage: 'M2', stageBasis: 'mainworld-content-backlog-review-required' };
 }
 const localReference = (entry, domain) => ({ id: String(domain === 'blocks' ? entry.id : entry.id ?? entry.kind), key: entry.key ?? entry.id ?? entry.kind, source: 'src/game/registry.ts' });
-const localGroups = { blocks: new Map(), items: new Map(), entities: new Map() };
+const localGroups = { blocks: new Map(), items: new Map(), entities: new Map(), enchantments: new Map() };
 for (const [domain, definitions] of Object.entries({ blocks: BLOCKS, items: ITEMS, entities: ENTITIES })) {
   for (const entry of Object.values(definitions)) {
     const id = canonical(entry.key ?? entry.id ?? entry.kind);
@@ -111,6 +143,7 @@ for (const [domain, definitions] of Object.entries({ blocks: BLOCKS, items: ITEM
     localGroups[domain].set(id, references);
   }
 }
+for (const entry of localEnchantments) localGroups.enchantments.set(canonical(entry.id), [entry]);
 const templates = {
   blocks: ['obtain-place-break-drops', 'all-declared-states-collision-interaction', 'light-fluid-neighbor-updates', 'save-unload-reload'],
   items: ['obtain-stack-split-container', 'use-durability-remainder-components', 'death-drop-and-save-roundtrip'],
@@ -287,6 +320,21 @@ if (args.has('--self-test')) {
   selfTests.push('recipe mirror equivalence', 'recipe ingredient multiplicity');
   assert(canonical('gold_pickaxe') === 'minecraft:golden_pickaxe' && canonical('gold_chestplate') === 'minecraft:golden_chestplate' && canonical('gold_block') === 'minecraft:gold_block' && canonical('gold_ingot') === 'minecraft:gold_ingot', 'Gold equipment aliases must not rename gold materials');
   selfTests.push('gold equipment aliases preserve material IDs');
+  assert(canonical('raw_beef') === 'minecraft:beef' && canonical('cooked_beef') === 'minecraft:cooked_beef', 'Beef aliases must resolve to existing Java item names');
+  selfTests.push('beef aliases preserve raw and cooked item IDs');
+  for (const domain of ['enchantments', 'effects'])
+    assert(catalog[domain].every((entry) => entry.stage === 'M2'), `${domain} belongs to M2`);
+  for (const domain of ['blocks', 'items'])
+    for (const id of ['minecraft:enchanting_table', 'minecraft:brewing_stand'])
+      assert(catalog[domain].find((entry) => entry.id === id)?.stage === 'M2', `${domain}/${id} belongs to M2`);
+  assert(behaviorCases.find((entry) => entry.id === 'B-MAGIC-01')?.stage === 'M2', 'Magic behavior scope belongs to M2');
+  selfTests.push('enchanting and brewing stages match the M2 plan');
+  const expectedEnchantments = ['efficiency', 'feather_falling', 'fortune', 'protection', 'respiration', 'sharpness', 'silk_touch', 'unbreaking'];
+  assert(JSON.stringify(localEnchantments.map((entry) => entry.id).sort()) === JSON.stringify(expectedEnchantments), 'Current eight-enchantment mapping changed; review the explicit audit baseline');
+  assert(catalog.enchantments.length === 42 && catalog.enchantments.filter((entry) => entry.implementation.status === 'partial-unverified').length === 8, 'Map only the eight local enchantments, preserving all 42 targets');
+  for (const entry of catalog.enchantments.filter((entry) => entry.implementation.localDefinitions.length))
+    assert(entry.acceptance.status === 'not-run' && entry.implementation.localDefinitions[0].maxLevel === entry.reference.maxLevel, `Unverified enchantment definition mismatch: ${entry.id}`);
+  selfTests.push('eight source-backed enchantment mappings remain unaccepted');
 }
 
 const countBy = (entries, callback) => Object.fromEntries([...new Set(entries.map(callback))].sort().map((key) => [key, entries.filter((entry) => callback(entry) === key).length]));
@@ -308,11 +356,11 @@ const localEvidence = {
   sourceSnapshot: index.localSourceSnapshot,
   statusRule: 'Definition matches and existing test names are leads, not executed per-entry acceptance. No acceptance is promoted by this generator.',
   aliases, cropAliases: cropNames, composterAlias: 'composter_1..composter_8 -> minecraft:composter; state acceptance remains unverified',
-  counts: { blocks: Object.keys(BLOCKS).length, items: Object.keys(ITEMS).length, entities: Object.keys(ENTITIES).length, craftingRecipes: RECIPES.length, smeltingRecipes: Object.keys(SMELTING).length },
-  unmatchedLocal, craftingRecipes: localRecipes, smeltingRecipes: localSmelting,
+  counts: { blocks: Object.keys(BLOCKS).length, items: Object.keys(ITEMS).length, entities: Object.keys(ENTITIES).length, enchantments: localEnchantments.length, craftingRecipes: RECIPES.length, smeltingRecipes: Object.keys(SMELTING).length },
+  unmatchedLocal, enchantmentDefinitions: localEnchantments, craftingRecipes: localRecipes, smeltingRecipes: localSmelting,
   localRecipeLinks: localRecipes.map((recipe) => ({ id: recipe.id, exactSourceRecords: catalog.recipes.filter((entry) => entry.implementation.localRecipes.includes(recipe.id)).map((entry) => entry.id), acceptance: 'not-run' })),
-  candidateTestFiles: ['tests/rules.test.ts', 'tests/simulation.test.ts', 'tests/survival-systems.test.ts', 'tests/engine.test.ts', 'tests/engine-world.test.ts', 'tests/storage.test.ts'],
-  candidateTestRule: 'Locate relevant cases in these files; file existence does not certify any catalog row. Agriculture additions in this snapshot remain unverified.',
+  candidateTestFiles: ['tests/rules.test.ts', 'tests/simulation.test.ts', 'tests/survival-systems.test.ts', 'tests/engine.test.ts', 'tests/engine-world.test.ts', 'tests/storage.test.ts', 'tests/enchantments.test.ts', 'tests/experience.test.ts', 'tests/enchanting-resources.test.ts', 'tests/enchanting-resources-generator.test.ts', 'tests/sugar-cane.test.ts', 'tests/enchanting-integration.test.ts'],
+  candidateTestRule: 'Locate relevant cases in these files; file existence does not certify any catalog row. Enchantment, resource, livestock and other partial definitions remain unverified until entry-specific acceptance is linked.',
 };
 const outputs = new Map([
   ['index.json', json(index)], ['local-evidence.json', json(localEvidence)],

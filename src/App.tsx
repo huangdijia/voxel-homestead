@@ -30,6 +30,8 @@ import type {
 import { Icon, ItemIcon, StackView } from "./ui/Icons";
 import { Inventory } from "./ui/Inventory";
 import { InstallApp } from "./ui/InstallApp";
+import { ExperienceBar } from "./ui/Enchanting";
+import { itemDescription, hasEnchantments } from "./ui/item-details";
 import "./styles.css";
 
 const settingsKey = "block-journey-settings-v1";
@@ -573,7 +575,9 @@ function GameInterface({
           game.setPaused(true);
           setOverlay("pause");
         } else if (
-          ["inventory", "workbench", "chest", "furnace"].includes(overlay)
+          ["inventory", "workbench", "chest", "furnace", "enchanting"].includes(
+            overlay,
+          )
         )
           void resume();
       }
@@ -723,7 +727,7 @@ function GameInterface({
         </div>
       )}
       {snapshot.ready &&
-        ["inventory", "workbench", "chest", "furnace"].includes(
+        ["inventory", "workbench", "chest", "furnace", "enchanting"].includes(
           overlay || "",
         ) && (
           <Inventory
@@ -861,7 +865,10 @@ function HUD({
             <kbd>E</kbd> 背包
           </div>
         )}
-        <div className="selected-item-name">
+        <div
+          className={`selected-item-name ${hasEnchantments(current) ? "enchanted-name" : ""}`}
+          title={current ? itemDescription(current) : "空手"}
+        >
           {current ? ITEMS[current.id]?.name || current.id : "空手"}
         </div>
         {player.oxygen < 20 && snapshot.manifest.mode === "survival" && (
@@ -953,12 +960,19 @@ function HUD({
             创造模式<span>双击空格飞行 · Shift 下降</span>
           </div>
         )}
+        {snapshot.manifest.mode === "survival" && (
+          <ExperienceBar points={snapshot.progression?.points ?? 0} />
+        )}
         <div className="game-hotbar">
           {Array.from({ length: 9 }, (_, i) => (
             <button
               className={`hotbar-slot ${player.selected === i ? "selected" : ""}`}
               key={i}
-              title={`${i + 1} · ${player.inventory[i] ? ITEMS[player.inventory[i]!.id]?.name : "空物品栏"}`}
+              title={
+                player.inventory[i]
+                  ? itemDescription(player.inventory[i]!)
+                  : `快捷栏 ${i + 1}：空`
+              }
               onClick={() => game.command({ type: "select", index: i })}
             >
               <span className="hotbar-number">{i + 1}</span>

@@ -8,6 +8,8 @@ import type {
 } from "../game/types";
 import { ITEMS } from "../game/registry";
 import { Icon, ItemIcon, StackView } from "./Icons";
+import { EnchantingWorkspace } from "./Enchanting";
+import { itemDescription } from "./item-details";
 
 const categories = [
   { id: "all", name: "全部物品" },
@@ -41,11 +43,13 @@ export function Inventory({
   const title =
     overlay === "workbench"
       ? "工作台"
-      : overlay === "chest"
-        ? "储物箱"
-        : overlay === "furnace"
-          ? "熔炉"
-          : "背包与合成";
+      : overlay === "enchanting"
+        ? "附魔台"
+        : overlay === "chest"
+          ? "储物箱"
+          : overlay === "furnace"
+            ? "熔炉"
+            : "背包与合成";
   useEffect(() => {
     const fn = (e: MouseEvent) => setMouse({ x: e.clientX, y: e.clientY });
     window.addEventListener("mousemove", fn);
@@ -61,12 +65,8 @@ export function Inventory({
       type="button"
       key={`${source}-${index}`}
       className={`item-slot ${source === "inventory" && Number(index) === snapshot.player.selected ? "equipped" : ""}`}
-      title={
-        stack
-          ? `${ITEMS[stack.id]?.name || stack.id}${stack.durability !== undefined ? ` · 耐久 ${stack.durability}` : ""}`
-          : label || "空物品栏"
-      }
-      aria-label={`${label || source + " " + index}${stack ? "：" + (ITEMS[stack.id]?.name || stack.id) + " × " + stack.count : "：空"}`}
+      title={stack ? itemDescription(stack) : label || "空物品栏"}
+      aria-label={`${label || source + " " + index}${stack ? "：" + itemDescription(stack) + " × " + stack.count : "：空"}`}
       onClick={(e) => game.clickSlot(source, index, false, e.shiftKey)}
       onContextMenu={(e) => {
         e.preventDefault();
@@ -117,7 +117,7 @@ export function Inventory({
       onContextMenu={(e) => e.preventDefault()}
     >
       <section
-        className="inventory-window"
+        className={`inventory-window ${overlay === "enchanting" ? "enchanting-window" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-label={title}
@@ -137,6 +137,16 @@ export function Inventory({
         </header>
         <div className={`inventory-body ${crafting ? "" : "no-recipes"}`}>
           <div className="inventory-main">
+            {overlay === "enchanting" && (
+              <EnchantingWorkspace
+                view={game.getEnchanting()}
+                slots={craft}
+                game={game}
+                renderSlot={(stack, index, label) =>
+                  slot(stack, index, "craft", label)
+                }
+              />
+            )}
             {crafting && (
               <div className="crafting-workspace">
                 <div className="armor-column">

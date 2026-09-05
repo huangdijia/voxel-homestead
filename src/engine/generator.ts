@@ -64,7 +64,7 @@ export function surfaceHeight(
 ): number {
   x = Math.floor(x);
   z = Math.floor(z);
-  if (generatorVersion === 5) return fullHeight(seed, x, z);
+  if (generatorVersion >= 5) return fullHeight(seed, x, z);
   const key = seed + ":" + x + "," + z;
   const cached = heights.get(key);
   if (cached !== undefined) return cached;
@@ -113,7 +113,7 @@ function treeAt(
       const tz = cz * 10 + 2 + Math.floor(hash(s, cx, 7, cz) * 6);
       if (
         Math.hypot(tx, tz) < 12 ||
-        (generatorVersion !== 5 && tx > 5 && tx < 35 && Math.abs(tz - 2) < 9)
+        (generatorVersion < 5 && tx > 5 && tx < 35 && Math.abs(tz - 2) < 9)
       )
         continue;
       candidates.push([tx, tz, 4 + Math.floor(hash(s, cx, 8, cz) * 3)]);
@@ -123,7 +123,7 @@ function treeAt(
       dz = Math.abs(z - tz);
     if (dx > 2 || dz > 2) continue;
     const floor = surfaceHeight(seed, tx, tz, generatorVersion);
-    if (floor <= (generatorVersion === 5 ? SEA_LEVEL : LEGACY_SEA_LEVEL) + 1)
+    if (floor <= (generatorVersion >= 5 ? SEA_LEVEL : LEGACY_SEA_LEVEL) + 1)
       continue;
     const top = floor + tall;
     if (dx === 0 && dz === 0 && y > floor && y <= top) return 7;
@@ -418,6 +418,34 @@ function sampleFullHeight(
   );
 }
 
+/** Version 6 adds cane to existing air on lake/ocean banks; all substrate stays v5. */
+function fullSugarCaneAt(
+  seed: string,
+  x: number,
+  y: number,
+  z: number,
+): number {
+  if (y < SEA_LEVEL || y > SEA_LEVEL + 2) return 0;
+  const ground = fullHeight(seed, x, z);
+  if (ground !== SEA_LEVEL - 1) return 0;
+  const s = seedNumber(seed);
+  if (hash(s + 23003, x, 0, z) >= 0.36) return 0;
+  if (
+    ![
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+    ].some(([dx, dz]) => fullHeight(seed, x + dx, z + dz) < ground)
+  )
+    return 0;
+  const height = 1 + Math.min(2, Math.floor(hash(s + 23011, x, 0, z) * 3));
+  if (y > ground + height) return 0;
+  for (let offset = 1; offset <= height; offset++)
+    if (sampleFullHeight(seed, x, ground + offset, z) !== 0) return 0;
+  return 111;
+}
+
 /** Deterministic terrain; trees never cover the safe spawn at (0, 0). */
 export function sampleBlock(
   seed: string,
@@ -429,7 +457,12 @@ export function sampleBlock(
   x = Math.floor(x);
   y = Math.floor(y);
   z = Math.floor(z);
-  if (generatorVersion === 5) return sampleFullHeight(seed, x, y, z);
+  if (generatorVersion >= 5) {
+    const existing = sampleFullHeight(seed, x, y, z);
+    return generatorVersion >= 6 && existing === 0
+      ? fullSugarCaneAt(seed, x, y, z)
+      : existing;
+  }
   if (y <= LEGACY_MIN_Y) return 24;
   if (y > LEGACY_MAX_Y) return 0;
   const top = surfaceHeight(seed, x, z);

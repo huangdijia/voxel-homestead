@@ -2924,3 +2924,299 @@ button:not(.item-slot):not(.hotbar-slot):not(.recipe) kbd {
     max-height: calc(100dvh - 32px);
   }
 }
+
+/* Experience and enchantments remain readable against both caves and daylight. */
+.experience-meter {
+  position: relative;
+  width: 100%;
+  margin: 1px 0 7px;
+  height: 7px;
+  pointer-events: auto;
+}
+.experience-track {
+  display: block;
+  height: 7px;
+  padding: 1px;
+  background: #192718dc;
+  border: 1px solid #bac59765;
+  box-shadow: 0 1px 2px #071408aa;
+}
+.experience-track > i {
+  display: block;
+  height: 3px;
+  max-width: 100%;
+  background: #b8da6d;
+  box-shadow: inset 0 1px #e0efa0;
+  transition: width 0.2s ease;
+}
+.experience-level {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  color: #c8e584;
+  font: bold 17px/1 monospace;
+  text-shadow:
+    1px 1px #1e3713,
+    -1px -1px #1e3713,
+    0 2px 3px #152311;
+}
+.enchanted-name {
+  color: #e0bdf4;
+}
+.enchantment-glint {
+  position: absolute;
+  inset: 5px;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  filter: sepia(1) saturate(2.8) hue-rotate(207deg) brightness(1.45);
+  mask-image: linear-gradient(
+    120deg,
+    transparent 33%,
+    #0009 43%,
+    #000 47%,
+    transparent 55%
+  );
+  mask-size: 320% 100%;
+  animation: enchantment-shimmer 3.8s linear infinite;
+}
+.enchantment-glint > .item-svg,
+.enchantment-glint > .item-cube {
+  width: 100%;
+  height: 100%;
+  max-width: 43px;
+  max-height: 43px;
+}
+.enchantment-glint .item-svg {
+  filter: none;
+}
+@keyframes enchantment-shimmer {
+  from {
+    mask-position: 160% 0;
+  }
+  to {
+    mask-position: -60% 0;
+  }
+}
+.inventory-window.enchanting-window {
+  width: 660px;
+}
+.enchanting-window > .inventory-body.no-recipes {
+  width: 100%;
+}
+.enchanting-workspace {
+  margin-bottom: 22px;
+}
+.enchanting-summary {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 18px;
+}
+.enchanting-emblem {
+  width: 52px;
+  height: 52px;
+  background: #e4dfce;
+  display: grid;
+  place-items: center;
+  border: 1px solid #cbc7b4;
+  border-bottom: 3px solid #b6b69e;
+}
+.enchanting-summary h3 {
+  font-size: 15px;
+  margin: 0 0 5px;
+  font-weight: 600;
+  color: #434c3b;
+}
+.enchanting-summary p {
+  margin: 0;
+  font-size: 11px;
+  color: #7b816d;
+  line-height: 1.5;
+}
+.enchanting-layout {
+  display: grid;
+  grid-template-columns: 105px 1fr;
+  gap: 22px;
+}
+.enchanting-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 13px 9px;
+  background: #e8e8d9;
+  border: 1px solid #cdd1be;
+}
+.enchanting-inputs label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.enchanting-inputs label > span {
+  color: #737b64;
+  font-size: 10px;
+}
+.enchanting-inputs > small {
+  color: #969982;
+  text-align: center;
+  font-size: 9px;
+  line-height: 1.7;
+  margin-top: 4px;
+}
+.enchanting-join {
+  color: #a1a38e;
+  height: 14px;
+}
+.enchanting-offers {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.enchanting-offer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 12px;
+  min-height: 76px;
+  text-align: left;
+  border: 1px solid #b8bfa3;
+  border-bottom: 3px solid #aeb496;
+  background: #e1e5cd;
+  color: #58644a;
+  border-radius: 2px;
+}
+.enchanting-offer.available:hover {
+  background: #d5dfb7;
+  border-color: #93a573;
+}
+.enchanting-offer:disabled {
+  cursor: default;
+  opacity: 1;
+  color: #979c88;
+  background: #e5e5d9;
+  border-color: #cfd0be;
+}
+.enchanting-option {
+  font:
+    600 18px/1 Georgia,
+    serif;
+  width: 24px;
+  text-align: center;
+  color: #8a926c;
+  flex-shrink: 0;
+}
+.enchanting-offer.available .enchanting-option {
+  color: #647843;
+}
+.enchanting-offer-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+.enchanting-offer-copy strong {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5b5070;
+}
+.enchanting-offer:disabled strong {
+  color: #8d8f80;
+}
+.enchanting-offer-copy > span {
+  font-size: 10px;
+}
+.enchanting-offer-copy b {
+  font-weight: 600;
+}
+.enchanting-offer-copy small {
+  font-size: 10px;
+  color: #798465;
+  line-height: 1.5;
+}
+.enchanting-offer-copy em {
+  font-style: normal;
+  font-size: 9px;
+  color: #a2785c;
+  line-height: 1.4;
+}
+.enchanting-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 13px;
+  padding-top: 11px;
+  border-top: 1px solid #c9ceba;
+  font-size: 11px;
+  color: #838b72;
+}
+.enchanting-status b {
+  color: #68784a;
+  font-weight: 600;
+  margin-left: 6px;
+}
+.enchanting-note {
+  margin: 9px 0 0;
+  font-size: 10px;
+  line-height: 1.7;
+  color: #8e947e;
+}
+@media (max-height: 760px) {
+  .enchanting-summary {
+    margin-bottom: 10px;
+  }
+  .enchanting-emblem {
+    width: 42px;
+    height: 42px;
+  }
+  .enchanting-offer {
+    padding: 7px 10px;
+    min-height: 65px;
+  }
+  .enchanting-workspace {
+    margin-bottom: 15px;
+  }
+  .enchanting-note {
+    font-size: 9px;
+  }
+}
+@media (max-width: 600px) {
+  .enchanting-layout {
+    grid-template-columns: 76px 1fr;
+    gap: 10px;
+  }
+  .enchanting-inputs {
+    padding: 8px 4px;
+  }
+  .enchanting-offer {
+    gap: 6px;
+    padding: 8px;
+  }
+  .enchanting-option {
+    width: 16px;
+    font-size: 15px;
+  }
+  .enchanting-offer-copy small {
+    font-size: 9px;
+  }
+  .enchanting-summary h3 {
+    font-size: 13px;
+  }
+  .experience-level {
+    font-size: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .enchantment-glint {
+    animation: none;
+    mask-position: 45% 0;
+  }
+  .experience-track > i {
+    transition: none;
+  }
+}
