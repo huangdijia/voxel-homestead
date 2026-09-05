@@ -13,7 +13,7 @@
 
 [原始状态记录](browser-fullscreen.json)。在生产版通过 Chrome 原生窗口点击“进入世界”，实际同时取得 Fullscreen 与 Pointer Lock：`fullscreenElement` 为 `app in-game`、鼠标已捕获。
 
-实际按 E 打开背包，画面保持全屏并释放鼠标；随后按原生 Esc，全屏和鼠标捕获都退出，页面显示“游戏已暂停”。开发版另外验证了备用拖动视角：进入全屏后按 Esc，模拟的 `paused` 变为 `true`、`overlay` 为 `pause`。全屏拒绝会提示并允许窗口游玩；异步请求取消、失焦、销毁和 Safari 事件式锁鼠标路径有事件测试覆盖。
+实际按 E 打开背包，画面保持全屏并释放鼠标；随后按原生 Esc，全屏和鼠标捕获都退出，页面显示“游戏已暂停”。开发版另外验证了备用拖动视角：进入全屏后按 Esc，模拟的 `paused` 变为 `true`、`overlay` 为 `pause`。全屏拒绝会提示并允许窗口游玩；异步请求取消、销毁和 Safari 事件式锁鼠标路径有事件测试覆盖。全屏测试未直接触发 `blur` 或 `visibilitychange`，不将暂停方法测试算作失焦事件验收。
 
 早期后台标签页中的自动点击被浏览器拒绝锁鼠标，不能据此判作全屏通过；激活原生 Chrome 窗口后的生产操作取得了上述成功结果。截图：[离线全屏世界](screenshots/pwa-offline-fullscreen.png)、[Esc 后的暂停](screenshots/pwa-escape-paused.png)，文件尺寸为 1384×844。
 
