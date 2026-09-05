@@ -1,0 +1,58 @@
+{
+  "passed": true,
+  "stages": [
+    {
+      "name": "enter-villa",
+      "evidence": {
+        "x": 32.5,
+        "y": 69,
+        "z": -17.250000000000032
+      }
+    },
+    {
+      "name": "stairs",
+      "evidence": {
+        "x": 21.5,
+        "y": 76.1663888888889,
+        "z": -21.06499999999996
+      }
+    },
+    {
+      "name": "pool-exit",
+      "evidence": {
+        "x": 52.5,
+        "y": 69.30250000000001,
+        "z": -12.938333333333324
+      }
+    },
+    {
+      "name": "range-occlusion-kill",
+      "evidence": {
+        "distance": 20,
+        "damage": 8,
+        "glassStoppedShot": true,
+        "terrainIntact": true
+      }
+    },
+    {
+      "name": "infinite-ammo",
+      "evidence": {
+        "consecutiveShots": 100,
+        "rifle": {
+          "id": "rifle",
+          "count": 1
+        }
+      }
+    },
+    {
+      "name": "save-reload",
+      "evidence": {
+        "identical": true,
+        "generator": 7
+      }
+    }
+  ],
+  "errors": [],
+  "fixture": "Teleports, accelerated movement, one zombie, temporary wall; fresh survival world",
+  "worldId": "9ff9c6a0-992a-4338-9781-3e515458a2b6"
+}

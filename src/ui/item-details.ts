@@ -17,6 +17,7 @@ export function hasEnchantments(stack?: ItemStack | null): boolean {
 export function itemDescription(stack: ItemStack): string {
   return [
     stack.customName || ITEMS[stack.id]?.name || stack.id,
+    ...(ITEMS[stack.id]?.firearm ? ["无限弹药 · 无需换弹 · 按住左键连射"] : []),
     ...(stack.customName ? [ITEMS[stack.id]?.name ?? stack.id] : []),
     ...Object.entries(stack.enchantments ?? {})
       .filter(([, level]) => level > 0)

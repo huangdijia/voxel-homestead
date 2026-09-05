@@ -1,3 +1,4 @@
+import { coastHeight, coastWeight, coastStructure } from "./coast";
 import {
   WORLD_MIN_Y,
   WORLD_MAX_Y,
@@ -64,7 +65,10 @@ export function surfaceHeight(
 ): number {
   x = Math.floor(x);
   z = Math.floor(z);
-  if (generatorVersion >= 5) return fullHeight(seed, x, z);
+  if (generatorVersion >= 5) {
+    const base = fullHeight(seed, x, z);
+    return generatorVersion >= 7 ? coastHeight(x, z, base) : base;
+  }
   const key = seed + ":" + x + "," + z;
   const cached = heights.get(key);
   if (cached !== undefined) return cached;
@@ -457,6 +461,23 @@ export function sampleBlock(
   x = Math.floor(x);
   y = Math.floor(y);
   z = Math.floor(z);
+  if (
+    generatorVersion >= 7 &&
+    y >= 48 &&
+    y <= WORLD_MAX_Y &&
+    coastWeight(x, z) > 0
+  ) {
+    const structure = coastStructure(x, y, z);
+    if (structure !== undefined) return structure;
+    const top = surfaceHeight(seed, x, z, 7);
+    if (y > top) {
+      if (y < SEA_LEVEL) return 6;
+      if (x < -3 && z > -12 && y <= top + 9) return treeAt(seed, x, y, z, 7);
+      return 0;
+    }
+    if (y >= top - 3) return z < -34 ? 4 : y === top ? 1 : 2;
+    return 3;
+  }
   if (generatorVersion >= 5) {
     const existing = sampleFullHeight(seed, x, y, z);
     return generatorVersion >= 6 && existing === 0

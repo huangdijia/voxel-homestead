@@ -400,6 +400,13 @@ function item(
     ...options,
   };
 }
+item("rifle", "海岸步枪", "#506b73", {
+  category: "tools",
+  maxStack: 1,
+  firearm: true,
+  damage: 8,
+  introducedVersion: 7,
+});
 item("stick", "木棍", "#9d7042", { fuel: 5 });
 item("coal", "煤炭", "#333842", { fuel: 80 });
 item("charcoal", "木炭", "#51473a", { fuel: 80 });

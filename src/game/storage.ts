@@ -215,7 +215,7 @@ export function validateSave(value: unknown): SaveData {
   );
   if (
     ![1, 2, 3, 4, 5, 6, 7].includes(manifest.version as number) ||
-    ![1, 2, 3, 4, 5, 6].includes(manifest.generatorVersion as number)
+    ![1, 2, 3, 4, 5, 6, 7].includes(manifest.generatorVersion as number)
   )
     return bad("不支持此存档或地形生成器版本；原始文件未被修改");
   if (
@@ -241,7 +241,7 @@ export function validateSave(value: unknown): SaveData {
     return bad("游戏模式无效");
   const validatedManifest: SaveManifest = {
     version: manifest.version as 1 | 2 | 3 | 4 | 5 | 6 | 7,
-    generatorVersion: manifest.generatorVersion as 1 | 2 | 3 | 4 | 5 | 6,
+    generatorVersion: manifest.generatorVersion as 1 | 2 | 3 | 4 | 5 | 6 | 7,
     id: string(manifest.id, "manifest.id"),
     name: string(manifest.name, "manifest.name", 80),
     seed: string(manifest.seed, "manifest.seed", 128),

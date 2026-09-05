@@ -319,11 +319,13 @@ describe("version seven storage metadata", () => {
       (s) => {
         s.changes.pop();
         s.manifest.version = 6;
+        s.manifest.generatorVersion = 6;
         s.natural!.falling = [{ x: 0, y: 64, z: 0, id: 114 }];
       },
       (s) => {
         s.changes.pop();
         s.manifest.version = 6;
+        s.manifest.generatorVersion = 6;
         s.natural!.anvilFalls = [];
       },
     ];
@@ -354,6 +356,7 @@ describe("version seven storage metadata", () => {
       container.customName = "旧版名称";
       container.slots.fill(null);
       save.manifest.version = 6;
+      save.manifest.generatorVersion = 6;
       expect(() => validateSave(save)).toThrow(/自定义名称/);
     },
   );
@@ -427,6 +430,7 @@ describe("version seven storage metadata", () => {
     expect(validateSave(save)).toEqual(save);
     expect(enchantmentLevel(save.player.inventory[0], "sharpness")).toBe(0);
     save.manifest.version = 6;
+    save.manifest.generatorVersion = 6;
     expect(() => validateSave(save)).toThrow();
   });
   it("rejects empty enchanted books and schema 7 items or blocks in older schemas", () => {
@@ -436,18 +440,22 @@ describe("version seven storage metadata", () => {
       },
       (s: SaveData) => {
         s.manifest.version = 6;
+        s.manifest.generatorVersion = 6;
         s.player.inventory[0] = book();
       },
       (s: SaveData) => {
         s.manifest.version = 6;
+        s.manifest.generatorVersion = 6;
         s.player.inventory[0] = { id: "anvil", count: 1 };
       },
       (s: SaveData) => {
         s.manifest.version = 6;
+        s.manifest.generatorVersion = 6;
         s.changes.push({ x: 0, y: 64, z: 0, id: 114 });
       },
       (s: SaveData) => {
         s.manifest.version = 6;
+        s.manifest.generatorVersion = 6;
         s.player.inventory[0] = {
           id: "stone",
           count: 1,
@@ -456,6 +464,7 @@ describe("version seven storage metadata", () => {
       },
       (s: SaveData) => {
         s.manifest.version = 6;
+        s.manifest.generatorVersion = 6;
         s.player.inventory[0] = { id: "stone", count: 1, repairCost: 0 };
       },
     ]) {
@@ -464,13 +473,14 @@ describe("version seven storage metadata", () => {
       expect(() => validateSave(save)).toThrow();
     }
     const save = fresh();
-    save.manifest.generatorVersion = 7 as never;
+    save.manifest.generatorVersion = 8 as never;
     expect(() => validateSave(save)).toThrow(/生成器版本/);
   });
   it("backs up an actual v6 checkpoint before the v7 write and preserves generator 6", async () => {
     vi.stubGlobal("indexedDB", new IDBFactory());
     const old = fresh();
     old.manifest.version = 6;
+    old.manifest.generatorVersion = 6;
     old.player.inventory[0] = {
       id: "iron_pickaxe",
       count: 1,
@@ -499,6 +509,7 @@ describe("version seven storage metadata", () => {
     vi.stubGlobal("indexedDB", new IDBFactory());
     const old = fresh();
     old.manifest.version = 6;
+    old.manifest.generatorVersion = 6;
     await saveWorld(old);
     const next = structuredClone(old);
     next.manifest.version = 7;

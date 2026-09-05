@@ -3349,3 +3349,68 @@ button:not(.item-slot):not(.hotbar-slot):not(.recipe) kbd {
     transition: none;
   }
 }
+
+.coast-guide {
+  position: absolute;
+  top: 94px;
+  left: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  color: #fff7df;
+  text-shadow: 0 1px 3px #142c37;
+  font-size: 13px;
+}
+.coast-guide > span {
+  background: #153440b8;
+  border-left: 3px solid #e6c68c;
+  padding: 10px 13px;
+  line-height: 1.7;
+}
+.coast-guide small {
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.85;
+}
+.coast-guide button {
+  pointer-events: auto;
+  color: #fff7df;
+  background: #17333ed9;
+  border: 1px solid #9bb0a566;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.coast-guide kbd {
+  margin-right: 7px;
+}
+.rifle-ammo {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 9px 13px;
+  background: #17333ed9;
+  color: #f2d599;
+  font-size: 17px;
+}
+.crosshair.shot-hit {
+  transform: translate(-50%, -50%) rotate(45deg);
+  filter: drop-shadow(0 0 3px #ffc15e);
+}
+.crosshair.shot-hit i {
+  background: #ffd082;
+}
+@media (max-width: 600px) {
+  .coast-guide {
+    top: 82px;
+    left: 12px;
+    font-size: 11px;
+    gap: 5px;
+  }
+  .coast-guide > span {
+    padding: 5px 8px;
+  }
+  .rifle-ammo {
+    font-size: 13px;
+  }
+}

@@ -181,6 +181,7 @@ export interface ItemDefinition {
   maxDurability?: number;
   miningSpeed?: number;
   damage?: number;
+  firearm?: boolean;
   food?: number;
   foodRemainder?: string;
   fuel?: number;
@@ -219,6 +220,7 @@ export interface WorldPort {
 export type GameCommand =
   | { type: "select"; index: number }
   | { type: "attack" }
+  | { type: "equipRifle" }
   | { type: "interact" }
   | { type: "drop" }
   | { type: "respawn" }
@@ -228,11 +230,14 @@ export type GameCommand =
   | { type: "workshopName"; name: string }
   | { type: "takeWorkshopOutput"; shift?: boolean };
 export interface WorldEvent {
-  type: "sound" | "toast" | "inventory" | "damage" | "block";
+  type: "sound" | "toast" | "inventory" | "damage" | "block" | "shot";
   message?: string;
   sound?: string;
+  end?: Vec3;
+  hit?: boolean;
 }
 export interface GameSnapshot {
+  hitMarker?: boolean;
   progression: { points: number };
   manifest: SaveManifest;
   player: PlayerState;

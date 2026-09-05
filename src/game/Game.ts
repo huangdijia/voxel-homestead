@@ -1,3 +1,4 @@
+import { RIFLE } from "./firearms";
 import * as THREE from "three";
 import type {
   ContainerState,
@@ -145,6 +146,19 @@ export class Game implements GameUIBridge {
   private jumpTime = 0;
   private handSwing = 0;
   private hitDelay = 0;
+  private shotTime = 0;
+  private hitMarkerUntil = 0;
+  private tracer = new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(),
+      new THREE.Vector3(),
+    ]),
+    new THREE.LineBasicMaterial({
+      color: 0xffd88b,
+      transparent: true,
+      opacity: 0.85,
+    }),
+  );
   private fps = 60;
   private frames: number[] = [];
   private loadingStart = performance.now();
@@ -170,6 +184,8 @@ export class Game implements GameUIBridge {
     this.scene.background = new THREE.Color(0xa9d5eb);
     this.scene.fog = this.fog;
     this.sky = createSky(this.scene);
+    this.tracer.visible = false;
+    this.scene.add(this.tracer);
     this.world = new VoxelWorld(
       this.scene,
       data.manifest.seed,
@@ -277,6 +293,19 @@ export class Game implements GameUIBridge {
     this.camera.updateProjectionMatrix();
   }
   private handleEvent(event: WorldEvent) {
+    if (event.type === "shot" && event.end) {
+      this.shotTime = 0.085;
+      this.handSwing = 0;
+      this.hitMarkerUntil = event.hit ? this.elapsed + 0.15 : 0;
+      const start = new THREE.Vector3(0.3, -0.2, -0.8)
+        .applyQuaternion(this.camera.quaternion)
+        .add(this.camera.position);
+      const positions = this.tracer.geometry.getAttribute("position");
+      positions.setXYZ(0, start.x, start.y, start.z);
+      positions.setXYZ(1, event.end.x, event.end.y, event.end.z);
+      positions.needsUpdate = true;
+      this.tracer.geometry.computeBoundingSphere();
+    }
     if (event.sound) this.audio.play(event.sound);
     if (event.message) {
       this.message = event.message;
@@ -348,6 +377,7 @@ export class Game implements GameUIBridge {
       const n = Number(e.code.slice(5));
       if (n >= 1 && n <= 9) this.command({ type: "select", index: n - 1 });
     }
+    if (e.code === "KeyG" && !e.repeat) this.command({ type: "equipRifle" });
     if (e.code === "KeyQ" && !e.repeat) this.command({ type: "drop" });
     if (e.code === "KeyF" && !e.repeat && this.simulation.creative) {
       this.simulation.player.flying = !this.simulation.player.flying;
@@ -379,7 +409,9 @@ export class Game implements GameUIBridge {
     if (e.button === 0) {
       this.primary = true;
       this.handSwing = 1;
-      if (this.simulation.attack()) this.hitDelay = 0.45;
+      if (this.simulation.attack())
+        this.hitDelay =
+          this.simulation.held?.id === "rifle" ? RIFLE.interval : 0.45;
     }
     if (e.button === 2 && this.mouseFallback) {
       this.rightHeld = true;
@@ -435,9 +467,9 @@ export class Game implements GameUIBridge {
       this.hitDelay = Math.max(0, this.hitDelay - dt);
       if (!this.paused && this.primary && this.hitDelay <= 0) {
         if (sim.attack()) {
-          this.hitDelay = 0.45;
+          this.hitDelay = sim.held?.id === "rifle" ? RIFLE.interval : 0.45;
           this.handSwing = 1;
-        } else {
+        } else if (sim.held?.id !== "rifle") {
           sim.mine(dt);
           this.handSwing = Math.max(this.handSwing, 0.3);
         }
@@ -451,6 +483,8 @@ export class Game implements GameUIBridge {
       }
       if (this.saveStatus === "saved") this.saveStatus = "dirty";
     } else this.accumulator = 0;
+    this.shotTime = Math.max(0, this.shotTime - dt);
+    this.tracer.visible = this.shotTime > 0 && !this.paused;
     this.updateVisuals(dt);
     this.renderer.render(this.scene, this.camera);
     this.notifyTimer += dt;
@@ -583,7 +617,19 @@ export class Game implements GameUIBridge {
         this.hand.add(box);
       };
       const item = held ? ITEMS[held.id] : null;
-      if (item?.tool) {
+      if (item?.firearm) {
+        add(0x24363e, 0, 0, -0.15, 0.12, 0.13, 0.48);
+        add(0x526d73, 0, 0.02, -0.39, 0.1, 0.1, 0.25);
+        add(0x18262e, 0, 0.025, -0.59, 0.045, 0.045, 0.22);
+        add(0x947448, 0, -0.035, 0.15, 0.105, 0.14, 0.2);
+        add(0x263c44, 0, -0.13, -0.05, 0.075, 0.19, 0.1);
+        add(0x111d24, 0, -0.14, -0.22, 0.075, 0.18, 0.12);
+        add(0xc2d6d5, 0, 0.11, -0.25, 0.035, 0.06, 0.06);
+        add(0xd5aa57, 0, 0.08, -0.48, 0.025, 0.04, 0.025);
+        add(0xba8d70, 0.03, -0.21, -0.05, 0.1, 0.15, 0.12);
+        add(0xffdf88, 0, 0.025, -0.73, 0.11, 0.11, 0.11);
+        this.hand.children.at(-1)!.name = "muzzle-flash";
+      } else if (item?.tool) {
         const metal = new THREE.Color(item.color ?? "#b9945a").getHex();
         add(0x997247, 0, 0, 0, 0.055, 0.39, 0.055);
         if (item.tool === "sword") add(metal, 0, 0.29, 0, 0.08, 0.34, 0.035);
@@ -795,12 +841,22 @@ export class Game implements GameUIBridge {
         (moving ? Math.sin(this.elapsed * 9) * 0.015 : 0),
       -0.58,
     );
+    if (id === "rifle") {
+      this.hand.position.set(
+        0.3,
+        -0.28 + this.shotTime * 0.25,
+        -0.48 + this.shotTime * 0.8,
+      );
+      const flash = this.hand.getObjectByName("muzzle-flash");
+      if (flash) flash.visible = this.shotTime > 0.045;
+    }
     this.hand.visible = !this.paused && !sim.player.dead;
   }
   private buildSnapshot(): GameSnapshot {
     const sim = this.simulation,
       t = sim.target();
     return {
+      hitMarker: this.elapsed < this.hitMarkerUntil,
       progression: { points: sim.progression.points },
       manifest: { ...sim.manifest },
       player: structuredClone(sim.player),
@@ -835,6 +891,9 @@ export class Game implements GameUIBridge {
       case "select":
         sim.player.selected = clamp(Math.floor(command.index), 0, 8);
         this.audio.play("equip");
+        break;
+      case "equipRifle":
+        sim.equipRifle();
         break;
       case "attack":
         sim.attack();
@@ -1195,6 +1254,8 @@ export class Game implements GameUIBridge {
     (this.selection.material as THREE.Material).dispose();
     this.handGeometry.dispose();
     this.handMaterials.forEach((m) => m.dispose());
+    this.tracer.geometry.dispose();
+    this.tracer.material.dispose();
     this.audio.dispose();
     for (const texture of handTextures.values()) texture.dispose();
     handTextures.clear();

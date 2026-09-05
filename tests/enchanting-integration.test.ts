@@ -113,7 +113,7 @@ afterEach(() => {
 describe("experience survives real rule transitions", () => {
   it("starts v7 empty and keeps experience out of item inventory", () => {
     const save = createNewSave("空世界", "xp", "survival");
-    expect(save.manifest).toMatchObject({ version: 7, generatorVersion: 6 });
+    expect(save.manifest).toMatchObject({ version: 7, generatorVersion: 7 });
     expect(validateSave(save)).toEqual(save);
     expect(save.player.inventory.every((s) => s === null)).toBe(true);
     expect(save.progression?.points).toBe(0);

@@ -1,3 +1,4 @@
+import { RIFLE, traceRifle } from "./firearms";
 import { WORLD_MIN_Y, WORLD_MAX_Y } from "../engine/world-height";
 import { canHarvest, miningDuration, damageAfterArmor } from "./equipment";
 import { FluidSystem } from "./fluids";
@@ -105,11 +106,11 @@ export function createNewSave(
 ): SaveData {
   const worldSeed =
     seed.trim() || String(Math.floor(Math.random() * 2147483647));
-  const spawn = { x: 0.5, y: surfaceHeight(worldSeed, 0, 0, 6) + 1.05, z: 0.5 };
+  const spawn = { x: 0.5, y: surfaceHeight(worldSeed, 0, 0, 7) + 1.05, z: 0.5 };
   return {
     manifest: {
       version: 7,
-      generatorVersion: 6,
+      generatorVersion: 7,
       id: uid(),
       name: name.trim() || "新的世界",
       seed: worldSeed,
@@ -121,7 +122,7 @@ export function createNewSave(
     player: {
       position: { ...spawn },
       velocity: { x: 0, y: 0, z: 0 },
-      yaw: -0.62,
+      yaw: -1.05,
       pitch: -0.06,
       health: 20,
       hunger: 20,
@@ -952,6 +953,10 @@ export class Simulation {
     }
   }
   mine(dt: number): boolean {
+    if (this.held && ITEMS[this.held.id]?.firearm) {
+      this.mining = 0;
+      return false;
+    }
     if (this.player.dead) return false;
     const target = this.target();
     if (!target) {
@@ -1104,14 +1109,44 @@ export class Simulation {
     }
     this.dirty = true;
   }
+  equipRifle(): boolean {
+    if (this.player.dead) return false;
+    const slots = this.player.inventory;
+    let index = slots.findIndex((slot) => slot?.id === "rifle");
+    if (index < 0) {
+      index = slots.findIndex((slot) => !slot);
+      if (index < 0) {
+        this.toast("背包已满，请先腾出一个位置领取步枪");
+        return false;
+      }
+      slots[index] = { id: "rifle", count: 1 };
+    }
+    if (index > 8) {
+      [slots[this.player.selected], slots[index]] = [
+        slots[index],
+        slots[this.player.selected],
+      ];
+    } else this.player.selected = index;
+    this.mining = 0;
+    this.dirty = true;
+    this.sound("equip");
+    this.toast("海岸步枪已装备 · 无限弹药 · 按住左键连射");
+    return true;
+  }
   attack(): boolean {
     if (this.attackCooldown > 0 || this.player.dead) return false;
     const eye = this.eye(),
       dir = this.direction();
-    const wall = raycastVoxel(this.world, eye, dir, 3.2, false, true);
-    let victim: EntityState | undefined;
+    const firearm = !!(this.held && ITEMS[this.held.id]?.firearm);
+    const shot = firearm
+      ? traceRifle(this.world, this.entities, eye, dir)
+      : null;
+    const wall = firearm
+      ? null
+      : raycastVoxel(this.world, eye, dir, 3.2, false, true);
+    let victim: EntityState | undefined = shot?.victim;
     let nearest = 3.2;
-    for (const e of this.entities) {
+    for (const e of firearm ? [] : this.entities) {
       const center = {
         ...e.position,
         y: e.position.y + (ENTITIES[e.kind].hostile ? 0.9 : 0.55),
@@ -1135,13 +1170,19 @@ export class Simulation {
         nearest = along;
       }
     }
-    if (!victim) return false;
-    this.attackCooldown = 0.5;
+    if (shot) {
+      this.attackCooldown = RIFLE.interval;
+      this.mining = 0;
+      this.emit({ type: "shot", sound: "shot", end: shot.end, hit: !!victim });
+    }
+    if (!victim) return firearm;
+    this.attackCooldown = firearm ? RIFLE.interval : 0.5;
     victim.health -=
       (this.held ? (ITEMS[this.held.id]?.damage ?? 2) : 1) +
       sharpnessBonus(this.held);
     victim.playerHitTimer = 5;
-    this.wearTool();
+    if (!firearm) this.wearTool();
+    this.dirty = true;
     this.sound("hit");
     const knock = moveBody(
       this.world,

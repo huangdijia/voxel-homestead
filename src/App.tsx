@@ -824,6 +824,23 @@ function HUD({
   }, []);
   return (
     <div className="hud">
+      <div className="coast-guide">
+        {snapshot.manifest.generatorVersion >= 7 && (
+          <span>
+            海边别墅 · 向东北沿石路前行
+            <br />
+            <small>入口 X 32 · Z −10 / 海滩向北</small>
+          </span>
+        )}
+        <button onClick={() => game.command({ type: "equipRifle" })}>
+          <kbd>G</kbd> 装备步枪
+        </button>
+        {current?.id === "rifle" && (
+          <strong className="rifle-ammo">
+            ∞ 无限弹药 <small>按住左键连射</small>
+          </strong>
+        )}
+      </div>
       <div className="hud-top">
         <div className="world-status">
           <Icon name={daytime ? "sun" : "moon"} size={20} />
@@ -855,7 +872,7 @@ function HUD({
           )}
         </button>
       </div>
-      <div className="crosshair">
+      <div className={`crosshair ${snapshot.hitMarker ? "shot-hit" : ""}`}>
         <i />
         <i />
       </div>
@@ -1095,7 +1112,9 @@ function CreateWorld({
                 <Icon name="spark" size={18} />
               </button>
             </div>
-            <small>相同的种子，会生长出相同的山川与森林。</small>
+            <small>
+              出生点旁有海边别墅、泳池和栈桥。相同种子生成相同世界。
+            </small>
           </label>
           <fieldset className="mode-selector">
             <legend>选择你的玩法</legend>
@@ -1299,7 +1318,8 @@ function HelpDialog({ close }: { close: () => void }) {
             ["空格", "跳跃 / 游泳上浮"],
             ["Ctrl", "疾跑"],
             ["Shift", "潜行 / 飞行下降"],
-            ["左键", "长按挖掘 / 攻击"],
+            ["左键", "长按挖掘 / 攻击 / 步枪连射"],
+            ["G", "领取并装备无限弹药步枪"],
             ["右键", "放置 / 使用 / 进食"],
             ["1 — 9 / 滚轮", "切换快捷栏"],
             ["E", "背包与合成"],

@@ -193,6 +193,7 @@ describe("fullscreen and game presentation lifecycle", () => {
       entityRenderer: resource(),
       sky: resource(),
       selection: { geometry: resource(), material: resource() },
+      tracer: { geometry: resource(), material: resource() },
       handGeometry: resource(),
       handMaterials: [],
       renderer: resource(),

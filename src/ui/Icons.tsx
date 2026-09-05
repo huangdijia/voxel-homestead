@@ -617,6 +617,23 @@ function progressionIcon(id: string): React.ReactNode | null {
 export function ItemIcon({ id, size = 36 }: { id: string; size?: number }) {
   const item = ITEMS[id];
   if (!item) return null;
+  if (item.firearm)
+    return (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 32 32"
+        className="item-svg"
+        aria-hidden="true"
+        shapeRendering="crispEdges"
+      >
+        <path d="M2 13h6v-2h15v2h7v3h-8v2h-7v8h-4v-8H8v3H2z" fill="#273c46" />
+        <path d="M8 12h14v3H8zM14 9h5v2h-5z" fill="#87a7ae" />
+        <path d="M2 14h5v5H2zM11 19h3v6h-3z" fill="#ab8050" />
+        <path d="M18 18h4v7h-4z" fill="#546b73" />
+        <path d="M26 11h2v2h-2z" fill="#e2bc6f" />
+      </svg>
+    );
   const c = item.color || "#a6a795";
   const mineral =
     item.block === undefined ? undefined : mineralAppearance(item.block);

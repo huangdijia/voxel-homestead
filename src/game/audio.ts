@@ -24,6 +24,7 @@ export class GameAudio {
       break: [140, 45, 0.09, "sawtooth"],
       step: [80, 45, 0.03, "triangle"],
       hurt: [160, 50, 0.18, "sawtooth"],
+      shot: [240, 32, 0.11, "sawtooth"],
       hit: [110, 40, 0.09, "square"],
       door: [190, 110, 0.12, "triangle"],
       eat: [200, 160, 0.1, "square"],

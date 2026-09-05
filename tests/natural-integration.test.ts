@@ -56,7 +56,7 @@ afterEach(() => vi.unstubAllGlobals());
 describe("natural world integration and checkpoints", () => {
   it("starts the current version with valid detached natural state", () => {
     const save = createNewSave("新世界", "version-three", "survival");
-    expect(save.manifest.generatorVersion).toBe(6);
+    expect(save.manifest.generatorVersion).toBe(7);
     expect(validateSave(save)).toEqual(save);
   });
   it("keeps old terrain generators unchanged while new deep caves contain lava", () => {
