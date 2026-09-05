@@ -292,7 +292,7 @@ describe("version four checkpoints", () => {
       new MineralWorld(old.changes),
       old,
     ).snapshot();
-    expect(upgraded.manifest.version).toBe(4);
+    expect(upgraded.manifest.version).toBe(5);
     expect(upgraded.manifest.generatorVersion).toBe(3);
     await saveWorld(upgraded);
     expect(await loadMigrationBackup(old.manifest.id, 3)).toEqual(old);
@@ -377,7 +377,7 @@ describe("version four checkpoints", () => {
         null,
         { id: output, count: 2 },
       ]);
-      expect(validateSave(resumed.snapshot()).manifest.version).toBe(4);
+      expect(validateSave(resumed.snapshot()).manifest.version).toBe(5);
     },
   );
 });

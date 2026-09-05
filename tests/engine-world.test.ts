@@ -2,6 +2,11 @@ import * as THREE from "three";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { VoxelWorld } from "../src/engine/world";
 import type { ChunkRequest, ChunkResult } from "../src/engine/protocol";
+import {
+  WORLD_MIN_Y,
+  WORLD_MAX_Y,
+  CHUNK_SIZE,
+} from "../src/engine/world-height";
 
 class WorkerDouble {
   static latest: WorkerDouble;
@@ -90,10 +95,10 @@ describe("chunk job ownership", () => {
     const worker = WorkerDouble.latest,
       old = worker.requests[0];
     for (let i = 1; i <= 20; i++) world.update({ x: i * 64, y: 23, z: 0 }, 1);
-    expect(world.stats.pending).toBeLessThanOrEqual(37);
+    expect(world.stats.pending).toBeLessThanOrEqual(28);
     worker.respond(old);
     expect(world.stats.chunks).toBe(0);
-    expect(world.stats.pending).toBeLessThanOrEqual(36);
+    expect(world.stats.pending).toBeLessThanOrEqual(27);
     world.dispose();
     expect(worker.terminated).toBe(true);
     expect(world.stats).toEqual({ chunks: 0, pending: 0 });
@@ -137,6 +142,10 @@ describe("chunk job ownership", () => {
   it("keeps a bounded loaded set across a simulated 15-minute walk with all jobs completing", () => {
     const world = new VoxelWorld(new THREE.Scene(), "test", [], "world-walk");
     const worker = WorkerDouble.latest;
+    const cy = Math.floor(23 / CHUNK_SIZE),
+      minY = Math.max(Math.floor(WORLD_MIN_Y / CHUNK_SIZE), cy - 6),
+      maxY = Math.min(Math.floor(WORLD_MAX_Y / CHUNK_SIZE), cy + 6),
+      sectionBudget = 13 * 13 * (maxY - minY + 1);
     let maxChunks = 0,
       maxPending = 0;
     for (let second = 0; second < 900; second++) {
@@ -146,12 +155,13 @@ describe("chunk job ownership", () => {
       );
       maxPending = Math.max(maxPending, world.stats.pending);
       let jobs = 0;
-      while (world.stats.pending > 0 && jobs++ < 1000) worker.respond();
+      while (world.stats.pending > 0 && jobs++ < sectionBudget + 1)
+        worker.respond();
       maxChunks = Math.max(maxChunks, world.stats.chunks);
-      expect(world.stats.chunks).toBeLessThanOrEqual(676);
+      expect(world.stats.chunks).toBeLessThanOrEqual(sectionBudget);
     }
-    expect(maxChunks).toBe(676);
-    expect(maxPending).toBeLessThanOrEqual(676);
+    expect(maxChunks).toBe(sectionBudget);
+    expect(maxPending).toBeLessThanOrEqual(sectionBudget);
     expect(worker.requests.length).toBeGreaterThan(10000);
     world.dispose();
   }, 15000);

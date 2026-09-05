@@ -1,8 +1,9 @@
 import type { BlockChange } from "../game/types";
+import type { GeneratorVersion } from "./world-height";
 export interface ChunkRequest {
   worldId: string;
   seed: string;
-  generatorVersion?: 1 | 2 | 3 | 4;
+  generatorVersion?: GeneratorVersion;
   key: string;
   cx: number;
   cy: number;

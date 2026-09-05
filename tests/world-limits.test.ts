@@ -59,27 +59,27 @@ function aim(sim: Simulation, point: Vec3): void {
 }
 
 describe("multi-block placement is atomic across world boundaries", () => {
-  it("rejects a door with its foot at y=95 and head outside the world, preserving the item and both positions", () => {
-    const world = new BoundedWorld(94);
-    const sim = makeSim(world, { x: 0.5, y: 95, z: 0.5 }, "door");
-    aim(sim, { x: 0.5, y: 94.999, z: -1.5 });
-    expect(sim.target()?.position).toEqual({ x: 0, y: 94, z: -2 });
+  it("rejects a door with its foot at y=319 and head outside the world, preserving the item and both positions", () => {
+    const world = new BoundedWorld(318);
+    const sim = makeSim(world, { x: 0.5, y: 319, z: 0.5 }, "door");
+    aim(sim, { x: 0.5, y: 318.999, z: -1.5 });
+    expect(sim.target()?.position).toEqual({ x: 0, y: 318, z: -2 });
     sim.interact();
     expect({
       doors: countItem(sim.player.inventory, "door"),
-      foot: world.getBlock(0, 95, -2),
-      head: world.getBlock(0, 96, -2),
+      foot: world.getBlock(0, 319, -2),
+      head: world.getBlock(0, 320, -2),
       changes: world.getChanges(),
     }).toEqual({ doors: 1, foot: 0, head: 0, changes: [] });
   });
 
-  it("still places a door whose head is exactly at the valid upper limit y=95", () => {
-    const world = new BoundedWorld(93);
-    const sim = makeSim(world, { x: 0.5, y: 94, z: 0.5 }, "door");
-    aim(sim, { x: 0.5, y: 93.999, z: -1.5 });
+  it("still places a door whose head is exactly at the valid upper limit y=319", () => {
+    const world = new BoundedWorld(317);
+    const sim = makeSim(world, { x: 0.5, y: 318, z: 0.5 }, "door");
+    aim(sim, { x: 0.5, y: 317.999, z: -1.5 });
     sim.interact();
-    expect(world.getBlock(0, 94, -2)).toBe(18);
-    expect(world.getBlock(0, 95, -2)).toBe(25);
+    expect(world.getBlock(0, 318, -2)).toBe(18);
+    expect(world.getBlock(0, 319, -2)).toBe(25);
     expect(countItem(sim.player.inventory, "door")).toBe(0);
   });
 
@@ -111,18 +111,21 @@ describe("multi-block placement is atomic across world boundaries", () => {
 });
 
 describe("imported block modifications respect the playable world height", () => {
-  it.each([-17, 96])("rejects a modification at out-of-world y=%i", (y) => {
+  it.each([-65, 320])("rejects a modification at out-of-world y=%i", (y) => {
     const save = createNewSave("无效高度导入", "world-limits", "survival");
     save.changes = [{ x: 0, y, z: 0, id: 3 }];
     const imported = JSON.parse(JSON.stringify(save));
     expect(() => validateSave(imported)).toThrow();
   });
 
-  it.each([-16, 95])("accepts a modification exactly at boundary y=%i", (y) => {
-    const save = createNewSave("有效高度导入", "world-limits", "survival");
-    save.changes = [{ x: -1, y, z: 16, id: y === -16 ? 24 : 11 }];
-    expect(validateSave(JSON.parse(JSON.stringify(save))).changes).toEqual(
-      save.changes,
-    );
-  });
+  it.each([-64, 319])(
+    "accepts a modification exactly at boundary y=%i",
+    (y) => {
+      const save = createNewSave("有效高度导入", "world-limits", "survival");
+      save.changes = [{ x: -1, y, z: 16, id: y === -64 ? 24 : 11 }];
+      expect(validateSave(JSON.parse(JSON.stringify(save))).changes).toEqual(
+        save.changes,
+      );
+    },
+  );
 });

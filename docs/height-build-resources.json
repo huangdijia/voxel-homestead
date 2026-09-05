@@ -1,0 +1,66 @@
+{
+  "unique": 12,
+  "bytes": 5352679,
+  "entries": [
+    {
+      "url": "manifest.webmanifest",
+      "bytes": 621,
+      "sha256": "f2dc5f8f70bfa39d76c0aaa36116209ff5f6646dd715c6bcfc83fb6c7761a2f4"
+    },
+    {
+      "url": "index.html",
+      "bytes": 885,
+      "sha256": "835a5fa5bc4cc3eb8a76efc1c0448a562760c6fbac08f05efa428d0101cea6a5"
+    },
+    {
+      "url": "icons/icon.svg",
+      "bytes": 1054,
+      "sha256": "84a8dd1ab9f57c2b49f7d5d21254550eec55f7298bb8926d12d1341d29262ef3"
+    },
+    {
+      "url": "icons/icon-maskable-512.png",
+      "bytes": 10897,
+      "sha256": "6f46ff1aa5364534be9c6a7ead58a96cd7e5d1b2dd695a92f9cb3c32955250b7"
+    },
+    {
+      "url": "icons/icon-512.png",
+      "bytes": 10897,
+      "sha256": "6f46ff1aa5364534be9c6a7ead58a96cd7e5d1b2dd695a92f9cb3c32955250b7"
+    },
+    {
+      "url": "icons/icon-192.png",
+      "bytes": 5166,
+      "sha256": "cd3898a105a9852d87a1e518c2fe7e326a18d0ae2cd39d3f1c180ad75a01b4f3"
+    },
+    {
+      "url": "icons/apple-touch-icon.png",
+      "bytes": 4971,
+      "sha256": "b699eef5c18261078a5ebe1a287c3b8fe9434ce9dd47efeb5120712975e809e6"
+    },
+    {
+      "url": "assets/terrain.worker-nFAcMD3F.js",
+      "bytes": 17474,
+      "sha256": "8a12e980a9aa8c23f85aa79c232578943be84614eae6536433a12218bb0ab888"
+    },
+    {
+      "url": "assets/terrain-atlas.png",
+      "bytes": 2330370,
+      "sha256": "b26896104930957cfe620997f7d2a7ab8f7698cc5197f755f6d0fe8887e6aae5"
+    },
+    {
+      "url": "assets/mob-atlas.png",
+      "bytes": 2014586,
+      "sha256": "d7b66a800f9bd85ac9b063492cee500a5549ed42e68b93bdf27c7480e0eecdf9"
+    },
+    {
+      "url": "assets/index-DJQoKuHi.js",
+      "bytes": 914042,
+      "sha256": "752578dcc4e68e1be95efc08d6ca14c01fde419003c4f2f902e92c2c079113d2"
+    },
+    {
+      "url": "assets/index-CJkd2sp2.css",
+      "bytes": 41716,
+      "sha256": "4500de03dae0d29e97027dfa3409892078952b772d1d2eaac51bbc174cd6db6b"
+    }
+  ]
+}

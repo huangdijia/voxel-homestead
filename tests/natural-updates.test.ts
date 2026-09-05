@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   NATURAL_FALLING_MAX,
+  NATURAL_MIN_Y,
+  NATURAL_MAX_Y,
   NATURAL_QUEUE_MAX,
   NATURAL_SCAN_BUDGET,
   NATURAL_SCAN_INTERVAL,
@@ -160,15 +162,15 @@ describe("falling blocks and ownership", () => {
   );
   it("drops once at the bottom boundary and can start at the maximum world height", () => {
     const low = fixture();
-    low.edit(0, -16, 0, 4);
-    advance(low.system, 10, { ...player, y: -15 });
-    expect(low.world.getBlock(0, -16, 0)).toBe(0);
+    low.edit(0, NATURAL_MIN_Y, 0, 4);
+    advance(low.system, 10, { ...player, y: NATURAL_MIN_Y + 1 });
+    expect(low.world.getBlock(0, NATURAL_MIN_Y, 0)).toBe(0);
     expect(low.drops).toHaveLength(1);
     expect(owned(low, 4)).toBe(1);
     const high = fixture();
-    high.edit(0, 95, 0, 5);
-    advance(high.system, 1, { ...player, y: 94 });
-    expect(high.world.getBlock(0, 94, 0)).toBe(5);
+    high.edit(0, NATURAL_MAX_Y, 0, 5);
+    advance(high.system, 1, { ...player, y: NATURAL_MAX_Y - 1 });
+    expect(high.world.getBlock(0, NATURAL_MAX_Y - 1, 0)).toBe(5);
     expect(owned(high, 5)).toBe(1);
   });
   it.each(["reject", "throw"] as const)(
@@ -403,12 +405,12 @@ describe("sapling growth, support and bone meal", () => {
     f.world.loaded = () => true;
     expect(f.system.fertilize({ x: 15, y: 1, z: 0 }, 15)).toBe(true);
     const high = fixture();
-    high.plant({ x: 0, y: 91, z: 0 });
-    expect(high.system.fertilize({ x: 0, y: 91, z: 0 }, 15)).toBe(false);
+    high.plant({ x: 0, y: NATURAL_MAX_Y - 4, z: 0 });
+    expect(high.system.fertilize({ x: 0, y: NATURAL_MAX_Y - 4, z: 0 }, 15)).toBe(false);
     const edge = fixture();
-    edge.plant({ x: 0, y: 90, z: 0 });
-    expect(edge.system.fertilize({ x: 0, y: 90, z: 0 }, 15)).toBe(true);
-    expect(edge.world.getBlock(0, 95, 0)).toBe(8);
+    edge.plant({ x: 0, y: NATURAL_MAX_Y - 5, z: 0 });
+    expect(edge.system.fertilize({ x: 0, y: NATURAL_MAX_Y - 5, z: 0 }, 15)).toBe(true);
+    expect(edge.world.getBlock(0, NATURAL_MAX_Y, 0)).toBe(8);
     const limit = fixture();
     limit.plant({ x: 30_000_000, y: 1, z: 0 });
     expect(limit.system.fertilize({ x: 30_000_000, y: 1, z: 0 }, 15)).toBe(
@@ -528,7 +530,7 @@ describe("bounded scheduling and reload", () => {
       { ...base, accumulator: 0.1 },
       { ...base, scanCursor: NATURAL_SCAN_SIZE },
       { ...base, queue: [{ x: 0.5, y: 2, z: 0 }] },
-      { ...base, queue: [{ x: 0, y: 96, z: 0 }] },
+      { ...base, queue: [{ x: 0, y: NATURAL_MAX_Y + 1, z: 0 }] },
       { ...base, queue: [...base.queue, ...base.queue] },
       {
         ...base,

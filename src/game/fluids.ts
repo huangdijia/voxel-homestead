@@ -1,4 +1,5 @@
 import { BLOCKS } from './registry';
+import { WORLD_MIN_Y as MIN_Y, WORLD_MAX_Y as MAX_Y } from '../engine/world-height';
 import { fluidBlock, fluidInfo, isFluid, isLava, isWater } from './fluid-blocks';
 import type { FluidKind } from './fluid-blocks';
 import type { Vec3, WorldPort } from './types';
@@ -30,7 +31,6 @@ export const FLUID_ACTIVE_RADIUS = 64;
 export const FLUID_WATER_INTERVAL = .25;
 export const FLUID_LAVA_INTERVAL = 1.5;
 
-const MIN_Y = -16, MAX_Y = 95;
 const horizontal = [[1, 0, 0], [-1, 0, 0], [0, 0, 1], [0, 0, -1]] as const;
 const neighbors = [[0, -1, 0], ...horizontal, [0, 1, 0]] as const;
 const delay = (kind: FluidKind) => kind === 'water' ? FLUID_WATER_INTERVAL : FLUID_LAVA_INTERVAL;
@@ -99,11 +99,11 @@ export class FluidSystem {
     // Above the world is known air, below it known bedrock, not an unloaded cell.
     if (position.y > MAX_Y) return 0;
     if (position.y < MIN_Y) return 24;
-    if (!finitePosition(position) || !this.world.isReady(position.x, position.z)) return undefined;
+    if (!finitePosition(position) || !this.world.isReady(position.x, position.z, position.y)) return undefined;
     return this.world.getBlock(position.x, position.y, position.z);
   }
   private write(position: Vec3, id: number): boolean {
-    if (!validBlock(position) || !this.world.isReady(position.x, position.z)) return false;
+    if (!validBlock(position) || !this.world.isReady(position.x, position.z, position.y)) return false;
     const old = this.world.getBlock(position.x, position.y, position.z);
     if (old === id || !this.callbacks.setBlock(position.x, position.y, position.z, id)) return false;
     if (this.world.getBlock(position.x, position.y, position.z) !== id) return false;
@@ -138,9 +138,12 @@ export class FluidSystem {
   private process(task: FluidTask): void {
     const current = this.read(task);
     if (current === undefined) return;
-    // A missing horizontal neighbor could be the supply of an existing flow.
-    // Retain the task and its fluid until those columns are available.
-    if (horizontal.some(d => this.read(offset(task, d)) === undefined)) {
+    // Unknown vertical cells may contain a supply or support just like horizontal
+    // cells. Preserve the flow until every dependency can actually be read.
+    if (neighbors.some(d => this.read(offset(task, d)) === undefined) || horizontal.some(d => {
+      const p = offset(task, d), id = this.read(p), neighbor = id === undefined ? undefined : fluidInfo(id);
+      return neighbor?.kind === task.kind && this.read({ ...p, y: p.y - 1 }) === undefined;
+    })) {
       this.enqueue(task, task.kind); return;
     }
     if (this.react(task, current)) return;
@@ -195,7 +198,7 @@ export class FluidSystem {
       const key = keyOf(task, task.kind);
       if (this.tasks.get(key) !== task) continue;
       this.tasks.delete(key);
-      if (task.due > this.clock || Math.abs(task.x - playerPosition.x) > FLUID_ACTIVE_RADIUS || Math.abs(task.z - playerPosition.z) > FLUID_ACTIVE_RADIUS || Math.abs(task.y - playerPosition.y) > 128 || !this.world.isReady(task.x, task.z)) {
+      if (task.due > this.clock || Math.abs(task.x - playerPosition.x) > FLUID_ACTIVE_RADIUS || Math.abs(task.z - playerPosition.z) > FLUID_ACTIVE_RADIUS || Math.abs(task.y - playerPosition.y) > 128 || !this.world.isReady(task.x, task.z, task.y)) {
         this.tasks.set(key, task); continue;
       }
       processed++;

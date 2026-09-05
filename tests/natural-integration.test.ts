@@ -56,7 +56,7 @@ afterEach(() => vi.unstubAllGlobals());
 describe("natural world integration and checkpoints", () => {
   it("starts the current version with valid detached natural state", () => {
     const save = createNewSave("新世界", "version-three", "survival");
-    expect(save.manifest.generatorVersion).toBe(4);
+    expect(save.manifest.generatorVersion).toBe(5);
     expect(validateSave(save)).toEqual(save);
   });
   it("keeps old terrain generators unchanged while new deep caves contain lava", () => {
@@ -168,6 +168,7 @@ describe("natural world integration and checkpoints", () => {
   });
   it("rejects a cargo record that duplicates unchanged generated gravel", () => {
     const save = createNewSave("下落校验", "natural", "survival");
+    save.manifest.generatorVersion = 3;
     let found = false;
     for (let x = -40; x < 40 && !found; x++)
       for (let z = -40; z < 40 && !found; z++) {
@@ -240,7 +241,9 @@ describe("natural world integration and checkpoints", () => {
     sim.player.inventory[0] = { id: "bucket", count: 2 };
     sim.player.selected = 0;
     aim(sim, { x: 15.5, y: 1.62, z: 0.5 });
-    expect(sim.target()?.position).toEqual({ x: 16, y: 1, z: 0 });
+    // Normal targeting stops at the unknown section; bucket targeting still
+    // reaches the loaded source in front of that boundary.
+    expect(sim.target()).toBeNull();
     sim.interact();
     expect(world.getBlock(15, 1, 0)).toBe(0);
     expect(world.getBlock(16, 1, 0)).toBe(3);

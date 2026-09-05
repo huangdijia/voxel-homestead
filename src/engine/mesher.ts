@@ -3,12 +3,8 @@ import type {
   MineralAppearance,
   MineralColor,
 } from "../game/mineral-appearance";
-import {
-  sampleBlock,
-  surfaceHeight,
-  CHUNK_SIZE,
-  WORLD_MIN_Y,
-} from "./generator";
+import { sampleBlock } from "./generator";
+import { CHUNK_SIZE, WORLD_MIN_Y, WORLD_MAX_Y } from "./world-height";
 import {
   fluidSurfaceHeights,
   fluidSurfaceQuads,
@@ -346,7 +342,50 @@ function empty(): Builder {
   return { p: [], n: [], u: [], c: [], i: [] };
 }
 
+// One worker owns one world's bounded cache. Adjacent vertical sections reuse the
+// same complete column scan instead of rescanning 384 heights for every mesh.
+const MAX_ROOF_COLUMNS = 65536;
+let roofWorld = "";
+const roofCache = new Map<string, { signature: string; height: number }>();
+function columnRoof(
+  request: ChunkRequest,
+  x: number,
+  z: number,
+  changes?: Map<number, number>,
+): number {
+  const key = x + "," + z;
+  // Revisions belong to sections; only changes in this column affect its roof.
+  const signature = changes
+    ? [...changes]
+        .sort((a, b) => a[0] - b[0])
+        .map(([y, id]) => y + ":" + id)
+        .join(";")
+    : "";
+  const cached = roofCache.get(key);
+  if (cached?.signature === signature) return cached.height;
+  let height = WORLD_MAX_Y;
+  for (; height >= WORLD_MIN_Y; height--) {
+    const id =
+      changes?.get(height) ??
+      sampleBlock(request.seed, x, height, z, request.generatorVersion);
+    if (isOpaque(id)) break;
+  }
+  if (roofCache.size >= MAX_ROOF_COLUMNS)
+    roofCache.delete(roofCache.keys().next().value!);
+  roofCache.set(key, { signature, height });
+  return height;
+}
+
 export function buildChunk(request: ChunkRequest): ChunkResult {
+  const identity = JSON.stringify([
+    request.worldId,
+    request.seed,
+    request.generatorVersion ?? 1,
+  ]);
+  if (identity !== roofWorld) {
+    roofWorld = identity;
+    roofCache.clear();
+  }
   const { seed, cx, cy, cz } = request;
   const ox = cx * CHUNK_SIZE,
     oy = cy * CHUNK_SIZE,
@@ -357,50 +396,54 @@ export function buildChunk(request: ChunkRequest): ChunkResult {
   for (let y = -1; y <= 16; y++)
     for (let z = -1; z <= 16; z++)
       for (let x = -1; x <= 16; x++) {
-        padded[offset(x, y, z)] = sampleBlock(
-          seed,
-          ox + x,
-          oy + y,
-          oz + z,
-          request.generatorVersion,
-        );
+        padded[offset(x, y, z)] =
+          oy + y < WORLD_MIN_Y || oy + y > WORLD_MAX_Y
+            ? 0
+            : sampleBlock(
+                seed,
+                ox + x,
+                oy + y,
+                oz + z,
+                request.generatorVersion,
+              );
       }
   for (const change of request.changes) {
     const x = change.x - ox,
       y = change.y - oy,
       z = change.z - oz;
-    if (x >= -1 && x <= 16 && y >= -1 && y <= 16 && z >= -1 && z <= 16)
+    if (
+      change.y >= WORLD_MIN_Y &&
+      change.y <= WORLD_MAX_Y &&
+      x >= -1 &&
+      x <= 16 &&
+      y >= -1 &&
+      y <= 16 &&
+      z >= -1 &&
+      z <= 16
+    )
       padded[offset(x, y, z)] = change.id;
   }
   const get = (x: number, y: number, z: number) => padded[offset(x, y, z)];
   // Bake vertical sky occlusion into terrain color. Point lights still illuminate
   // these surfaces, while the scene's global daylight no longer fills deep caves.
   const roofs = new Int16Array(18 * 18);
-  const changesByPosition = new Map(
-    request.changes.map((c) => [c.x + "," + c.y + "," + c.z, c.id]),
-  );
+  const changedColumns = new Map<string, Map<number, number>>();
   const roofOffset = (x: number, z: number) => (z + 1) * 18 + x + 1;
-  for (let z = -1; z <= 16; z++)
-    for (let x = -1; x <= 16; x++)
-      roofs[roofOffset(x, z)] = surfaceHeight(seed, ox + x, oz + z);
   for (const change of request.changes) {
-    const x = change.x - ox,
-      z = change.z - oz;
-    if (x >= -1 && x <= 16 && z >= -1 && z <= 16 && isOpaque(change.id))
-      roofs[roofOffset(x, z)] = Math.max(roofs[roofOffset(x, z)], change.y);
+    if (change.y < WORLD_MIN_Y || change.y > WORLD_MAX_Y) continue;
+    const key = change.x + "," + change.z;
+    let column = changedColumns.get(key);
+    if (!column) changedColumns.set(key, (column = new Map()));
+    column.set(change.y, change.id);
   }
   for (let z = -1; z <= 16; z++)
     for (let x = -1; x <= 16; x++) {
-      const index = roofOffset(x, z);
-      let y = roofs[index];
-      while (y > WORLD_MIN_Y) {
-        const id =
-          changesByPosition.get(ox + x + "," + y + "," + (oz + z)) ??
-          sampleBlock(seed, ox + x, y, oz + z, request.generatorVersion);
-        if (isOpaque(id)) break;
-        y--;
-      }
-      roofs[index] = y;
+      roofs[roofOffset(x, z)] = columnRoof(
+        request,
+        ox + x,
+        oz + z,
+        changedColumns.get(ox + x + "," + (oz + z)),
+      );
     }
   const voxels = new Uint16Array(4096),
     layers = [empty(), empty(), empty(), empty()];

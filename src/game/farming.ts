@@ -1,4 +1,5 @@
 import { isWater, isLava } from "./fluid-blocks";
+import { WORLD_MIN_Y, WORLD_MAX_Y } from "../engine/world-height";
 import { BLOCKS } from "./registry";
 import type { ItemStack, Vec3, WorldPort } from "./types";
 
@@ -102,8 +103,8 @@ const validPosition = (p: Vec3) =>
   [p.x, p.y, p.z].every(Number.isFinite) &&
   Math.abs(p.x) <= 30_000_000 &&
   Math.abs(p.z) <= 30_000_000 &&
-  p.y >= -16 &&
-  p.y <= 95;
+  p.y >= WORLD_MIN_Y &&
+  p.y <= WORLD_MAX_Y;
 const randomInt = (rng: () => number, maximum: number) =>
   Math.floor(Math.max(0, Math.min(0.999999999, rng())) * maximum);
 
@@ -219,17 +220,28 @@ export class FarmingSystem {
   private nextGrowth(): number {
     return 20 + this.nextRandom() * 40;
   }
-  private register(position: Vec3): FarmPlot | null {
+  private loaded(position: Vec3): boolean {
+    return (
+      validPosition(position) &&
+      this.world.isReady(position.x, position.z, position.y)
+    );
+  }
+  private read(position: Vec3): number | undefined {
+    if (position.y > WORLD_MAX_Y) return 0;
+    if (position.y < WORLD_MIN_Y) return 24;
+    return this.loaded(position)
+      ? this.world.getBlock(position.x, position.y, position.z)
+      : undefined;
+  }
+  private register(position: Vec3, knownId?: number): FarmPlot | null {
     if (!validPosition(position)) return null;
     const key = keyOf(position),
       existing = this.indices.get(key);
     if (existing !== undefined) return this.plots[existing];
+    if (this.plots.length >= 100_000) return null;
     const plot: FarmPlot = {
       ...position,
-      moisture:
-        this.world.getBlock(position.x, position.y, position.z) === FARMLAND.wet
-          ? 7
-          : 0,
+      moisture: (knownId ?? this.read(position)) === FARMLAND.wet ? 7 : 0,
       drySeconds: 0,
       growthRemaining: this.nextGrowth(),
       lastVisit: this.clock,
@@ -252,6 +264,7 @@ export class FarmingSystem {
     if (this.scanCursor >= this.plots.length) this.scanCursor = 0;
   }
   private write(position: Vec3, newId: number): boolean {
+    if (!this.loaded(position)) return false;
     const oldId = this.world.getBlock(position.x, position.y, position.z);
     if (oldId === newId) return false;
     this.world.setBlock(position.x, position.y, position.z, newId);
@@ -261,8 +274,8 @@ export class FarmingSystem {
     return true;
   }
   private dropCrop(position: Vec3): void {
-    const id = this.world.getBlock(position.x, position.y, position.z);
-    if (!cropAt(id) || !this.write(position, 0)) return;
+    const id = this.read(position);
+    if (id === undefined || !cropAt(id) || !this.write(position, 0)) return;
     for (const stack of harvestCrop(id, this.nextRandom))
       this.callbacks.dropItem?.(stack, {
         x: position.x + 0.5,
@@ -278,14 +291,14 @@ export class FarmingSystem {
       y: Math.floor(position.y),
       z: Math.floor(position.z),
     };
-    if (isFarmland(newId)) this.register(p);
+    if (isFarmland(newId)) this.register(p, newId);
     if (isFarmland(oldId) && !isFarmland(newId)) {
-      if (this.world.isReady(p.x, p.z)) {
+      if (this.read({ ...p, y: p.y + 1 }) !== undefined) {
         this.dropCrop({ ...p, y: p.y + 1 });
         this.remove(p);
       }
       // Retain an unloaded orphan until it can be checked without reading an unloaded column.
-      else this.register(p);
+      else this.register(p, oldId);
     }
     if (cropAt(oldId) || cropAt(newId)) {
       const soil = { ...p, y: p.y - 1 };
@@ -300,7 +313,7 @@ export class FarmingSystem {
     }
     const belowCrop = { ...p, y: p.y - 1 };
     if (
-      this.world.isReady(p.x, p.z) &&
+      this.loaded(belowCrop) &&
       this.blocksCrop(newId) &&
       cropAt(this.world.getBlock(belowCrop.x, belowCrop.y, belowCrop.z))
     )
@@ -318,26 +331,27 @@ export class FarmingSystem {
       for (let dz = -4; dz <= 4; dz++) {
         const x = plot.x + dx,
           z = plot.z + dz;
-        if (!this.world.isReady(x, z)) {
-          complete = false;
-          continue;
+        for (const y of [plot.y, plot.y + 1]) {
+          const id = this.read({ x, y, z });
+          if (id === undefined) complete = false;
+          else if (isWater(id)) return { wet: true, complete: true };
         }
-        if (
-          isWater(this.world.getBlock(x, plot.y, z)) ||
-          isWater(this.world.getBlock(x, plot.y + 1, z))
-        )
-          return { wet: true, complete: true };
       }
     return { wet: false, complete };
   }
   private lightAt(position: Vec3, daylight: number): number {
     if (daylight >= 9) {
-      let visibleSky = true;
-      for (let y = position.y + 1; y <= 95; y++)
-        if (this.isOpaque(this.world.getBlock(position.x, y, position.z))) {
-          visibleSky = false;
-          break;
+      let visibleSky =
+        this.world.hasSkyAccess?.(position.x, position.y, position.z) ?? true;
+      if (!this.world.hasSkyAccess) {
+        for (let y = position.y + 1; y <= WORLD_MAX_Y; y++) {
+          const id = this.read({ ...position, y });
+          if (id === undefined || this.isOpaque(id)) {
+            visibleSky = false;
+            break;
+          }
         }
+      }
       if (visibleSky) return daylight;
     }
     // Bounded reverse light propagation: walls block an outside torch, while
@@ -348,7 +362,8 @@ export class FarmingSystem {
     const seen = new Set([keyOf(position)]);
     for (let head = 0; head < queue.length; head++) {
       const p = queue[head];
-      const lightBlock = this.world.getBlock(p.x, p.y, p.z);
+      const lightBlock = this.read(p);
+      if (lightBlock === undefined) continue;
       if (lightBlock === 16 || isLava(lightBlock))
         return (isLava(lightBlock) ? 15 : 14) - p.distance;
       if (p.distance === 5) continue;
@@ -367,13 +382,7 @@ export class FarmingSystem {
           distance: p.distance + 1,
         };
         const key = keyOf(next);
-        if (
-          seen.has(key) ||
-          next.y < -16 ||
-          next.y > 95 ||
-          !this.world.isReady(next.x, next.z)
-        )
-          continue;
+        if (seen.has(key) || !this.loaded(next)) continue;
         seen.add(key);
         const id = this.world.getBlock(next.x, next.y, next.z);
         if (!this.isOpaque(id) && !isFarmland(id)) queue.push(next);
@@ -388,7 +397,7 @@ export class FarmingSystem {
       Math.abs(player.x - plot.x) > FARM_ACTIVE_RADIUS ||
       Math.abs(player.z - plot.z) > FARM_ACTIVE_RADIUS ||
       Math.abs(player.y - plot.y) > FARM_ACTIVE_VERTICAL_RANGE ||
-      !this.world.isReady(plot.x, plot.z)
+      !this.loaded(plot)
     ) {
       plot.active = false;
       return;
@@ -397,28 +406,26 @@ export class FarmingSystem {
       plot.active ? 5 : FARM_SCAN_INTERVAL,
       this.clock - previous,
     );
-    plot.active = true;
     const cropPosition = { x: plot.x, y: plot.y + 1, z: plot.z };
+    const cropId = this.read(cropPosition);
+    const cover = this.read({ ...cropPosition, y: cropPosition.y + 1 });
+    if (cropId === undefined || (cropAt(cropId) && cover === undefined)) {
+      plot.active = false;
+      return;
+    }
+    plot.active = true;
     if (!isFarmland(this.world.getBlock(plot.x, plot.y, plot.z))) {
       this.dropCrop(cropPosition);
       this.remove(plot);
       return;
     }
-    const cropId = this.world.getBlock(
-        cropPosition.x,
-        cropPosition.y,
-        cropPosition.z,
-      ),
-      crop = cropAt(cropId);
+    const crop = cropAt(cropId);
     if (this.blocksCrop(cropId)) {
       this.write(plot, 2);
       this.remove(plot);
       return;
     }
-    if (
-      crop &&
-      this.blocksCrop(this.world.getBlock(plot.x, plot.y + 2, plot.z))
-    ) {
+    if (crop && cover !== undefined && this.blocksCrop(cover)) {
       this.dropCrop(cropPosition);
       return;
     }
@@ -480,8 +487,8 @@ export class FarmingSystem {
   fertilize(position: Vec3): boolean {
     if (
       !validPosition(position) ||
-      position.y <= -16 ||
-      !this.world.isReady(position.x, position.z)
+      position.y <= WORLD_MIN_Y ||
+      !this.loaded(position)
     )
       return false;
     const p = {
@@ -491,11 +498,15 @@ export class FarmingSystem {
     };
     const id = this.world.getBlock(p.x, p.y, p.z),
       crop = cropAt(id);
+    const soil = this.read({ ...p, y: p.y - 1 });
+    const above = this.read({ ...p, y: p.y + 1 });
     if (
       !crop ||
       crop.mature ||
-      !isFarmland(this.world.getBlock(p.x, p.y - 1, p.z)) ||
-      this.blocksCrop(this.world.getBlock(p.x, p.y + 1, p.z))
+      soil === undefined ||
+      above === undefined ||
+      !isFarmland(soil) ||
+      this.blocksCrop(above)
     )
       return false;
     const growth =

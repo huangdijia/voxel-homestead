@@ -1,12 +1,8 @@
 import * as THREE from "three";
 import type { BlockChange, Vec3, WorldPort } from "../game/types";
-import {
-  CHUNK_SIZE,
-  sampleBlock,
-  surfaceHeight,
-  WORLD_MIN_Y,
-  WORLD_MAX_Y,
-} from "./generator";
+import { sampleBlock, surfaceHeight } from "./generator";
+import { CHUNK_SIZE, WORLD_MIN_Y, WORLD_MAX_Y } from "./world-height";
+import type { GeneratorVersion } from "./world-height";
 import type { ChunkRequest, ChunkResult } from "./protocol";
 import { buildChunk } from "./mesher";
 import { isOpaque } from "./shapes";
@@ -17,6 +13,9 @@ const keyOf = (x: number, y: number, z: number) => x + "," + y + "," + z;
 const chunkKey = (x: number, y: number, z: number) =>
   keyOf(Math.floor(x / 16), Math.floor(y / 16), Math.floor(z / 16));
 const positiveModulo = (n: number) => ((n % 16) + 16) % 16;
+const MIN_CHUNK_Y = Math.floor(WORLD_MIN_Y / CHUNK_SIZE);
+const MAX_CHUNK_Y = Math.floor(WORLD_MAX_Y / CHUNK_SIZE);
+const MAX_SKY_COLUMNS = 4096;
 
 /** Owns chunk resources, while procedural data and changes remain independent of rendering. */
 export class VoxelWorld implements WorldPort {
@@ -35,6 +34,8 @@ export class VoxelWorld implements WorldPort {
   private center = { x: 0, y: 1, z: 0 };
   private currentRadius = -1;
   private currentVertical = -100;
+  private viewPosition: Vec3 = { x: 0, y: 23, z: 0 };
+  private skyRoofs = new Map<string, { x: number; z: number; roof: number }>();
   private texture: THREE.Texture;
   private materials: THREE.Material[];
   private torchLights: THREE.PointLight[] = [];
@@ -47,7 +48,7 @@ export class VoxelWorld implements WorldPort {
     public readonly seed: string,
     changes: BlockChange[],
     public readonly worldId: string,
-    public readonly generatorVersion: 1 | 2 | 3 | 4 = 1,
+    public readonly generatorVersion: GeneratorVersion = 1,
   ) {
     for (const change of changes) {
       if (
@@ -112,8 +113,7 @@ export class VoxelWorld implements WorldPort {
     x = Math.floor(x);
     y = Math.floor(y);
     z = Math.floor(z);
-    if (y < WORLD_MIN_Y) return 24;
-    if (y > WORLD_MAX_Y) return 0;
+    if (y < WORLD_MIN_Y || y > WORLD_MAX_Y) return 0;
     const change = this.changes.get(keyOf(x, y, z));
     if (change) return change.id;
     const chunk = this.chunks.get(chunkKey(x, y, z));
@@ -138,6 +138,7 @@ export class VoxelWorld implements WorldPort {
       return;
     const previous = this.getBlock(x, y, z);
     if (previous === id) return;
+    this.skyRoofs.delete(x + "," + z);
     const key = keyOf(x, y, z),
       ckey = chunkKey(x, y, z);
     if (id === sampleBlock(this.seed, x, y, z, this.generatorVersion)) {
@@ -174,18 +175,11 @@ export class VoxelWorld implements WorldPort {
         );
       for (const column of columns) {
         const [columnX, , columnZ] = column.split(",").map(Number);
-        for (let below = -1; below < Math.floor(y / 16); below++)
+        for (let below = MIN_CHUNK_Y; below < Math.floor(y / 16); below++)
           affected.add(keyOf(columnX, below, columnZ));
       }
     }
-    // Newly placed high-altitude blocks become part of the streamed column.
-    const cx = Math.floor(x / 16),
-      cz = Math.floor(z / 16);
-    if (
-      Math.abs(cx - this.center.x) <= this.currentRadius &&
-      Math.abs(cz - this.center.z) <= this.currentRadius
-    )
-      this.wanted.add(ckey);
+    // Changes persist independently of residency: distant edits must not pin layers.
     for (const dirty of affected)
       if (this.wanted.has(dirty)) this.enqueue(dirty);
     this.lastLights = "";
@@ -193,17 +187,49 @@ export class VoxelWorld implements WorldPort {
     this.pump();
   }
   getSurface(x: number, z: number): number {
-    return surfaceHeight(this.seed, x, z);
+    return surfaceHeight(this.seed, x, z, this.generatorVersion);
   }
   getChanges(): BlockChange[] {
     return Array.from(this.changes.values(), (c) => ({ ...c }));
   }
-  isReady(x: number, z: number): boolean {
+  isReady(x: number, z: number, y?: number): boolean {
     const cx = Math.floor(x / 16),
       cz = Math.floor(z / 16);
-    for (let cy = -1; cy <= 2; cy++)
+    if (y !== undefined) {
+      if (y < WORLD_MIN_Y || y >= WORLD_MAX_Y + 1) return true;
+      return this.chunks.has(keyOf(cx, Math.floor(y / 16), cz));
+    }
+    const bottom = Math.floor((this.viewPosition.y - 0.025) / 16),
+      top = Math.floor((this.viewPosition.y + 1.8) / 16);
+    for (
+      let cy = Math.max(MIN_CHUNK_Y, bottom);
+      cy <= Math.min(MAX_CHUNK_Y, top);
+      cy++
+    )
       if (!this.chunks.has(keyOf(cx, cy, cz))) return false;
     return true;
+  }
+  /** Includes natural trees and every saved edit, even above the resident window. */
+  hasSkyAccess(x: number, y: number, z: number): boolean {
+    x = Math.floor(x);
+    z = Math.floor(z);
+    if (y >= WORLD_MAX_Y) return true;
+    const key = x + "," + z;
+    let entry = this.skyRoofs.get(key);
+    if (!entry) {
+      let roof = WORLD_MAX_Y;
+      for (; roof >= WORLD_MIN_Y; roof--) {
+        const id =
+          this.changes.get(keyOf(x, roof, z))?.id ??
+          sampleBlock(this.seed, x, roof, z, this.generatorVersion);
+        if (isOpaque(id)) break;
+      }
+      if (this.skyRoofs.size >= MAX_SKY_COLUMNS)
+        this.skyRoofs.delete(this.skyRoofs.keys().next().value!);
+      entry = { x, z, roof };
+      this.skyRoofs.set(key, entry);
+    }
+    return entry.roof < WORLD_MIN_Y || entry.roof <= Math.floor(y);
   }
   /** Block light only. Sky light/daytime is managed by the game simulation. */
   getLight(x: number, y: number, z: number): number {
@@ -218,6 +244,7 @@ export class VoxelWorld implements WorldPort {
 
   update(position: Vec3, radius: number): void {
     if (this.disposed) return;
+    this.viewPosition = { ...position };
     const cx = Math.floor(position.x / 16),
       cy = Math.floor(position.y / 16),
       cz = Math.floor(position.z / 16);
@@ -232,15 +259,23 @@ export class VoxelWorld implements WorldPort {
       this.currentRadius = radius;
       this.currentVertical = cy;
       const wanted = new Set<string>();
+      // Full vertical view distance, clipped only by known world bounds. At r=6
+      // at most 13^3 sections are resident, plus one obsolete worker task.
       for (let z = cz - radius; z <= cz + radius; z++)
         for (let x = cx - radius; x <= cx + radius; x++) {
-          for (let y = -1; y <= Math.max(2, Math.min(5, cy + 1)); y++)
+          for (
+            let y = Math.max(MIN_CHUNK_Y, cy - radius);
+            y <= Math.min(MAX_CHUNK_Y, cy + radius);
+            y++
+          )
             wanted.add(keyOf(x, y, z));
         }
-      for (const key of this.chunkChanges.keys()) {
-        const [x, , z] = key.split(",").map(Number);
-        if (Math.abs(x - cx) <= radius && Math.abs(z - cz) <= radius)
-          wanted.add(key);
+      for (const [key, column] of this.skyRoofs) {
+        if (
+          Math.abs(Math.floor(column.x / 16) - cx) > radius ||
+          Math.abs(Math.floor(column.z / 16) - cz) > radius
+        )
+          this.skyRoofs.delete(key);
       }
       this.wanted = wanted;
       for (const key of this.chunks.keys())
@@ -256,14 +291,19 @@ export class VoxelWorld implements WorldPort {
         if (
           !this.chunks.has(key) &&
           !this.queue.has(key) &&
-          this.inFlight?.key !== key
+          !(
+            this.inFlight?.key === key &&
+            this.expected.get(key) === this.inFlight.revision
+          )
         )
           this.enqueue(key);
       this.pump();
     }
     this.updateLights(position);
     // Reloading a saved game far from origin must not wait for that unloaded origin.
-    this.ready = this.isReady(position.x, position.z);
+    this.ready = [-0.3, 0.3].every((dx) =>
+      [-0.3, 0.3].every((dz) => this.isReady(position.x + dx, position.z + dz)),
+    );
   }
   dispose(): void {
     if (this.disposed) return;
@@ -275,6 +315,7 @@ export class VoxelWorld implements WorldPort {
     this.queue.clear();
     this.expected.clear();
     this.wanted.clear();
+    this.skyRoofs.clear();
     this.inFlight = null;
     for (const light of this.torchLights) this.scene.remove(light);
     this.torchLights.length = 0;
@@ -299,7 +340,7 @@ export class VoxelWorld implements WorldPort {
     const changes: BlockChange[] = [];
     for (let dz = -1; dz <= 1; dz++)
       for (let dx = -1; dx <= 1; dx++)
-        for (let y = -1; y <= 5; y++) {
+        for (let y = MIN_CHUNK_Y; y <= MAX_CHUNK_Y; y++) {
           const list = this.chunkChanges.get(keyOf(cx + dx, y, cz + dz));
           if (list)
             for (const change of list.values()) {
@@ -338,7 +379,11 @@ export class VoxelWorld implements WorldPort {
       priority = Infinity;
     for (const request of this.queue.values()) {
       const p =
-        this.priority(request.key) - (this.chunks.has(request.key) ? 10000 : 0);
+        ((request.cx - this.center.x) ** 2 +
+          (request.cz - this.center.z) ** 2) *
+          8 +
+        Math.abs(request.cy - this.center.y) * 0.3 -
+        (this.chunks.has(request.key) ? 10000 : 0);
       if (p < priority) {
         best = request;
         priority = p;

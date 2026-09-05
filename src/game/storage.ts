@@ -1,3 +1,4 @@
+import { WORLD_MIN_Y, WORLD_MAX_Y } from "../engine/world-height";
 import { sampleBlock } from "../engine/generator";
 import type { FluidState } from "./fluids";
 import type { NaturalState } from "./natural-updates";
@@ -85,7 +86,7 @@ function vector(value: unknown, path: string, integer = false): Vec3 {
     z: number(v.z, `${path}.z`, -30_000_000, 30_000_000, integer),
   };
 }
-function stack(value: unknown, path: string, saveVersion = 4): Slot {
+function stack(value: unknown, path: string, saveVersion = 5): Slot {
   if (value === null) return null;
   const v = record(value, path);
   fields(v, ["id", "count", "durability"], path);
@@ -114,7 +115,7 @@ function slots(
   value: unknown,
   count: number,
   path: string,
-  saveVersion = 4,
+  saveVersion = 5,
 ): Slot[] {
   const values = array(value, path, count);
   if (values.length !== count) return bad(`${path} 必须有 ${count} 格`);
@@ -159,8 +160,8 @@ export function validateSave(value: unknown): SaveData {
     "manifest",
   );
   if (
-    ![1, 2, 3, 4].includes(manifest.version as number) ||
-    ![1, 2, 3, 4].includes(manifest.generatorVersion as number)
+    ![1, 2, 3, 4, 5].includes(manifest.version as number) ||
+    ![1, 2, 3, 4, 5].includes(manifest.generatorVersion as number)
   )
     return bad("不支持此存档或地形生成器版本；原始文件未被修改");
   if (
@@ -180,8 +181,8 @@ export function validateSave(value: unknown): SaveData {
   if (manifest.mode !== "survival" && manifest.mode !== "creative")
     return bad("游戏模式无效");
   const validatedManifest: SaveManifest = {
-    version: manifest.version as 1 | 2 | 3 | 4,
-    generatorVersion: manifest.generatorVersion as 1 | 2 | 3 | 4,
+    version: manifest.version as 1 | 2 | 3 | 4 | 5,
+    generatorVersion: manifest.generatorVersion as 1 | 2 | 3 | 4 | 5,
     id: string(manifest.id, "manifest.id"),
     name: string(manifest.name, "manifest.name", 80),
     seed: string(manifest.seed, "manifest.seed", 128),
@@ -190,6 +191,8 @@ export function validateSave(value: unknown): SaveData {
     updatedAt: number(manifest.updatedAt, "manifest.updatedAt", 0),
     playedSeconds: number(manifest.playedSeconds, "manifest.playedSeconds", 0),
   };
+  const minY = validatedManifest.version < 5 ? -16 : WORLD_MIN_Y;
+  const maxY = validatedManifest.version < 5 ? 95 : WORLD_MAX_Y;
   const player = record(data.player, "player");
   fields(
     player,
@@ -233,8 +236,8 @@ export function validateSave(value: unknown): SaveData {
         "changes",
         true,
       );
-      if (position.y < -16 || position.y >= 96)
-        bad("方块修改超出当前生成器的世界高度");
+      if (position.y < minY || position.y > maxY)
+        bad("方块修改超出存档版本支持的世界高度");
       const id = number(
         change.id,
         "changes.id",
@@ -445,7 +448,7 @@ export function validateSave(value: unknown): SaveData {
         "farming.plot",
         true,
       );
-      if (at.y < -16 || at.y > 95) bad("耕地高度无效");
+      if (at.y < minY || at.y > maxY) bad("耕地高度无效");
       const key = `${at.x},${at.y},${at.z}`;
       if (seen.has(key)) bad("耕地记录重复");
       seen.add(key);
@@ -505,7 +508,7 @@ export function validateSave(value: unknown): SaveData {
   let natural: NaturalState | undefined;
   const blockPosition = (entry: Record<string, unknown>, path: string) => {
     const at = vector({ x: entry.x, y: entry.y, z: entry.z }, path, true);
-    if (at.y < -16 || at.y > 95) bad(`${path} 高度无效`);
+    if (at.y < minY || at.y > maxY) bad(`${path} 高度无效`);
     return at;
   };
   if (Number(manifest.version) >= 3) {
