@@ -47,7 +47,7 @@ export class VoxelWorld implements WorldPort {
     public readonly seed: string,
     changes: BlockChange[],
     public readonly worldId: string,
-    public readonly generatorVersion: 1 | 2 | 3 = 1,
+    public readonly generatorVersion: 1 | 2 | 3 | 4 = 1,
   ) {
     for (const change of changes) {
       if (

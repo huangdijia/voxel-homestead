@@ -5,12 +5,12 @@
       "bytes": 3438
     },
     "src/game/recipes.ts": {
-      "sha256": "f9bda2a0384fd8bc7ed71473ab18469a9d6d0f558c9733b5f0fab17f7405f909",
-      "bytes": 6898
+      "sha256": "0ae9d48384e7946de8a2b0c449895655252bcdf3fec6e2a0cfab2f40509e8e29",
+      "bytes": 8748
     },
     "src/game/registry.ts": {
-      "sha256": "a16db45fea9fa22fe0e1cf78ae2b6ecc48d890a0d6fc678554e144347b4eba86",
-      "bytes": 9888
+      "sha256": "54039e163c29decaaf8ade016b5858a4863552f2c12a9dc2096301757189cd6a",
+      "bytes": 13035
     }
   },
   "statusRule": "Definition matches and existing test names are leads, not executed per-entry acceptance. No acceptance is promoted by this generator.",
@@ -41,11 +41,11 @@
   },
   "composterAlias": "composter_1..composter_8 -> minecraft:composter; state acceptance remains unverified",
   "counts": {
-    "blocks": 84,
-    "items": 74,
+    "blocks": 111,
+    "items": 129,
     "entities": 4,
-    "craftingRecipes": 36,
-    "smeltingRecipes": 7
+    "craftingRecipes": 86,
+    "smeltingRecipes": 26
   },
   "unmatchedLocal": {
     "blocks": [
@@ -805,6 +805,357 @@
       "station": "workbench"
     },
     {
+      "id": "gold_pickaxe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot"
+        ],
+        [
+          null,
+          "minecraft:stick",
+          null
+        ],
+        [
+          null,
+          "minecraft:stick",
+          null
+        ]
+      ],
+      "output": {
+        "id": "minecraft:golden_pickaxe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "gold_axe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:gold_ingot",
+          "minecraft:stick"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:golden_axe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "gold_shovel",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:golden_shovel",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "gold_sword",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:golden_sword",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "gold_hoe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:golden_hoe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "diamond_pickaxe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:diamond",
+          "minecraft:diamond",
+          "minecraft:diamond"
+        ],
+        [
+          null,
+          "minecraft:stick",
+          null
+        ],
+        [
+          null,
+          "minecraft:stick",
+          null
+        ]
+      ],
+      "output": {
+        "id": "minecraft:diamond_pickaxe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "diamond_axe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:diamond",
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:diamond",
+          "minecraft:stick"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:diamond_axe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "diamond_shovel",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:diamond_shovel",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "diamond_sword",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:diamond_sword",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "diamond_hoe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:diamond",
+          "minecraft:diamond"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:diamond_hoe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "stone_pickaxe_deepslate",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:cobbled_deepslate",
+          "minecraft:cobbled_deepslate",
+          "minecraft:cobbled_deepslate"
+        ],
+        [
+          null,
+          "minecraft:stick",
+          null
+        ],
+        [
+          null,
+          "minecraft:stick",
+          null
+        ]
+      ],
+      "output": {
+        "id": "minecraft:stone_pickaxe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "stone_axe_deepslate",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:cobbled_deepslate",
+          "minecraft:cobbled_deepslate"
+        ],
+        [
+          "minecraft:cobbled_deepslate",
+          "minecraft:stick"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:stone_axe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "stone_shovel_deepslate",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:cobbled_deepslate"
+        ],
+        [
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:stone_shovel",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "stone_sword_deepslate",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:cobbled_deepslate"
+        ],
+        [
+          "minecraft:cobbled_deepslate"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:stone_sword",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "stone_hoe_deepslate",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:cobbled_deepslate",
+          "minecraft:cobbled_deepslate"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:stone_hoe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
       "id": "iron_helmet",
       "source": "src/game/recipes.ts",
       "kind": "shaped",
@@ -901,6 +1252,775 @@
         "count": 1
       },
       "station": "workbench"
+    },
+    {
+      "id": "gold_helmet",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:gold_ingot",
+          null,
+          "minecraft:gold_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:golden_helmet",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "gold_chestplate",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:gold_ingot",
+          null,
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:golden_chestplate",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "gold_leggings",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:gold_ingot",
+          null,
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:gold_ingot",
+          null,
+          "minecraft:gold_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:golden_leggings",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "gold_boots",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:gold_ingot",
+          null,
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:gold_ingot",
+          null,
+          "minecraft:gold_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:golden_boots",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "diamond_helmet",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:diamond",
+          "minecraft:diamond",
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:diamond",
+          null,
+          "minecraft:diamond"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:diamond_helmet",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "diamond_chestplate",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:diamond",
+          null,
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:diamond",
+          "minecraft:diamond",
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:diamond",
+          "minecraft:diamond",
+          "minecraft:diamond"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:diamond_chestplate",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "diamond_leggings",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:diamond",
+          "minecraft:diamond",
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:diamond",
+          null,
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:diamond",
+          null,
+          "minecraft:diamond"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:diamond_leggings",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "diamond_boots",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:diamond",
+          null,
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:diamond",
+          null,
+          "minecraft:diamond"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:diamond_boots",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "furnace_deepslate",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:cobbled_deepslate",
+          "minecraft:cobbled_deepslate",
+          "minecraft:cobbled_deepslate"
+        ],
+        [
+          "minecraft:cobbled_deepslate",
+          null,
+          "minecraft:cobbled_deepslate"
+        ],
+        [
+          "minecraft:cobbled_deepslate",
+          "minecraft:cobbled_deepslate",
+          "minecraft:cobbled_deepslate"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:furnace",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "copper_block",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:copper_ingot",
+          "minecraft:copper_ingot",
+          "minecraft:copper_ingot"
+        ],
+        [
+          "minecraft:copper_ingot",
+          "minecraft:copper_ingot",
+          "minecraft:copper_ingot"
+        ],
+        [
+          "minecraft:copper_ingot",
+          "minecraft:copper_ingot",
+          "minecraft:copper_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:copper_block",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "copper_block_unpack",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:copper_block"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:copper_ingot",
+        "count": 9
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "gold_block",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot",
+          "minecraft:gold_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:gold_block",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "gold_block_unpack",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:gold_block"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:gold_ingot",
+        "count": 9
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "redstone_block",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:redstone",
+          "minecraft:redstone",
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:redstone",
+          "minecraft:redstone",
+          "minecraft:redstone"
+        ],
+        [
+          "minecraft:redstone",
+          "minecraft:redstone",
+          "minecraft:redstone"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:redstone_block",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "redstone_block_unpack",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:redstone_block"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:redstone",
+        "count": 9
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "lapis_block",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:lapis_lazuli",
+          "minecraft:lapis_lazuli",
+          "minecraft:lapis_lazuli"
+        ],
+        [
+          "minecraft:lapis_lazuli",
+          "minecraft:lapis_lazuli",
+          "minecraft:lapis_lazuli"
+        ],
+        [
+          "minecraft:lapis_lazuli",
+          "minecraft:lapis_lazuli",
+          "minecraft:lapis_lazuli"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:lapis_block",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "lapis_block_unpack",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:lapis_block"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:lapis_lazuli",
+        "count": 9
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "diamond_block",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:diamond",
+          "minecraft:diamond",
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:diamond",
+          "minecraft:diamond",
+          "minecraft:diamond"
+        ],
+        [
+          "minecraft:diamond",
+          "minecraft:diamond",
+          "minecraft:diamond"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:diamond_block",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "diamond_block_unpack",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:diamond_block"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:diamond",
+        "count": 9
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "emerald_block",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:emerald",
+          "minecraft:emerald",
+          "minecraft:emerald"
+        ],
+        [
+          "minecraft:emerald",
+          "minecraft:emerald",
+          "minecraft:emerald"
+        ],
+        [
+          "minecraft:emerald",
+          "minecraft:emerald",
+          "minecraft:emerald"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:emerald_block",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "emerald_block_unpack",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:emerald_block"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:emerald",
+        "count": 9
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "iron_block",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:iron_block",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "iron_block_unpack",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_block"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:iron_ingot",
+        "count": 9
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "coal_block",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:coal",
+          "minecraft:coal",
+          "minecraft:coal"
+        ],
+        [
+          "minecraft:coal",
+          "minecraft:coal",
+          "minecraft:coal"
+        ],
+        [
+          "minecraft:coal",
+          "minecraft:coal",
+          "minecraft:coal"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:coal_block",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "coal_block_unpack",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:coal_block"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:coal",
+        "count": 9
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "raw_iron_block",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:raw_iron",
+          "minecraft:raw_iron",
+          "minecraft:raw_iron"
+        ],
+        [
+          "minecraft:raw_iron",
+          "minecraft:raw_iron",
+          "minecraft:raw_iron"
+        ],
+        [
+          "minecraft:raw_iron",
+          "minecraft:raw_iron",
+          "minecraft:raw_iron"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:raw_iron_block",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "raw_iron_block_unpack",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:raw_iron_block"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:raw_iron",
+        "count": 9
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "raw_copper_block",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:raw_copper",
+          "minecraft:raw_copper",
+          "minecraft:raw_copper"
+        ],
+        [
+          "minecraft:raw_copper",
+          "minecraft:raw_copper",
+          "minecraft:raw_copper"
+        ],
+        [
+          "minecraft:raw_copper",
+          "minecraft:raw_copper",
+          "minecraft:raw_copper"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:raw_copper_block",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "raw_copper_block_unpack",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:raw_copper_block"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:raw_copper",
+        "count": 9
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "raw_gold_block",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:raw_gold",
+          "minecraft:raw_gold",
+          "minecraft:raw_gold"
+        ],
+        [
+          "minecraft:raw_gold",
+          "minecraft:raw_gold",
+          "minecraft:raw_gold"
+        ],
+        [
+          "minecraft:raw_gold",
+          "minecraft:raw_gold",
+          "minecraft:raw_gold"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:raw_gold_block",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "raw_gold_block_unpack",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:raw_gold_block"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:raw_gold",
+        "count": 9
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "iron_ingot_from_nuggets",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_nugget",
+          "minecraft:iron_nugget",
+          "minecraft:iron_nugget"
+        ],
+        [
+          "minecraft:iron_nugget",
+          "minecraft:iron_nugget",
+          "minecraft:iron_nugget"
+        ],
+        [
+          "minecraft:iron_nugget",
+          "minecraft:iron_nugget",
+          "minecraft:iron_nugget"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:iron_ingot",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "iron_nugget",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:iron_nugget",
+        "count": 9
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "gold_ingot_from_nuggets",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:gold_nugget",
+          "minecraft:gold_nugget",
+          "minecraft:gold_nugget"
+        ],
+        [
+          "minecraft:gold_nugget",
+          "minecraft:gold_nugget",
+          "minecraft:gold_nugget"
+        ],
+        [
+          "minecraft:gold_nugget",
+          "minecraft:gold_nugget",
+          "minecraft:gold_nugget"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:gold_ingot",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "gold_nugget",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:gold_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:gold_nugget",
+        "count": 9
+      },
+      "station": "inventory"
     },
     {
       "id": "bread",
@@ -1054,6 +2174,28 @@
       "acceptance": "not-run"
     },
     {
+      "id": "local:smelting/raw_copper",
+      "input": "minecraft:raw_copper",
+      "output": {
+        "id": "minecraft:copper_ingot",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/raw_gold",
+      "input": "minecraft:raw_gold",
+      "output": {
+        "id": "minecraft:gold_ingot",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
       "id": "local:smelting/log",
       "input": "minecraft:oak_log",
       "output": {
@@ -1102,6 +2244,193 @@
       "input": "minecraft:cobblestone",
       "output": {
         "id": "minecraft:stone",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/cobbled_deepslate",
+      "input": "minecraft:cobbled_deepslate",
+      "output": {
+        "id": "minecraft:deepslate",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/coal_ore",
+      "input": "minecraft:coal_ore",
+      "output": {
+        "id": "minecraft:coal",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/deepslate_coal_ore",
+      "input": "minecraft:deepslate_coal_ore",
+      "output": {
+        "id": "minecraft:coal",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/iron_ore",
+      "input": "minecraft:iron_ore",
+      "output": {
+        "id": "minecraft:iron_ingot",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/deepslate_iron_ore",
+      "input": "minecraft:deepslate_iron_ore",
+      "output": {
+        "id": "minecraft:iron_ingot",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/copper_ore",
+      "input": "minecraft:copper_ore",
+      "output": {
+        "id": "minecraft:copper_ingot",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/deepslate_copper_ore",
+      "input": "minecraft:deepslate_copper_ore",
+      "output": {
+        "id": "minecraft:copper_ingot",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/gold_ore",
+      "input": "minecraft:gold_ore",
+      "output": {
+        "id": "minecraft:gold_ingot",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/deepslate_gold_ore",
+      "input": "minecraft:deepslate_gold_ore",
+      "output": {
+        "id": "minecraft:gold_ingot",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/redstone_ore",
+      "input": "minecraft:redstone_ore",
+      "output": {
+        "id": "minecraft:redstone",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/deepslate_redstone_ore",
+      "input": "minecraft:deepslate_redstone_ore",
+      "output": {
+        "id": "minecraft:redstone",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/lapis_ore",
+      "input": "minecraft:lapis_ore",
+      "output": {
+        "id": "minecraft:lapis_lazuli",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/deepslate_lapis_ore",
+      "input": "minecraft:deepslate_lapis_ore",
+      "output": {
+        "id": "minecraft:lapis_lazuli",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/diamond_ore",
+      "input": "minecraft:diamond_ore",
+      "output": {
+        "id": "minecraft:diamond",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/deepslate_diamond_ore",
+      "input": "minecraft:deepslate_diamond_ore",
+      "output": {
+        "id": "minecraft:diamond",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/emerald_ore",
+      "input": "minecraft:emerald_ore",
+      "output": {
+        "id": "minecraft:emerald",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/deepslate_emerald_ore",
+      "input": "minecraft:deepslate_emerald_ore",
+      "output": {
+        "id": "minecraft:emerald",
         "count": 1
       },
       "source": "src/game/recipes.ts",
@@ -1291,6 +2620,111 @@
       "acceptance": "not-run"
     },
     {
+      "id": "gold_pickaxe",
+      "exactSourceRecords": [
+        "prismarine:recipe/830/34682bdac63efd2f6600"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "gold_axe",
+      "exactSourceRecords": [
+        "prismarine:recipe/831/d929be9d4955c14bc2c2"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "gold_shovel",
+      "exactSourceRecords": [
+        "prismarine:recipe/829/0fc58cd6265f3aaf4190"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "gold_sword",
+      "exactSourceRecords": [
+        "prismarine:recipe/828/3eca6b4260ed3d7f42cd"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "gold_hoe",
+      "exactSourceRecords": [
+        "prismarine:recipe/832/774e8efb658b37efbaab"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "diamond_pickaxe",
+      "exactSourceRecords": [
+        "prismarine:recipe/840/943136b493a5ad6af8ca"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "diamond_axe",
+      "exactSourceRecords": [
+        "prismarine:recipe/841/117c0782cd17c5861893"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "diamond_shovel",
+      "exactSourceRecords": [
+        "prismarine:recipe/839/f927e517c0948f4caaf0"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "diamond_sword",
+      "exactSourceRecords": [
+        "prismarine:recipe/838/3bf3326c406fbcdfca75"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "diamond_hoe",
+      "exactSourceRecords": [
+        "prismarine:recipe/842/dfe2ffef99158fc90ff3"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "stone_pickaxe_deepslate",
+      "exactSourceRecords": [
+        "prismarine:recipe/825/0d455b18a6730156310e"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "stone_axe_deepslate",
+      "exactSourceRecords": [
+        "prismarine:recipe/826/7393d62a829b556e469c"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "stone_shovel_deepslate",
+      "exactSourceRecords": [
+        "prismarine:recipe/824/234e5ea818097c98da35"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "stone_sword_deepslate",
+      "exactSourceRecords": [
+        "prismarine:recipe/823/7f28cb57544d481db92c"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "stone_hoe_deepslate",
+      "exactSourceRecords": [
+        "prismarine:recipe/827/23a3ff80e16c48de3b46"
+      ],
+      "acceptance": "not-run"
+    },
+    {
       "id": "iron_helmet",
       "exactSourceRecords": [
         "prismarine:recipe/864/2d5490725688bb2c8971"
@@ -1316,6 +2750,225 @@
       "exactSourceRecords": [
         "prismarine:recipe/867/64c30b42c13eb237ef56"
       ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "gold_helmet",
+      "exactSourceRecords": [
+        "prismarine:recipe/872/b82b9c1da0e4ac57587e"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "gold_chestplate",
+      "exactSourceRecords": [
+        "prismarine:recipe/873/3846d8ba1252505f1e0f"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "gold_leggings",
+      "exactSourceRecords": [
+        "prismarine:recipe/874/019f8d7d91fafcbb3e5c"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "gold_boots",
+      "exactSourceRecords": [
+        "prismarine:recipe/875/fda79774f5c68af62fe3"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "diamond_helmet",
+      "exactSourceRecords": [
+        "prismarine:recipe/868/dcbf3602750e6ead98dc"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "diamond_chestplate",
+      "exactSourceRecords": [
+        "prismarine:recipe/869/3cd660bc5a1c933ba224"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "diamond_leggings",
+      "exactSourceRecords": [
+        "prismarine:recipe/870/b1a84498ed8df7c14bf4"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "diamond_boots",
+      "exactSourceRecords": [
+        "prismarine:recipe/871/326891814741bdfaa4d9"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "furnace_deepslate",
+      "exactSourceRecords": [
+        "prismarine:recipe/302/321aa15cba39454fa5ef"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "copper_block",
+      "exactSourceRecords": [
+        "prismarine:recipe/89/fc5137286b8615d6e0e6"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "copper_block_unpack",
+      "exactSourceRecords": [],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "gold_block",
+      "exactSourceRecords": [
+        "prismarine:recipe/90/3c50b31155fa593ebf68"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "gold_block_unpack",
+      "exactSourceRecords": [],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "redstone_block",
+      "exactSourceRecords": [
+        "prismarine:recipe/659/770c458e90b45434a1aa"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "redstone_block_unpack",
+      "exactSourceRecords": [],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "lapis_block",
+      "exactSourceRecords": [
+        "prismarine:recipe/190/04d15ddba1cc64d8dbb1"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "lapis_block_unpack",
+      "exactSourceRecords": [],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "diamond_block",
+      "exactSourceRecords": [
+        "prismarine:recipe/91/bdeba793719f2316f214"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "diamond_block_unpack",
+      "exactSourceRecords": [],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "emerald_block",
+      "exactSourceRecords": [
+        "prismarine:recipe/382/8e40528a496a36a3041b"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "emerald_block_unpack",
+      "exactSourceRecords": [],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "iron_block",
+      "exactSourceRecords": [
+        "prismarine:recipe/88/25fadc9e58ce0103b63d"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "iron_block_unpack",
+      "exactSourceRecords": [],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "coal_block",
+      "exactSourceRecords": [
+        "prismarine:recipe/81/8126d082f7c638da5586"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "coal_block_unpack",
+      "exactSourceRecords": [],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "raw_iron_block",
+      "exactSourceRecords": [
+        "prismarine:recipe/82/a97f499e07de4876d8f1"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "raw_iron_block_unpack",
+      "exactSourceRecords": [],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "raw_copper_block",
+      "exactSourceRecords": [
+        "prismarine:recipe/83/2a09c203c5bdd98ddbb7"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "raw_copper_block_unpack",
+      "exactSourceRecords": [],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "raw_gold_block",
+      "exactSourceRecords": [
+        "prismarine:recipe/84/665c65ad860d05ee7500"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "raw_gold_block_unpack",
+      "exactSourceRecords": [],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "iron_ingot_from_nuggets",
+      "exactSourceRecords": [
+        "prismarine:recipe/811/7e72038b8e903ce81d9b"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "iron_nugget",
+      "exactSourceRecords": [],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "gold_ingot_from_nuggets",
+      "exactSourceRecords": [
+        "prismarine:recipe/815/c4e8c4a5772235c0e018"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "gold_nugget",
+      "exactSourceRecords": [],
       "acceptance": "not-run"
     },
     {

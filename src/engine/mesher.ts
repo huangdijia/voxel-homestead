@@ -1,3 +1,8 @@
+import { mineralAppearance } from "../game/mineral-appearance";
+import type {
+  MineralAppearance,
+  MineralColor,
+} from "../game/mineral-appearance";
 import {
   sampleBlock,
   surfaceHeight,
@@ -524,13 +529,113 @@ export function buildChunk(request: ChunkRequest): ChunkResult {
       b.i.push(base, base + 1, base + 2, base + 2, base + 1, base + 3);
     }
   }
+  function addMineral(
+    x: number,
+    y: number,
+    z: number,
+    id: number,
+    appearance: MineralAppearance,
+  ) {
+    addBox(
+      x,
+      y,
+      z,
+      id,
+      [0, 0, 0, 1, 1, 1],
+      0,
+      appearance.base,
+      appearance.tile,
+    );
+    const b = layers[0];
+    for (let face = 0; face < 6; face++) {
+      const d = directions[face];
+      if (isOpaque(get(x + d[0], y + d[1], z + d[2]))) continue;
+      const depth = roofs[roofOffset(x + d[0], z + d[2])] - (oy + y + d[1]) + 1,
+        sky = depth <= 0 ? 1 : 0.18 + 0.82 * Math.exp(-depth / 2.5),
+        shade =
+          (face === 2 ? 1 : face === 3 ? 0.52 : face < 2 ? 0.82 : 0.69) * sky;
+      // Tiny raised, stepped crystal faces retain the stone between the grains.
+      // Each exposed face has at most eight extra quads; hidden grains emit none.
+      const patch = (
+        u: number,
+        v: number,
+        width: number,
+        height: number,
+        color: MineralColor,
+        lift = 0.0015,
+      ) => {
+        const base = b.p.length / 3,
+          c = corners[face],
+          inset = 0.001;
+        for (const [pu, pv] of [
+          [u, v],
+          [u + width, v],
+          [u, v + height],
+          [u + width, v + height],
+        ]) {
+          for (let axis = 0; axis < 3; axis++)
+            b.p.push(
+              [x, y, z][axis] +
+                c[0][axis] +
+                (c[1][axis] - c[0][axis]) * pu +
+                (c[2][axis] - c[0][axis]) * pv +
+                d[axis] * lift,
+            );
+          b.n.push(...d);
+          b.u.push(
+            (3 + inset + pu * (1 - inset * 2)) / 4,
+            1 - (4 - inset - pv * (1 - inset * 2)) / 4,
+          );
+          b.c.push(color[0] * shade, color[1] * shade, color[2] * shade);
+        }
+        b.i.push(base, base + 1, base + 2, base + 2, base + 1, base + 3);
+      };
+      if (appearance.kind === "ore" || appearance.kind === "raw") {
+        const raw = appearance.kind === "raw";
+        for (const [u, v, w, h] of raw
+          ? [
+              [0.05, 0.08, 0.39, 0.31],
+              [0.53, 0.14, 0.39, 0.4],
+              [0.19, 0.52, 0.34, 0.39],
+              [0.65, 0.67, 0.26, 0.26],
+            ]
+          : [
+              [0.14, 0.16, 0.18, 0.12],
+              [0.58, 0.3, 0.18, 0.21],
+              [0.31, 0.64, 0.26, 0.12],
+              [0.73, 0.73, 0.1, 0.12],
+            ]) {
+          patch(u, v, w, h, appearance.grain);
+          patch(
+            u + w * 0.18,
+            v + h * 0.58,
+            w * 0.6,
+            h * 0.42,
+            appearance.highlight,
+            0.0025,
+          );
+        }
+      } else if (appearance.kind === "slate") {
+        patch(0, 0.25, 1, 0.055, appearance.grain);
+        patch(0.22, 0.69, 0.78, 0.055, appearance.grain);
+      } else {
+        patch(0.08, 0.08, 0.84, 0.84, appearance.grain);
+        patch(0.08, 0.84, 0.84, 0.08, appearance.highlight, 0.0025);
+        patch(0.08, 0.15, 0.07, 0.69, appearance.highlight, 0.0025);
+        patch(0.66, 0.22, 0.14, 0.09, appearance.highlight, 0.0025);
+      }
+    }
+  }
   for (let y = 0; y < 16; y++)
     for (let z = 0; z < 16; z++)
       for (let x = 0; x < 16; x++) {
         const id = get(x, y, z);
         voxels[y * 256 + z * 16 + x] = id;
         if (!id) continue;
-        if (fluidInfo(id)) {
+        const mineral = mineralAppearance(id);
+        if (mineral) {
+          addMineral(x, y, z, id, mineral);
+        } else if (fluidInfo(id)) {
           addFluid(x, y, z, id);
         } else if (id === 83) {
           for (const part of saplingVisualParts)

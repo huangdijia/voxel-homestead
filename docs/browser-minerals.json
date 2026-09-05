@@ -1,0 +1,247 @@
+{
+  "advancedSeconds": 20.633333333333443,
+  "checkpoints": [
+    {
+      "changes": 694,
+      "inventory": [
+        {
+          "count": 1,
+          "durability": 247,
+          "id": "iron_pickaxe"
+        },
+        {
+          "count": 2,
+          "id": "stick"
+        },
+        {
+          "count": 1,
+          "id": "workbench"
+        },
+        {
+          "count": 1,
+          "id": "water_bucket"
+        },
+        {
+          "count": 6,
+          "id": "torch"
+        },
+        {
+          "count": 3,
+          "id": "diamond"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "name": "three-natural-diamonds",
+      "same": true
+    },
+    {
+      "changes": 814,
+      "inventory": [
+        {
+          "count": 1,
+          "durability": 247,
+          "id": "iron_pickaxe"
+        },
+        {
+          "count": 1,
+          "durability": 1560,
+          "id": "diamond_pickaxe"
+        },
+        {
+          "count": 1,
+          "id": "obsidian"
+        },
+        {
+          "count": 1,
+          "id": "water_bucket"
+        },
+        {
+          "count": 6,
+          "id": "torch"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "name": "diamond-pick-and-obsidian",
+      "same": true
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-09-05T02:22:57.477Z",
+  "fixtureGrants": [
+    "Survival world, iron pickaxe, 2 sticks, 1 workbench, 6 torches, water bucket",
+    "Player teleports and a cleared access gallery; no diamond, diamond equipment, lava or obsidian grants",
+    "Accelerated 60 Hz mining/simulation; main render loop remains paused"
+  ],
+  "limitations": [
+    "Programmatic game integration, not an unassisted manual survival playthrough or FPS benchmark"
+  ],
+  "naturalDiamonds": [
+    {
+      "x": -3,
+      "y": 9,
+      "z": 7
+    },
+    {
+      "x": -3,
+      "y": 8,
+      "z": 7
+    },
+    {
+      "x": -2,
+      "y": 8,
+      "z": 7
+    }
+  ],
+  "naturalLava": {
+    "x": 15,
+    "y": -5,
+    "z": 15
+  },
+  "passed": true,
+  "saveId": "1882c591-bfca-4ca3-bf3d-11462b0cd0db",
+  "stages": [
+    {
+      "generator": 4,
+      "mode": "survival",
+      "name": "preflight",
+      "naturalCluster": 19,
+      "passed": true,
+      "saveVersion": 4
+    },
+    {
+      "diamonds": 3,
+      "ironDurability": 247,
+      "mining": [
+        {
+          "seconds": 0.75,
+          "x": -3,
+          "y": 9,
+          "z": 7
+        },
+        {
+          "seconds": 0.75,
+          "x": -3,
+          "y": 8,
+          "z": 7
+        },
+        {
+          "seconds": 0.75,
+          "x": -2,
+          "y": 8,
+          "z": 7
+        }
+      ],
+      "name": "natural-diamond-mining",
+      "passed": true
+    },
+    {
+      "name": "craft-diamond-pickaxe",
+      "passed": true
+    },
+    {
+      "name": "cast-natural-lava-to-obsidian",
+      "passed": true
+    },
+    {
+      "diamondDurability": 1560,
+      "name": "harvest-obsidian",
+      "obsidian": 1,
+      "passed": true,
+      "seconds": 9.383333333333333
+    }
+  ],
+  "startedAt": "2026-09-05T02:22:55.644Z",
+  "version": 1,
+  "viewport": {
+    "dpr": 2,
+    "height": 900,
+    "width": 1440
+  },
+  "pageReload": {
+    "changes": true,
+    "player": true,
+    "fluids": true,
+    "natural": true,
+    "containers": true,
+    "time": true
+  },
+  "nativeEnter": {
+    "fullscreen": true,
+    "overlay": null,
+    "paused": false,
+    "pointer": true
+  },
+  "nativeEscape": {
+    "fullscreen": false,
+    "overlay": "pause",
+    "paused": true,
+    "pointer": false
+  },
+  "versionThreeMigration": {
+    "worldId": "73f9798f-4291-494e-b8d7-204046f4840e",
+    "version": 4,
+    "generator": 3,
+    "backupExact": true,
+    "changesPreserved": true,
+    "playerPreserved": true
+  }
+}

@@ -1,6 +1,94 @@
 import type { CSSProperties } from "react";
 import { BLOCKS, ITEMS } from "../game/registry";
 import type { ItemStack } from "../game/types";
+import { mineralAppearance } from "../game/mineral-appearance";
+import type { MineralAppearance } from "../game/mineral-appearance";
+
+function colorTone(color: string, amount: number): string {
+  const hex = color.replace("#", "");
+  if (!/^[a-f\d]{6}$/i.test(hex)) return color;
+  const n = Number.parseInt(hex, 16);
+  return `#${[n >> 16, (n >> 8) & 255, n & 255]
+    .map((value) =>
+      Math.round(
+        amount < 0 ? value * (1 + amount) : value + (255 - value) * amount,
+      )
+        .toString(16)
+        .padStart(2, "0"),
+    )
+    .join("")}`;
+}
+function mineralCubeIcon(appearance: MineralAppearance) {
+  const hex = (color: number[], brightness = 1) =>
+    `#${color
+      .map((value) =>
+        Math.round(Math.min(1, value * brightness) * 255)
+          .toString(16)
+          .padStart(2, "0"),
+      )
+      .join("")}`;
+  const stone = appearance.kind === "ore" || appearance.kind === "slate",
+    base = hex(appearance.base, stone ? 0.57 : 1),
+    grain = hex(appearance.grain),
+    highlight = hex(appearance.highlight);
+  return (
+    <>
+      <path d="M8 1 15 5v7l-7 4-7-4V5l7-4Z" fill={colorTone(base, -0.35)} />
+      <path d="m8 1 7 4-7 4-7-4 7-4Z" fill={colorTone(base, 0.13)} />
+      <path d="m1 5 7 4v7l-7-4V5Z" fill={base} />
+      <path d="m8 9 7-4v7l-7 4V9Z" fill={colorTone(base, -0.21)} />
+      {appearance.kind === "ore" ? (
+        <>
+          <path
+            d="M6 3h2v1H6V3Zm4 2h2v1h-2V5ZM3 7h2v2H3V7Zm3 4h1v2H6v-2Zm4-1h2v2h-2v-2Zm3-3h1v2h-1V7Z"
+            fill={grain}
+          />
+          <path
+            d="M6 3h1v1H6V3Zm4 2h1v1h-1V5ZM3 7h1v1H3V7Zm7 3h1v1h-1v-1Zm3-3h1v1h-1V7Z"
+            fill={highlight}
+          />
+          <path
+            d="M4 5h2v1H4V5Zm0 5h1v1H4v-1Zm8 2h1v1h-1v-1Z"
+            fill={colorTone(base, 0.16)}
+          />
+        </>
+      ) : appearance.kind === "slate" ? (
+        <>
+          <path
+            d="m2 7 5 3v1L2 8V7Zm0 3 5 3v1l-5-3v-1Zm7 1 5-3v1l-5 3v-1Zm0 3 5-3v1l-5 3v-1ZM5 4h5v1H5V4Z"
+            fill={colorTone(base, -0.24)}
+          />
+          {appearance.tile === 12 && (
+            <path
+              d="M5 2h1v2H5V2Zm4 2h1v2H9V4ZM4 7h1v3H4V7Zm2 4h1v3H6v-3Zm6-3h1v3h-1V8Zm-2 4h1v2h-1v-2Z"
+              fill={colorTone(base, 0.2)}
+            />
+          )}
+        </>
+      ) : appearance.kind === "raw" ? (
+        <>
+          <path
+            d="M6 3h4v2H6V3Zm-3 4h3v3H3V7Zm2 4h2v3H5v-3Zm5-2h3v3h-3V9Zm3-3h1v3h-1V6Z"
+            fill={grain}
+          />
+          <path
+            d="M6 3h3v1H6V3ZM3 7h2v1H3V7Zm7 2h2v1h-2V9ZM5 11h1v1H5v-1Z"
+            fill={highlight}
+          />
+        </>
+      ) : (
+        <>
+          <path d="m8 2 5 3-5 3-5-3 5-3Z" fill={grain} />
+          <path d="m2 7 5 3v4l-5-3V7Zm7 3 5-3v4l-5 3v-4Z" fill={grain} />
+          <path
+            d="m4 4 4-2 3 2-3-1-3 2-1-1ZM2 7l1 1v3l-1-1V7Zm7 3 5-3v1l-5 3v-1Z"
+            fill={highlight}
+          />
+        </>
+      )}
+    </>
+  );
+}
 
 export function Icon({
   name,
@@ -250,23 +338,11 @@ function agricultureIcon(id: string): React.ReactNode | null {
         <path d="m2 12 7-9 1 1-7 9H2v-1Z" fill="#a6814b" />
         <path
           d="M6 2h7v1h-1v3h-2V4H9V3H6V2Z"
-          fill={
-            id.startsWith("iron")
-              ? "#ccd9d7"
-              : id.startsWith("stone")
-                ? "#9caaa4"
-                : "#c2a068"
-          }
+          fill={ITEMS[id]?.color ?? "#c2a068"}
         />
         <path
           d="M6 2h6v1H6V2Z"
-          fill={
-            id.startsWith("iron")
-              ? "#f1f1de"
-              : id.startsWith("stone")
-                ? "#c4c8b8"
-                : "#e2bd7a"
-          }
+          fill={colorTone(ITEMS[id]?.color ?? "#c2a068", 0.45)}
         />
       </>
     );
@@ -386,6 +462,22 @@ export function ItemIcon({ id, size = 36 }: { id: string; size?: number }) {
   const item = ITEMS[id];
   if (!item) return null;
   const c = item.color || "#a6a795";
+  const mineral =
+    item.block === undefined ? undefined : mineralAppearance(item.block);
+  if (mineral)
+    return (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 16 16"
+        fill="none"
+        shapeRendering="crispEdges"
+        className="item-svg"
+        aria-hidden="true"
+      >
+        {mineralCubeIcon(mineral)}
+      </svg>
+    );
   const agriculture = agricultureIcon(id);
   if (agriculture)
     return (
@@ -428,11 +520,7 @@ export function ItemIcon({ id, size = 36 }: { id: string; size?: number }) {
       </span>
     );
   }
-  const toolColor = id.startsWith("iron")
-    ? "#c4d4d4"
-    : id.startsWith("stone")
-      ? "#9b9e9b"
-      : "#bea36d";
+  const toolColor = item.color ?? "#bea36d";
   const pixel = (body: React.ReactNode) => (
     <svg
       width={size}
@@ -461,20 +549,23 @@ export function ItemIcon({ id, size = 36 }: { id: string; size?: number }) {
           <>
             <path d="M8 1h5v2h2v5h-5V6H8V1Z" fill="#333c3b" />
             <path d="M9 2h4v2h1v3h-4V5H9V2Z" fill={toolColor} />
-            <path d="M11 2h2v2h1v2h-1V4h-2V2Z" fill="#e0e0c9" />
+            <path
+              d="M11 2h2v2h1v2h-1V4h-2V2Z"
+              fill={colorTone(toolColor, 0.5)}
+            />
           </>
         ) : item.tool === "sword" ? (
           <>
             <path d="M12 1h3v4l-6 6-4-4 7-6Z" fill="#39413d" />
             <path d="M13 2h1v3l-5 5-2-2 6-6Z" fill={toolColor} />
-            <path d="m7 8 1 1 6-6V2h-1L7 8Z" fill="#e0e0c9" />
+            <path d="m7 8 1 1 6-6V2h-1L7 8Z" fill={colorTone(toolColor, 0.5)} />
             <path d="m4 7 5 5-1 1-5-5 1-1Z" fill="#977d43" />
           </>
         ) : (
           <>
             <path d="M11 1h4v4l-4 4-4-4 4-4Z" fill="#35403e" />
             <path d="M11 2h3v3l-3 3-3-3 3-3Z" fill={toolColor} />
-            <path d="M12 2h2v2h-2V2Z" fill="#e0e0c9" />
+            <path d="M12 2h2v2h-2V2Z" fill={colorTone(toolColor, 0.5)} />
           </>
         )}
       </>,
@@ -492,7 +583,7 @@ export function ItemIcon({ id, size = 36 }: { id: string; size?: number }) {
                   ? "M4 2h8v12H9V7H7v7H4V2Z"
                   : "M4 3h3v7h2V3h3v10H9v1H2v-3h2V3Z"
           }
-          fill="#667777"
+          fill={colorTone(c, -0.48)}
         />
         <path
           d={
@@ -504,7 +595,7 @@ export function ItemIcon({ id, size = 36 }: { id: string; size?: number }) {
                   ? "M5 3h6v3H6v7H5V3Z"
                   : "M5 4h1v8H3v-1h2V4Zm5 0h1v8h-1V4Z"
           }
-          fill="#cad7d2"
+          fill={c}
         />
       </>,
     );
@@ -559,13 +650,104 @@ export function ItemIcon({ id, size = 36 }: { id: string; size?: number }) {
         <path d="M6 8h4v3H6V8Z" fill="#343e43" />
       </>,
     );
+  if (["raw_iron", "raw_copper", "raw_gold"].includes(id))
+    return pixel(
+      <>
+        <path
+          d="M4 2h5v1h3v2h2v6h-2v2H8v1H3v-2H1V7h1V4h2V2Z"
+          fill={colorTone(c, -0.58)}
+        />
+        <path d="M4 3h4v2h3v2h2v3h-3v2H7v1H3v-2H2V7h2V3Z" fill={c} />
+        <path
+          d="M5 3h3v2H5V3ZM3 6h3v2H3V6Zm4 3h3v2H7V9Z"
+          fill={colorTone(c, 0.43)}
+        />
+        <path
+          d="M9 4h3v2H9V4ZM3 10h2v2H3v-2Zm7-3h3v2h-3V7Z"
+          fill={id === "raw_copper" ? "#548f76" : colorTone(c, -0.24)}
+        />
+      </>,
+    );
+  if (id === "diamond")
+    return pixel(
+      <>
+        <path
+          d="M5 1h6v1h2v2h2v5h-2v2h-2v2H9v2H7v-2H5v-2H3V9H1V4h2V2h2V1Z"
+          fill={colorTone(c, -0.52)}
+        />
+        <path d="M5 2h6v2h2v4h-2v2H9v3H7v-3H5V8H3V4h2V2Z" fill={c} />
+        <path
+          d="M5 2h6v2H5V2ZM3 4h2v3H3V4Zm2 3h2v3H5V7Z"
+          fill={colorTone(c, 0.64)}
+        />
+        <path d="M7 4h2v3h3v1H9v4H7V8H4V7h3V4Z" fill={colorTone(c, -0.12)} />
+        <path d="M6 3h4v1H6V3Z" fill="#effffc" />
+      </>,
+    );
+  if (id === "emerald")
+    return pixel(
+      <>
+        <path
+          d="M5 1h6v2h2v2h1v7h-2v2H4v-2H2V5h1V3h2V1Z"
+          fill={colorTone(c, -0.53)}
+        />
+        <path d="M5 2h6v2h1v8h-2v1H5v-2H3V5h2V2Z" fill={c} />
+        <path d="M5 2h5v1H6v2H4v6H3V5h2V2Z" fill={colorTone(c, 0.64)} />
+        <path d="M6 4h4v7H6V4Z" fill={colorTone(c, -0.12)} />
+        <path d="M6 4h3v1H7v5H6V4Z" fill={colorTone(c, 0.34)} />
+      </>,
+    );
+  if (id === "redstone" || id === "lapis_lazuli")
+    return pixel(
+      <>
+        <path
+          d={
+            id === "redstone"
+              ? "M6 3h4v2h2v3h2v2h1v3H1v-3h2V8h2V5h1V3Z"
+              : "M6 1h5v2h2v3h1v5h-2v2H9v2H4v-2H2V8h1V4h3V1Z"
+          }
+          fill={colorTone(c, -0.55)}
+        />
+        <path
+          d={
+            id === "redstone"
+              ? "M6 5h3v2h2v2h2v3H3v-2h2V8h1V5Z"
+              : "M6 2h4v2h2v6h-2v2H8v2H5v-2H3V8h2V4h1V2Z"
+          }
+          fill={c}
+        />
+        <path
+          d="M6 5h2v2H6V5ZM4 9h2v2H4V9Zm5 1h2v1H9v-1Z"
+          fill={colorTone(c, 0.4)}
+        />
+        {id === "redstone" ? (
+          <path d="M2 4h2v1H2V4Zm10-2h1v2h-1V2Zm1 5h2v1h-2V7Z" fill={c} />
+        ) : (
+          <path d="M8 3h1v1H8V3Zm3 4h1v1h-1V7ZM7 12h1v1H7v-1Z" fill="#d4ad5f" />
+        )}
+      </>,
+    );
+  if (id === "gold_nugget" || id === "iron_nugget")
+    return pixel(
+      <>
+        <path
+          d="M6 4h5v2h2v5h-3v2H5v-1H3V8h1V6h2V4Z"
+          fill={colorTone(c, -0.53)}
+        />
+        <path d="M6 5h4v2h2v3H9v2H5v-2H4V8h2V5Z" fill={c} />
+        <path
+          d="M6 5h3v1H6V5ZM5 7h2v2H5V7Zm3 3h2v1H8v-1Z"
+          fill={colorTone(c, 0.6)}
+        />
+      </>,
+    );
   if (id.includes("ingot"))
     return pixel(
       <>
-        <path d="m2 7 3-3h8l2 4-3 4H3L1 9l1-2Z" fill="#536166" />
-        <path d="m2 7 3-3h8l-2 4H2V7Z" fill="#d5dfd7" />
-        <path d="M2 8h9v3H3L2 8Z" fill="#a4b9b2" />
-        <path d="m11 8 2-4 1 4-3 3V8Z" fill="#7e918c" />
+        <path d="m2 7 3-3h8l2 4-3 4H3L1 9l1-2Z" fill={colorTone(c, -0.53)} />
+        <path d="m2 7 3-3h8l-2 4H2V7Z" fill={c} />
+        <path d="M2 8h9v3H3L2 8Z" fill={colorTone(c, -0.2)} />
+        <path d="m11 8 2-4 1 4-3 3V8Z" fill={colorTone(c, -0.37)} />
       </>,
     );
   if (item.food || id.includes("pork") || id.includes("mutton"))
