@@ -128,6 +128,7 @@ describe("agriculture integration independent audit", () => {
     legacy.manifest.generatorVersion = 1;
     delete legacy.farming;
     delete legacy.composters;
+    delete legacy.fluids; delete legacy.natural;
     await saveWorld(legacy);
     const upgraded = new Simulation(new AuditWorld(), legacy).snapshot();
     await saveWorld(upgraded);

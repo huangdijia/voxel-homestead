@@ -118,7 +118,7 @@ export function sampleBlock(
   x: number,
   y: number,
   z: number,
-  generatorVersion: 1 | 2 = 1,
+  generatorVersion: 1 | 2 | 3 = 1,
 ): number {
   x = Math.floor(x);
   y = Math.floor(y);
@@ -155,7 +155,7 @@ export function sampleBlock(
       Math.sin(x * 0.12 + Math.sin(z * 0.09) * 2 + (s % 91)) +
       Math.sin(y * 0.22 + z * 0.11) +
       Math.cos(z * 0.13 - x * 0.065 + y * 0.095);
-    if (tunnel > 2.35) return 0;
+    if (tunnel > 2.35) return generatorVersion >= 3 && y <= -5 ? 76 : 0;
   }
   if (y === top) return top <= SEA_LEVEL + 1 ? 4 : 1;
   if (y >= top - 3) return top <= SEA_LEVEL + 1 ? 4 : 2;

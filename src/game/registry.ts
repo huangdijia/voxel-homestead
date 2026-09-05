@@ -195,13 +195,37 @@ for (let level = 0; level <= 8; level++)
     { opaque: false, hardness: 0.6, tool: "axe", drop: "composter" },
   );
 
+// Dynamic fluid states are world data; only sources appear in the creative catalog.
+for (let id = 68; id <= 80; id++) {
+  const lava = id >= 76;
+  block(id, id === 76 ? "lava" : `fluid_${id}`, lava ? "熔岩" : "流动的水", 4, {
+    solid: false,
+    opaque: false,
+    hardness: Infinity,
+    drop: undefined,
+  });
+}
+block(81, "obsidian", "黑曜石", 3, { hardness: 50, tool: "pickaxe", tier: 4 });
+block(82, "persistent_leaves", "橡树树叶", 8, {
+  opaque: false,
+  hardness: 0.2,
+  drop: "leaves",
+});
+block(83, "oak_sapling", "橡树树苗", 8, {
+  solid: false,
+  opaque: false,
+  hardness: 0,
+  shape: "crop",
+});
+
 export const ITEMS: Record<string, ItemDefinition> = {};
 for (const definition of Object.values(BLOCKS)) {
   if (
     !definition.id ||
     [19, 25, 26, 27, 29].includes(definition.id) ||
     (definition.id >= 30 && definition.id <= 57) ||
-    definition.id >= 60
+    (definition.id >= 60 && definition.id <= 75) ||
+    [77, 78, 79, 80, 82].includes(definition.id)
   )
     continue;
   ITEMS[definition.key] = {
@@ -213,6 +237,10 @@ for (const definition of Object.values(BLOCKS)) {
     texture: definition.topTexture ?? definition.texture,
   };
 }
+Object.assign(ITEMS.leaves, { block: 82 });
+Object.assign(ITEMS.oak_sapling, { fuel: 5 });
+Object.assign(ITEMS.obsidian, { color: "#39284d" });
+Object.assign(ITEMS.lava, { color: "#ff6b16" });
 Object.assign(ITEMS.log, { fuel: 15 });
 Object.assign(ITEMS.planks, { fuel: 15 });
 Object.assign(ITEMS.slab, { fuel: 7.5 });
@@ -252,6 +280,7 @@ item("potato", "马铃薯", "#b99154", { category: "food", food: 1 });
 item("poisonous_potato", "毒马铃薯", "#9b9f43", { category: "food", food: 2 });
 item("beetroot_seeds", "甜菜种子", "#81523c");
 item("beetroot", "甜菜根", "#a03952", { category: "food", food: 1 });
+item("apple", "苹果", "#c54838", { category: "food", food: 4 });
 item("bread", "面包", "#cc943e", { category: "food", food: 5 });
 item("baked_potato", "烤马铃薯", "#d0a358", { category: "food", food: 5 });
 item("bowl", "碗", "#916741");
@@ -342,4 +371,14 @@ export const ENTITIES: Record<EntityKind, EntityDefinition> = {
     hostile: true,
     drops: [],
   },
+};
+
+ITEMS.lava_bucket = {
+  id: "lava_bucket",
+  name: "熔岩桶",
+  category: "tools",
+  maxStack: 1,
+  color: "#ef722e",
+  fuel: 1000,
+  fuelRemainder: "bucket",
 };

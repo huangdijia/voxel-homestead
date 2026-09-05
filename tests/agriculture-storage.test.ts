@@ -23,7 +23,7 @@ function legacyFixture(): SaveData {
   const save = createNewSave('旧版农庄', 'old-farm-seed', 'survival');
   save.manifest.version = 1; save.manifest.generatorVersion = 1;
   save.manifest.createdAt = 1234; save.manifest.updatedAt = 5678; save.manifest.playedSeconds = 90;
-  delete save.farming; delete save.composters;
+  delete save.farming; delete save.composters; delete save.fluids; delete save.natural;
   save.player.position = { x: .5, y: 1, z: 3.5 };
   save.player.spawn = { ...save.player.position };
   save.player.inventory[0] = { id: 'iron_pickaxe', count: 1, durability: 107 };
@@ -181,7 +181,7 @@ describe('legacy migration and original checkpoint backups', () => {
     expect(loaded).toEqual(legacy);
     expect(await loadMigrationBackup(legacy.manifest.id)).toBeNull();
     const next = upgrade(loaded!);
-    expect(next.manifest.version).toBe(2); expect(next.manifest.generatorVersion).toBe(1);
+    expect(next.manifest.version).toBe(3); expect(next.manifest.generatorVersion).toBe(1);
     expect(next.farming!.plots).toEqual([]); expect(next.composters).toEqual({});
     expect(validateSave(next)).toEqual(next);
     expect(await loadWorld(legacy.manifest.id)).toEqual(legacy);

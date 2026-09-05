@@ -9,8 +9,8 @@
       "bytes": 6898
     },
     "src/game/registry.ts": {
-      "sha256": "f144ea365ae1ea622783ef3a4746deb4d717657a863aff5ed70b17555ee8c898",
-      "bytes": 8756
+      "sha256": "a16db45fea9fa22fe0e1cf78ae2b6ecc48d890a0d6fc678554e144347b4eba86",
+      "bytes": 9888
     }
   },
   "statusRule": "Definition matches and existing test names are leads, not executed per-entry acceptance. No acceptance is promoted by this generator.",
@@ -41,14 +41,158 @@
   },
   "composterAlias": "composter_1..composter_8 -> minecraft:composter; state acceptance remains unverified",
   "counts": {
-    "blocks": 68,
-    "items": 69,
+    "blocks": 84,
+    "items": 74,
     "entities": 4,
     "craftingRecipes": 36,
     "smeltingRecipes": 7
   },
   "unmatchedLocal": {
-    "blocks": [],
+    "blocks": [
+      {
+        "id": "minecraft:fluid_68",
+        "localDefinitions": [
+          {
+            "id": "68",
+            "key": "fluid_68",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      },
+      {
+        "id": "minecraft:fluid_69",
+        "localDefinitions": [
+          {
+            "id": "69",
+            "key": "fluid_69",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      },
+      {
+        "id": "minecraft:fluid_70",
+        "localDefinitions": [
+          {
+            "id": "70",
+            "key": "fluid_70",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      },
+      {
+        "id": "minecraft:fluid_71",
+        "localDefinitions": [
+          {
+            "id": "71",
+            "key": "fluid_71",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      },
+      {
+        "id": "minecraft:fluid_72",
+        "localDefinitions": [
+          {
+            "id": "72",
+            "key": "fluid_72",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      },
+      {
+        "id": "minecraft:fluid_73",
+        "localDefinitions": [
+          {
+            "id": "73",
+            "key": "fluid_73",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      },
+      {
+        "id": "minecraft:fluid_74",
+        "localDefinitions": [
+          {
+            "id": "74",
+            "key": "fluid_74",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      },
+      {
+        "id": "minecraft:fluid_75",
+        "localDefinitions": [
+          {
+            "id": "75",
+            "key": "fluid_75",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      },
+      {
+        "id": "minecraft:fluid_77",
+        "localDefinitions": [
+          {
+            "id": "77",
+            "key": "fluid_77",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      },
+      {
+        "id": "minecraft:fluid_78",
+        "localDefinitions": [
+          {
+            "id": "78",
+            "key": "fluid_78",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      },
+      {
+        "id": "minecraft:fluid_79",
+        "localDefinitions": [
+          {
+            "id": "79",
+            "key": "fluid_79",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      },
+      {
+        "id": "minecraft:fluid_80",
+        "localDefinitions": [
+          {
+            "id": "80",
+            "key": "fluid_80",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      },
+      {
+        "id": "minecraft:persistent_leaves",
+        "localDefinitions": [
+          {
+            "id": "82",
+            "key": "persistent_leaves",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      }
+    ],
     "items": [
       {
         "id": "minecraft:water",
@@ -56,6 +200,17 @@
           {
             "id": "water",
             "key": "water",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      },
+      {
+        "id": "minecraft:lava",
+        "localDefinitions": [
+          {
+            "id": "lava",
+            "key": "lava",
             "source": "src/game/registry.ts"
           }
         ],

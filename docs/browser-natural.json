@@ -1,0 +1,131 @@
+{
+  "advancedSeconds": 41.49999999999893,
+  "checkpoints": [
+    {
+      "changes": 780,
+      "fluidTasks": 14,
+      "name": "spreading",
+      "naturalQueue": 0,
+      "same": true,
+      "worldId": "4dcf4940-2333-4eda-91c9-835a7850b9fa"
+    },
+    {
+      "changes": 901,
+      "fluidTasks": 0,
+      "name": "settled-world",
+      "naturalQueue": 0,
+      "same": true,
+      "worldId": "4dcf4940-2333-4eda-91c9-835a7850b9fa"
+    },
+    {
+      "changes": 901,
+      "fluidTasks": 0,
+      "name": "visual-fixture",
+      "naturalQueue": 0,
+      "same": true,
+      "worldId": "4dcf4940-2333-4eda-91c9-835a7850b9fa"
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-09-05T01:59:07.357Z",
+  "fixtureGrants": [
+    "Creative test world; elevated platform and lined fluid channels at y=40",
+    "Water/lava sources, sand/gravel, soil and saplings placed through Simulation.setBlock",
+    "Player position and hotbar developer fixtures; fixed steps accelerated at 60 Hz"
+  ],
+  "limitations": [
+    "Programmatic game rule integration, not manual survival acquisition or a frame-rate benchmark",
+    "Page reload and screenshots are recorded separately by the browser operator"
+  ],
+  "passed": true,
+  "saveId": "4dcf4940-2333-4eda-91c9-835a7850b9fa",
+  "stages": [
+    {
+      "generator": 3,
+      "mode": "creative",
+      "name": "preflight",
+      "passed": true,
+      "saveVersion": 3
+    },
+    {
+      "lavaCells": 15,
+      "name": "propagation",
+      "passed": true,
+      "waterCells": 27
+    },
+    {
+      "name": "source-removal",
+      "passed": true
+    },
+    {
+      "name": "contact-obsidian",
+      "passed": true
+    },
+    {
+      "name": "gravity",
+      "passed": true
+    },
+    {
+      "name": "tree-growth-and-leaf-decay",
+      "passed": true
+    },
+    {
+      "name": "pause-freezes-updates",
+      "passed": true
+    }
+  ],
+  "startedAt": "2026-09-05T01:59:04.899Z",
+  "version": 1,
+  "viewport": {
+    "dpr": 2,
+    "height": 900,
+    "width": 1384
+  },
+  "pageReload": {
+    "worldId": "4dcf4940-2333-4eda-91c9-835a7850b9fa",
+    "changes": true,
+    "fluids": true,
+    "natural": true,
+    "inventory": true,
+    "ready": true
+  },
+  "nativeFullscreen": {
+    "fullscreen": true,
+    "pointerLock": true,
+    "paused": false
+  },
+  "nativeEscape": {
+    "fullscreen": false,
+    "paused": true,
+    "pointerLock": false,
+    "text": true
+  },
+  "screenshot": {
+    "width": 1384,
+    "height": 844,
+    "dpr": 2,
+    "files": [
+      "screenshots/natural-world.png",
+      "screenshots/natural-paused.png",
+      "screenshots/natural-fluids.png"
+    ]
+  },
+  "migration": {
+    "backupExact": true,
+    "changesSame": true,
+    "inventorySame": true,
+    "newGenerator": 2,
+    "newVersion": 3,
+    "oldGenerator": 2,
+    "oldVersion": 2,
+    "versions": {
+      "64a9d7df-5e33-4f20-b993-dfbc511a35e4": [
+        2
+      ],
+      "6b8c315b-b73f-4ef6-b835-901f033d127c": [
+        1
+      ]
+    },
+    "worldId": "64a9d7df-5e33-4f20-b993-dfbc511a35e4"
+  }
+}

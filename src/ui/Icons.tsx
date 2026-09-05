@@ -286,7 +286,7 @@ function agricultureIcon(id: string): React.ReactNode | null {
         <path d="M4 12h1v1H4v-1Zm6 0h1v1h-1v-1Z" fill="#39433f" />
       </>
     );
-  if (id === "bucket" || id === "water_bucket")
+  if (id === "bucket" || id === "water_bucket" || id === "lava_bucket")
     return (
       <>
         <path
@@ -297,14 +297,61 @@ function agricultureIcon(id: string): React.ReactNode | null {
         <path d="M2 6h12v3h-1v3h-2v2H5v-2H3V9H2V6Z" fill="#a7b9bc" />
         <path
           d="M3 6h10v3H3V6Z"
-          fill={id === "water_bucket" ? "#397fc0" : "#65797c"}
+          fill={
+            id === "water_bucket"
+              ? "#397fc0"
+              : id === "lava_bucket"
+                ? "#ed641b"
+                : "#65797c"
+          }
         />
         <path
           d="M3 6h10v1H3V6Z"
-          fill={id === "water_bucket" ? "#78c5ed" : "#d7e0d8"}
+          fill={
+            id === "water_bucket"
+              ? "#78c5ed"
+              : id === "lava_bucket"
+                ? "#ffd069"
+                : "#d7e0d8"
+          }
         />
         <path d="M4 9h1v3H4V9Zm1 3h2v1H5v-1Z" fill="#e4e8db" />
         <path d="M11 9h1v3h-1V9Zm-2 3h2v1H9v-1Z" fill="#7d959a" />
+      </>
+    );
+  if (id === "oak_sapling")
+    return (
+      <>
+        <path d="M7 15V9H5V7h2V2h2v4h3v2H9v7H7Z" fill="#684b2b" />
+        <path d="M8 4h1v10H8V4Z" fill="#bc9857" />
+        <path
+          d="M5 1h5v1h2v3h-2v2H6V5H4V2h1V1ZM1 6h4v1h2v3H5v1H2V9H1V6Zm9 1h4v1h1v3h-2v1H9V9h1V7Z"
+          fill="#3e7133"
+        />
+        <path
+          d="M5 2h5v2H8v2H6V4H5V2ZM2 7h3v1h1v1H3V8H2V7Zm9 1h3v2h-2v1h-2V9h1V8Z"
+          fill="#73a448"
+        />
+        <path d="M6 2h3v1H6V2ZM2 7h2v1H2V7Zm9 1h2v1h-2V8Z" fill="#b3c56c" />
+      </>
+    );
+  if (id === "obsidian")
+    return (
+      <>
+        <path
+          d="M7 1h2v1h2v1h2v1h2v8h-2v1h-2v1H9v1H7v-1H5v-1H3v-1H1V4h2V3h2V2h2V1Z"
+          fill="#191520"
+        />
+        <path
+          d="M7 2h2v1h2v1h2v1h1v1h-2v1h-2v1H8V7H6V6H4V5H2V4h3V3h2V2Z"
+          fill="#4d385f"
+        />
+        <path d="M2 6h2v1h2v1h2v6H7v-1H5v-1H3v-1H2V6Z" fill="#2f243c" />
+        <path d="M8 8h2V7h2V6h2v5h-1v1h-2v1H9v1H8V8Z" fill="#211c2f" />
+        <path
+          d="M7 3h3v1H7V3ZM4 4h2v1H4V4Zm3 2h3v1H7V6ZM3 8h1v2H3V8Zm2 3h2v1H5v-1Zm6-3h2v1h-2V8Zm-1 3h1v1h-1v-1Z"
+          fill="#6d527e"
+        />
       </>
     );
   if (id === "composter")

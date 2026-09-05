@@ -18,8 +18,8 @@
       "bytes": 6898
     },
     "src/game/registry.ts": {
-      "sha256": "f144ea365ae1ea622783ef3a4746deb4d717657a863aff5ed70b17555ee8c898",
-      "bytes": 8756
+      "sha256": "a16db45fea9fa22fe0e1cf78ae2b6ecc48d890a0d6fc678554e144347b4eba86",
+      "bytes": 9888
     }
   },
   "totals": {
@@ -46,8 +46,8 @@
         "M3": 199
       },
       "implementationCounts": {
-        "not-mapped": 1029,
-        "partial-unverified": 31
+        "not-mapped": 1026,
+        "partial-unverified": 34
       },
       "acceptancePassed": 0
     },
@@ -62,8 +62,8 @@
         "M3": 221
       },
       "implementationCounts": {
-        "not-mapped": 1265,
-        "partial-unverified": 68
+        "not-mapped": 1261,
+        "partial-unverified": 72
       },
       "acceptancePassed": 0
     },
@@ -108,8 +108,8 @@
         "M3": 1
       },
       "implementationCounts": {
-        "not-mapped": 30,
-        "partial-unverified": 11
+        "not-mapped": 29,
+        "partial-unverified": 12
       },
       "acceptancePassed": 0
     },
