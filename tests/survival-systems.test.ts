@@ -209,28 +209,28 @@ describe("hunger, regeneration and exertion", () => {
 });
 
 describe("armor protection and wear", () => {
-  it("a full iron suit reduces one ten-point attack to four damage and wears each piece once", () => {
+  it("a full iron suit reduces a ten-point attack to six damage and wears each piece by two", () => {
     const bare = setup(),
       armored = setup();
     ironArmor(armored);
     bare.damage(10, "attack");
     armored.damage(10, "attack");
     expect(bare.player.health).toBe(10);
-    expect(armored.player.health).toBe(16);
-    expect(
-      Object.values(armored.player.armor).map((slot) => slot?.durability),
-    ).toEqual([19, 19, 19, 19]);
-    armored.damage(10, "attack"); // Same contact during the invulnerability interval.
-    expect(armored.player.health).toBe(16);
-    expect(
-      Object.values(armored.player.armor).map((slot) => slot?.durability),
-    ).toEqual([19, 19, 19, 19]);
-    advance(armored, 0.5);
-    armored.damage(10, "attack");
-    expect(armored.player.health).toBe(12);
+    expect(armored.player.health).toBe(14);
     expect(
       Object.values(armored.player.armor).map((slot) => slot?.durability),
     ).toEqual([18, 18, 18, 18]);
+    armored.damage(10, "attack"); // Same contact during the invulnerability interval.
+    expect(armored.player.health).toBe(14);
+    expect(
+      Object.values(armored.player.armor).map((slot) => slot?.durability),
+    ).toEqual([18, 18, 18, 18]);
+    advance(armored, 0.5);
+    armored.damage(10, "attack");
+    expect(armored.player.health).toBe(8);
+    expect(
+      Object.values(armored.player.armor).map((slot) => slot?.durability),
+    ).toEqual([16, 16, 16, 16]);
     expect(() => validateSave(armored.snapshot())).not.toThrow();
   });
 
@@ -241,7 +241,7 @@ describe("armor protection and wear", () => {
     ironArmor(falling);
     explosion.damage(10, "explosion");
     falling.damage(10, "fall");
-    expect(explosion.player.health).toBe(16);
+    expect(explosion.player.health).toBe(14);
     expect(falling.player.health).toBe(10);
     expect(
       Object.values(falling.player.armor).map((slot) => slot?.durability),

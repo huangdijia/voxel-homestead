@@ -83,7 +83,7 @@ const aliases = {
 const cropNames = { wheat: 'wheat', carrot: 'carrots', potato: 'potatoes', beetroot: 'beetroots' };
 function canonical(localId) {
   const crop = /^(wheat|carrot|potato|beetroot)_crop_\d+$/.exec(localId);
-  return `minecraft:${crop ? cropNames[crop[1]] : /^composter_[1-8]$/.test(localId) ? 'composter' : aliases[localId] ?? localId.replace(/^wood_/, 'wooden_')}`;
+  return `minecraft:${crop ? cropNames[crop[1]] : /^composter_[1-8]$/.test(localId) ? 'composter' : aliases[localId] ?? localId.replace(/^wood_/, 'wooden_').replace(/^gold_(pickaxe|axe|shovel|sword|hoe|helmet|chestplate|leggings|boots)$/, 'golden_$1')}`;
 }
 const baselineBlocks = new Set(Object.values(BLOCKS).filter((entry) => entry.id <= 27).map((entry) => canonical(entry.key)));
 const baselineItems = new Set([
@@ -285,6 +285,8 @@ if (args.has('--self-test')) {
   assert(recipeSignature({ kind: 'shaped', shape: [['a', 'a'], ['a', 'b'], [null, 'b']], output: { id: 'c', count: 1 } }) === recipeSignature({ kind: 'shaped', shape: [['a', 'a'], ['b', 'a'], ['b', null]], output: { id: 'c', count: 1 } }), 'Mirrored recipes must normalize equally');
   assert(recipeSignature({ kind: 'shapeless', ingredients: ['a', 'b'], output: { id: 'c', count: 1 } }) !== recipeSignature({ kind: 'shapeless', ingredients: ['a', 'b', 'b'], output: { id: 'c', count: 1 } }), 'Recipe input multiplicity must matter');
   selfTests.push('recipe mirror equivalence', 'recipe ingredient multiplicity');
+  assert(canonical('gold_pickaxe') === 'minecraft:golden_pickaxe' && canonical('gold_chestplate') === 'minecraft:golden_chestplate' && canonical('gold_block') === 'minecraft:gold_block' && canonical('gold_ingot') === 'minecraft:gold_ingot', 'Gold equipment aliases must not rename gold materials');
+  selfTests.push('gold equipment aliases preserve material IDs');
 }
 
 const countBy = (entries, callback) => Object.fromEntries([...new Set(entries.map(callback))].sort().map((key) => [key, entries.filter((entry) => callback(entry) === key).length]));

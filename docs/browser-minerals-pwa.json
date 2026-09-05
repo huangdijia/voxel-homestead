@@ -1,0 +1,98 @@
+{
+  "url": "http://127.0.0.1:4174/",
+  "manifest": {
+    "data": "{\"name\":\"方块纪行 · 耕作与牧场\",\"short_name\":\"方块纪行\",\"description\":\"自由探索、耕作与建造的原创方块沙盒游戏，支持本地存档与离线游玩。\",\"start_url\":\"/\",\"display\":\"standalone\",\"background_color\":\"#172722\",\"theme_color\":\"#172722\",\"lang\":\"zh-CN\",\"scope\":\"/\",\"id\":\"/\",\"categories\":[\"games\",\"entertainment\"],\"icons\":[{\"src\":\"icons/icon-192.png\",\"sizes\":\"192x192\",\"type\":\"image/png\",\"purpose\":\"any\"},{\"src\":\"icons/icon-512.png\",\"sizes\":\"512x512\",\"type\":\"image/png\",\"purpose\":\"any\"},{\"src\":\"icons/icon-maskable-512.png\",\"sizes\":\"512x512\",\"type\":\"image/png\",\"purpose\":\"maskable\"}]}\n",
+    "errors": [],
+    "manifest": {
+      "backgroundColor": "rgba(23,39,34,1)",
+      "description": "自由探索、耕作与建造的原创方块沙盒游戏，支持本地存档与离线游玩。",
+      "display": "kStandalone",
+      "icons": [
+        {
+          "sizes": "192x192",
+          "type": "image/png",
+          "url": "http://127.0.0.1:4174/icons/icon-192.png"
+        },
+        {
+          "sizes": "512x512",
+          "type": "image/png",
+          "url": "http://127.0.0.1:4174/icons/icon-512.png"
+        },
+        {
+          "sizes": "512x512",
+          "type": "image/png",
+          "url": "http://127.0.0.1:4174/icons/icon-maskable-512.png"
+        }
+      ],
+      "id": "http://127.0.0.1:4174/",
+      "name": "方块纪行 · 耕作与牧场",
+      "orientation": "DEFAULT",
+      "preferRelatedApplications": false,
+      "scope": "http://127.0.0.1:4174/",
+      "startUrl": "http://127.0.0.1:4174/",
+      "themeColor": "rgba(23,39,34,1)"
+    },
+    "parsed": {
+      "scope": "http://127.0.0.1:4174/"
+    },
+    "url": "http://127.0.0.1:4174/manifest.webmanifest"
+  },
+  "installability": {
+    "installabilityErrors": []
+  },
+  "online": {
+    "result": {
+      "type": "object",
+      "value": {
+        "controller": false,
+        "online": true,
+        "scripts": [
+          "http://127.0.0.1:4174/assets/index-CE2scUa0.js"
+        ],
+        "text": "Y\n单人世界\n设置\n从一块方块，开始一场冒险\n我的世界.\n方块纪行\n\n走进森林，向山野出发。\n采集、创造、生存，亲手建造属于你的世界。\n\n创建新世界\n种子生成 · 自由探索\n生存 / 创造\n继续你的旅程\n你的世界\n00\n这里，等着你的第一个世界\n\n为世界取个名字，\n从一片未经探索的原野开始。\n\n开启第一场冒险\n旅程会自动保存在此浏览器\n导入世界\n每一块，都有新的可能。\n耕作与牧场\n操作指南\n把这片世界带到桌面\n离线资源已准备好\n安装应用"
+      }
+    }
+  },
+  "nativeInstallDialog": {
+    "shown": true,
+    "name": "方块纪行 · 耕作与牧场",
+    "origin": "127.0.0.1:4174",
+    "buttons": [
+      "取消",
+      "安装"
+    ],
+    "confirmedInstallation": false
+  },
+  "offline": {
+    "result": {
+      "type": "object",
+      "value": {
+        "controller": true,
+        "errorOverlay": false,
+        "online": true,
+        "probe": "network-failed",
+        "script": [
+          "http://127.0.0.1:4174/assets/index-CE2scUa0.js"
+        ],
+        "text": "/ 创造\n继续你的旅程\n你的世界\n00\n这里，等着你的第一个世界\n\n为世界取个名字，\n从一片未经探索的原野开始。\n\n开启第一场冒险\n旅程会自动保存在此浏览器\n导入世界\n每一块，都有新的可能。\n耕作与牧场\n操作指南\n把这片世界带到桌面\n离线资源已准备好\n安装应用",
+        "title": "我的世界 · 方块纪行"
+      }
+    }
+  },
+  "offlineWorld": {
+    "result": {
+      "type": "object",
+      "value": {
+        "canvas": true,
+        "controller": true,
+        "fullscreen": true,
+        "hud": "原野漫游\n第 1 天/07:43\nF3\n空手\n1\n2\n3\n4\n5\n6\n7\n8\n9\n滚轮\n切换物品\nE\n背包与合成",
+        "online": false,
+        "pointer": true,
+        "script": [
+          "http://127.0.0.1:4174/assets/index-CE2scUa0.js"
+        ]
+      }
+    }
+  }
+}

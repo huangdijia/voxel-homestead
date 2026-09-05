@@ -33,41 +33,104 @@ recipe("door", ["PP", "PP", "PP"], { P: "planks" }, "door", 3);
 recipe("ladder", ["S S", "SSS", "S S"], { S: "stick" }, "ladder", 3);
 recipe("slab", ["PPP"], { P: "planks" }, "slab", 6);
 recipe("bed", ["WWW", "PPP"], { W: "wool", P: "planks" }, "bed");
-for (const material of ["wood", "stone", "iron"]) {
-  const keys = {
-    M:
-      material === "wood"
-        ? "planks"
-        : material === "stone"
-          ? "cobblestone"
-          : "iron_ingot",
-    S: "stick",
-  };
+for (const [material, ingredient, suffix] of [
+  ["wood", "planks", ""],
+  ["stone", "cobblestone", ""],
+  ["iron", "iron_ingot", ""],
+  ["gold", "gold_ingot", ""],
+  ["diamond", "diamond", ""],
+  ["stone", "cobbled_deepslate", "_deepslate"],
+] as const) {
+  const keys = { M: ingredient, S: "stick" };
   recipe(
-    `${material}_pickaxe`,
+    `${material}_pickaxe${suffix}`,
     ["MMM", " S ", " S "],
     keys,
     `${material}_pickaxe`,
   );
-  recipe(`${material}_axe`, ["MM", "MS", " S"], keys, `${material}_axe`);
-  recipe(`${material}_shovel`, ["M", "S", "S"], keys, `${material}_shovel`);
-  recipe(`${material}_sword`, ["M", "M", "S"], keys, `${material}_sword`);
-  recipe(`${material}_hoe`, ["MM", " S", " S"], keys, `${material}_hoe`);
+  recipe(
+    `${material}_axe${suffix}`,
+    ["MM", "MS", " S"],
+    keys,
+    `${material}_axe`,
+  );
+  recipe(
+    `${material}_shovel${suffix}`,
+    ["M", "S", "S"],
+    keys,
+    `${material}_shovel`,
+  );
+  recipe(
+    `${material}_sword${suffix}`,
+    ["M", "M", "S"],
+    keys,
+    `${material}_sword`,
+  );
+  recipe(
+    `${material}_hoe${suffix}`,
+    ["MM", " S", " S"],
+    keys,
+    `${material}_hoe`,
+  );
 }
-recipe("iron_helmet", ["III", "I I"], { I: "iron_ingot" }, "iron_helmet");
+for (const [material, ingredient] of [
+  ["iron", "iron_ingot"],
+  ["gold", "gold_ingot"],
+  ["diamond", "diamond"],
+] as const) {
+  const keys = { I: ingredient };
+  recipe(`${material}_helmet`, ["III", "I I"], keys, `${material}_helmet`);
+  recipe(
+    `${material}_chestplate`,
+    ["I I", "III", "III"],
+    keys,
+    `${material}_chestplate`,
+  );
+  recipe(
+    `${material}_leggings`,
+    ["III", "I I", "I I"],
+    keys,
+    `${material}_leggings`,
+  );
+  recipe(`${material}_boots`, ["I I", "I I"], keys, `${material}_boots`);
+}
 recipe(
-  "iron_chestplate",
-  ["I I", "III", "III"],
-  { I: "iron_ingot" },
-  "iron_chestplate",
+  "furnace_deepslate",
+  ["CCC", "C C", "CCC"],
+  { C: "cobbled_deepslate" },
+  "furnace",
 );
-recipe(
-  "iron_leggings",
-  ["III", "I I", "I I"],
-  { I: "iron_ingot" },
-  "iron_leggings",
-);
-recipe("iron_boots", ["I I", "I I"], { I: "iron_ingot" }, "iron_boots");
+for (const [block, material] of [
+  ["copper_block", "copper_ingot"],
+  ["gold_block", "gold_ingot"],
+  ["redstone_block", "redstone"],
+  ["lapis_block", "lapis_lazuli"],
+  ["diamond_block", "diamond"],
+  ["emerald_block", "emerald"],
+  ["iron_block", "iron_ingot"],
+  ["coal_block", "coal"],
+  ["raw_iron_block", "raw_iron"],
+  ["raw_copper_block", "raw_copper"],
+  ["raw_gold_block", "raw_gold"],
+] as const) {
+  recipe(block, ["MMM", "MMM", "MMM"], { M: material }, block);
+  recipe(`${block}_unpack`, ["B"], { B: block }, material, 9);
+}
+for (const metal of ["iron", "gold"] as const) {
+  recipe(
+    `${metal}_ingot_from_nuggets`,
+    ["NNN", "NNN", "NNN"],
+    { N: `${metal}_nugget` },
+    `${metal}_ingot`,
+  );
+  recipe(
+    `${metal}_nugget`,
+    ["I"],
+    { I: `${metal}_ingot` },
+    `${metal}_nugget`,
+    9,
+  );
+}
 
 recipe("bread", ["WWW"], { W: "wheat" }, "bread");
 recipe("bowl", ["P P", " P "], { P: "planks" }, "bowl", 4);
@@ -85,12 +148,27 @@ RECIPES.push({
 export const SMELTING: Record<string, { output: string; count: number }> = {
   potato: { output: "baked_potato", count: 1 },
   raw_iron: { output: "iron_ingot", count: 1 },
+  raw_copper: { output: "copper_ingot", count: 1 },
+  raw_gold: { output: "gold_ingot", count: 1 },
   log: { output: "charcoal", count: 1 },
   raw_pork: { output: "cooked_pork", count: 1 },
   raw_mutton: { output: "cooked_mutton", count: 1 },
   sand: { output: "glass", count: 1 },
   cobblestone: { output: "stone", count: 1 },
+  cobbled_deepslate: { output: "deepslate", count: 1 },
 };
+for (const [mineral, output] of [
+  ["coal", "coal"],
+  ["iron", "iron_ingot"],
+  ["copper", "copper_ingot"],
+  ["gold", "gold_ingot"],
+  ["redstone", "redstone"],
+  ["lapis", "lapis_lazuli"],
+  ["diamond", "diamond"],
+  ["emerald", "emerald"],
+] as const)
+  for (const prefix of ["", "deepslate_"])
+    SMELTING[`${prefix}${mineral}_ore`] = { output, count: 1 };
 export function recipeIngredients(
   recipe: RecipeDefinition,
 ): Record<string, number> {

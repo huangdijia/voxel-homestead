@@ -112,13 +112,97 @@ function treeAt(seed: string, x: number, y: number, z: number): number {
   return leaf ? 8 : 0;
 }
 
+interface MineralVein {
+  id: number;
+  x: number;
+  y: number;
+  z: number;
+  rx: number;
+  ry: number;
+  rz: number;
+}
+const mineralVeins = new Map<string, MineralVein | null>();
+const deepMinerals: Record<number, number> = {
+  84: 94,
+  85: 95,
+  86: 96,
+  87: 97,
+  88: 98,
+  89: 99,
+};
+
+/**
+ * Version 4 uses its own compact-world distribution, NOT Java's ore heights.
+ * Each five-cell grid box may contain an irregular ellipsoid. The grid is
+ * independent of sixteen-cell chunks, so veins cross chunk boundaries without
+ * depending on generation order, worker state, or the item registry.
+ */
+function mineralAt(
+  seed: string,
+  s: number,
+  x: number,
+  y: number,
+  z: number,
+): number {
+  const gx = Math.floor(x / 5),
+    gy = Math.floor(y / 5),
+    gz = Math.floor(z / 5);
+  const key = `${s}:${gx},${gy},${gz}`;
+  let vein = mineralVeins.get(key);
+  if (vein === undefined) {
+    const centerY = gy * 5 + 2;
+    const hill = surfaceHeight(seed, gx * 5 + 2, gz * 5 + 2) >= 33;
+    const deep = centerY <= 0;
+    // Absolute probabilities leave most boxes empty. Copper favors the shallow
+    // rock; diamond/gold/redstone favor the compressed deep band. Emerald is
+    // ten times as frequent below hills as beneath low terrain.
+    const choices: Array<[number, number]> = [
+      [84, centerY <= 37 ? (deep ? 0.014 : 0.08) : 0],
+      [85, centerY <= 17 ? (deep ? 0.045 : 0.02) : 0],
+      [86, centerY <= 12 ? (deep ? 0.075 : 0.03) : 0],
+      [87, centerY <= 22 ? (centerY >= -3 && centerY <= 12 ? 0.05 : 0.025) : 0],
+      [88, centerY <= 7 ? (deep ? 0.022 : 0.008) : 0],
+      [89, centerY <= 37 ? (hill ? 0.04 : 0.004) : 0],
+    ];
+    let pick = hash(s + 7309, gx, gy, gz),
+      id = 0;
+    for (const [candidate, probability] of choices) {
+      if (pick < probability) {
+        id = candidate;
+        break;
+      }
+      pick -= probability;
+    }
+    vein = id
+      ? {
+          id,
+          x: gx * 5 + 2 + (hash(s + 7311, gx, gy, gz) - 0.5) * 0.8,
+          y: centerY + (hash(s + 7313, gx, gy, gz) - 0.5) * 0.6,
+          z: gz * 5 + 2 + (hash(s + 7319, gx, gy, gz) - 0.5) * 0.8,
+          rx: 1.65 + hash(s + 7321, gx, gy, gz) * 0.7,
+          ry: 1.3 + hash(s + 7327, gx, gy, gz) * 0.6,
+          rz: 1.65 + hash(s + 7331, gx, gy, gz) * 0.7,
+        }
+      : null;
+    if (mineralVeins.size >= 16384) mineralVeins.clear();
+    mineralVeins.set(key, vein);
+  }
+  if (!vein) return 0;
+  const distance =
+    ((x - vein.x) / vein.rx) ** 2 +
+    ((y - vein.y) / vein.ry) ** 2 +
+    ((z - vein.z) / vein.rz) ** 2;
+  if (distance > 1 + (hash(s + 7333, x, y, z) - 0.5) * 0.25) return 0;
+  return y <= 0 ? deepMinerals[vein.id] : vein.id;
+}
+
 /** Deterministic terrain; trees never cover the safe spawn at (0, 0). */
 export function sampleBlock(
   seed: string,
   x: number,
   y: number,
   z: number,
-  generatorVersion: 1 | 2 | 3 = 1,
+  generatorVersion: 1 | 2 | 3 | 4 = 1,
 ): number {
   x = Math.floor(x);
   y = Math.floor(y);
@@ -166,8 +250,12 @@ export function sampleBlock(
     Math.floor(z / 3),
   );
   const speck = hash(s + 99, x, y, z);
-  if (cluster > 0.89 && speck > 0.24) return 9;
-  if (cluster > 0.78 && cluster < 0.85 && speck > 0.3) return 10;
+  if (cluster > 0.89 && speck > 0.24)
+    return generatorVersion >= 4 && y <= 0 ? 92 : 9;
+  if (cluster > 0.78 && cluster < 0.85 && speck > 0.3)
+    return generatorVersion >= 4 && y <= 0 ? 93 : 10;
   if (cluster > 0.72 && cluster < 0.75 && y < 14) return 5;
+  if (generatorVersion >= 4)
+    return mineralAt(seed, s, x, y, z) || (y <= 0 ? 90 : 3);
   return 3;
 }

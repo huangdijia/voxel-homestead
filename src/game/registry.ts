@@ -218,6 +218,61 @@ block(83, "oak_sapling", "橡树树苗", 8, {
   shape: "crop",
 });
 
+// Harvest tiers describe what a pickaxe can collect, independently of its speed.
+const minerals = [
+  ["coal", "煤", "coal", 1, 1, 1, 9],
+  ["iron", "铁", "raw_iron", 2, 1, 1, 10],
+  ["copper", "铜", "raw_copper", 2, 2, 5, 10],
+  ["gold", "金", "raw_gold", 3, 1, 1, 10],
+  ["redstone", "红石", "redstone", 3, 4, 5, 9],
+  ["lapis", "青金石", "lapis_lazuli", 2, 4, 9, 9],
+  ["diamond", "钻石", "diamond", 3, 1, 1, 10],
+  ["emerald", "绿宝石", "emerald", 3, 1, 1, 10],
+] as const;
+for (let index = 0; index < minerals.length; index++) {
+  const [key, name, drop, tier, minimum, maximum, texture] = minerals[index];
+  const ore = {
+    drop,
+    tier,
+    dropCount: [minimum, maximum] as const,
+    tool: "pickaxe" as const,
+  };
+  if (index >= 2)
+    block(82 + index, `${key}_ore`, `${name}矿石`, texture, {
+      ...ore,
+      hardness: 3,
+    });
+  block(92 + index, `deepslate_${key}_ore`, `深层${name}矿石`, texture, {
+    ...ore,
+    hardness: 4.5,
+  });
+}
+block(90, "deepslate", "深板岩", 3, {
+  hardness: 3,
+  drop: "cobbled_deepslate",
+  tool: "pickaxe",
+  tier: 1,
+});
+block(91, "cobbled_deepslate", "深板岩圆石", 12, {
+  hardness: 3.5,
+  tool: "pickaxe",
+  tier: 1,
+});
+for (const [id, key, name, tier, hardness] of [
+  [100, "copper_block", "铜块", 2, 3],
+  [101, "gold_block", "金块", 3, 3],
+  [102, "redstone_block", "红石块", 1, 5],
+  [103, "lapis_block", "青金石块", 2, 3],
+  [104, "diamond_block", "钻石块", 3, 5],
+  [105, "emerald_block", "绿宝石块", 3, 5],
+  [106, "iron_block", "铁块", 2, 5],
+  [107, "coal_block", "煤炭块", 1, 5],
+  [108, "raw_iron_block", "粗铁块", 2, 5],
+  [109, "raw_copper_block", "粗铜块", 2, 5],
+  [110, "raw_gold_block", "粗金块", 3, 5],
+] as const)
+  block(id, key, name, 15, { hardness, tool: "pickaxe", tier });
+
 export const ITEMS: Record<string, ItemDefinition> = {};
 for (const definition of Object.values(BLOCKS)) {
   if (
@@ -235,6 +290,7 @@ for (const definition of Object.values(BLOCKS)) {
     maxStack: 64,
     block: definition.id,
     texture: definition.topTexture ?? definition.texture,
+    ...(definition.id >= 84 ? { introducedVersion: 4 as const } : {}),
   };
 }
 Object.assign(ITEMS.leaves, { block: 82 });
@@ -249,6 +305,7 @@ Object.assign(ITEMS.chest, { fuel: 15 });
 Object.assign(ITEMS.door, { fuel: 10 });
 Object.assign(ITEMS.ladder, { fuel: 15 });
 Object.assign(ITEMS.bed, { maxStack: 1 });
+Object.assign(ITEMS.coal_block, { fuel: 800 });
 function item(
   id: string,
   name: string,
@@ -269,6 +326,19 @@ item("coal", "煤炭", "#333842", { fuel: 80 });
 item("charcoal", "木炭", "#51473a", { fuel: 80 });
 item("raw_iron", "粗铁", "#c89976");
 item("iron_ingot", "铁锭", "#c4d0d5");
+for (const [id, name, color] of [
+  ["raw_copper", "粗铜", "#c17a52"],
+  ["raw_gold", "粗金", "#d4a844"],
+  ["copper_ingot", "铜锭", "#da875c"],
+  ["gold_ingot", "金锭", "#f4ce53"],
+  ["redstone", "红石粉", "#c43436"],
+  ["lapis_lazuli", "青金石", "#416bc8"],
+  ["diamond", "钻石", "#61e1d9"],
+  ["emerald", "绿宝石", "#42c975"],
+  ["gold_nugget", "金粒", "#e6bf4c"],
+  ["iron_nugget", "铁粒", "#bfc9cc"],
+] as const)
+  item(id, name, color, { introducedVersion: 4 });
 item("raw_pork", "生猪肉", "#ee9d9e", { category: "food", food: 3 });
 item("cooked_pork", "熟猪排", "#b97747", { category: "food", food: 8 });
 item("raw_mutton", "生羊肉", "#c44c56", { category: "food", food: 2 });
@@ -298,10 +368,12 @@ item("shears", "剪刀", "#bdc5c2", {
 });
 item("bucket", "铁桶", "#b8c6ce", { category: "tools", maxStack: 16 });
 item("water_bucket", "水桶", "#5898ce", { category: "tools", maxStack: 1 });
-for (const [material, title, tier, maxDurability, color] of [
-  ["wood", "木", 1, 59, "#ad7d45"],
-  ["stone", "石", 2, 131, "#858b8d"],
-  ["iron", "铁", 3, 250, "#d4dfe3"],
+for (const [material, title, tier, miningSpeed, maxDurability, color] of [
+  ["wood", "木", 1, 2, 59, "#ad7d45"],
+  ["stone", "石", 2, 4, 131, "#858b8d"],
+  ["iron", "铁", 3, 6, 250, "#d4dfe3"],
+  ["gold", "金", 1, 12, 32, "#f4ce53"],
+  ["diamond", "钻石", 4, 8, 1561, "#61e1d9"],
 ] as const) {
   for (const [tool, name, baseDamage] of [
     ["pickaxe", "镐", 1],
@@ -315,25 +387,39 @@ for (const [material, title, tier, maxDurability, color] of [
       maxStack: 1,
       tool,
       tier,
+      miningSpeed,
       maxDurability,
       damage: baseDamage + tier,
       fuel: material === "wood" ? 10 : undefined,
+      ...(["gold", "diamond"].includes(material)
+        ? { introducedVersion: 4 as const }
+        : {}),
     });
   }
 }
-for (const [id, name, armorSlot, armorPoints, maxDurability] of [
-  ["helmet", "铁头盔", "head", 2, 165],
-  ["chestplate", "铁胸甲", "chest", 6, 240],
-  ["leggings", "铁护腿", "legs", 5, 225],
-  ["boots", "铁靴子", "feet", 2, 195],
-] as const)
-  item(`iron_${id}`, name, "#c4d0d5", {
-    category: "tools",
-    maxStack: 1,
-    armorSlot,
-    armorPoints,
-    maxDurability,
-  });
+for (const [material, title, color, toughness, protection, durability] of [
+  ["iron", "铁", "#c4d0d5", 0, [2, 6, 5, 2], [165, 240, 225, 195]],
+  ["gold", "金", "#f4ce53", 0, [2, 5, 3, 1], [77, 112, 105, 91]],
+  ["diamond", "钻石", "#61e1d9", 2, [3, 8, 6, 3], [363, 528, 495, 429]],
+] as const) {
+  const pieces = [
+    ["helmet", "头盔", "head"],
+    ["chestplate", "胸甲", "chest"],
+    ["leggings", "护腿", "legs"],
+    ["boots", "靴子", "feet"],
+  ] as const;
+  pieces.forEach(([id, name, armorSlot], index) =>
+    item(`${material}_${id}`, `${title}${name}`, color, {
+      category: "tools",
+      maxStack: 1,
+      armorSlot,
+      armorPoints: protection[index],
+      maxDurability: durability[index],
+      ...(toughness ? { armorToughness: toughness } : {}),
+      ...(material !== "iron" ? { introducedVersion: 4 as const } : {}),
+    }),
+  );
+}
 
 export const ENTITIES: Record<EntityKind, EntityDefinition> = {
   pig: {

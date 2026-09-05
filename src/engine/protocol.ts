@@ -2,7 +2,7 @@ import type { BlockChange } from "../game/types";
 export interface ChunkRequest {
   worldId: string;
   seed: string;
-  generatorVersion?: 1 | 2 | 3;
+  generatorVersion?: 1 | 2 | 3 | 4;
   key: string;
   cx: number;
   cy: number;

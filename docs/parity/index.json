@@ -14,12 +14,12 @@
       "bytes": 3438
     },
     "src/game/recipes.ts": {
-      "sha256": "f9bda2a0384fd8bc7ed71473ab18469a9d6d0f558c9733b5f0fab17f7405f909",
-      "bytes": 6898
+      "sha256": "0ae9d48384e7946de8a2b0c449895655252bcdf3fec6e2a0cfab2f40509e8e29",
+      "bytes": 8748
     },
     "src/game/registry.ts": {
-      "sha256": "a16db45fea9fa22fe0e1cf78ae2b6ecc48d890a0d6fc678554e144347b4eba86",
-      "bytes": 9888
+      "sha256": "54039e163c29decaaf8ade016b5858a4863552f2c12a9dc2096301757189cd6a",
+      "bytes": 13035
     }
   },
   "totals": {
@@ -46,8 +46,8 @@
         "M3": 199
       },
       "implementationCounts": {
-        "not-mapped": 1026,
-        "partial-unverified": 34
+        "not-mapped": 999,
+        "partial-unverified": 61
       },
       "acceptancePassed": 0
     },
@@ -62,8 +62,8 @@
         "M3": 221
       },
       "implementationCounts": {
-        "not-mapped": 1261,
-        "partial-unverified": 72
+        "not-mapped": 1206,
+        "partial-unverified": 127
       },
       "acceptancePassed": 0
     },
@@ -204,9 +204,9 @@
         "M3": 208
       },
       "implementationCounts": {
-        "definition-match-unverified": 35,
-        "not-mapped": 1310,
-        "output-candidate-unverified": 125
+        "definition-match-unverified": 72,
+        "not-mapped": 1265,
+        "output-candidate-unverified": 133
       },
       "acceptancePassed": 0
     }

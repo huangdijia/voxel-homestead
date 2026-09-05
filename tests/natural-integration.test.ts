@@ -54,9 +54,9 @@ function aim(sim: Simulation, point: Vec3) {
 }
 afterEach(() => vi.unstubAllGlobals());
 describe("natural world integration and checkpoints", () => {
-  it("starts version 3 with valid detached natural state", () => {
+  it("starts the current version with valid detached natural state", () => {
     const save = createNewSave("新世界", "version-three", "survival");
-    expect(save.manifest.generatorVersion).toBe(3);
+    expect(save.manifest.generatorVersion).toBe(4);
     expect(validateSave(save)).toEqual(save);
   });
   it("keeps old terrain generators unchanged while new deep caves contain lava", () => {

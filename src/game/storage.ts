@@ -85,13 +85,15 @@ function vector(value: unknown, path: string, integer = false): Vec3 {
     z: number(v.z, `${path}.z`, -30_000_000, 30_000_000, integer),
   };
 }
-function stack(value: unknown, path: string): Slot {
+function stack(value: unknown, path: string, saveVersion = 4): Slot {
   if (value === null) return null;
   const v = record(value, path);
   fields(v, ["id", "count", "durability"], path);
   const id = string(v.id, `${path}.id`);
   const item = ITEMS[id];
   if (!item || !Object.hasOwn(ITEMS, id)) return bad(`${path} 物品不存在`);
+  if ((item.introducedVersion ?? 1) > saveVersion)
+    return bad(`${path} 物品超出存档版本`);
   const result: ItemStack = {
     id,
     count: number(v.count, `${path}.count`, 1, item.maxStack, true),
@@ -108,11 +110,16 @@ function stack(value: unknown, path: string): Slot {
   } else if (item.maxDurability) result.durability = item.maxDurability;
   return result;
 }
-function slots(value: unknown, count: number, path: string): Slot[] {
+function slots(
+  value: unknown,
+  count: number,
+  path: string,
+  saveVersion = 4,
+): Slot[] {
   const values = array(value, path, count);
   if (values.length !== count) return bad(`${path} 必须有 ${count} 格`);
   return Array.from(values, (value, index) =>
-    stack(value, `${path}[${index}]`),
+    stack(value, `${path}[${index}]`, saveVersion),
   );
 }
 /** Validate before any database transaction and return a detached, known-schema value. */
@@ -152,8 +159,8 @@ export function validateSave(value: unknown): SaveData {
     "manifest",
   );
   if (
-    ![1, 2, 3].includes(manifest.version as number) ||
-    ![1, 2, 3].includes(manifest.generatorVersion as number)
+    ![1, 2, 3, 4].includes(manifest.version as number) ||
+    ![1, 2, 3, 4].includes(manifest.generatorVersion as number)
   )
     return bad("不支持此存档或地形生成器版本；原始文件未被修改");
   if (
@@ -173,8 +180,8 @@ export function validateSave(value: unknown): SaveData {
   if (manifest.mode !== "survival" && manifest.mode !== "creative")
     return bad("游戏模式无效");
   const validatedManifest: SaveManifest = {
-    version: manifest.version as 1 | 2 | 3,
-    generatorVersion: manifest.generatorVersion as 1 | 2 | 3,
+    version: manifest.version as 1 | 2 | 3 | 4,
+    generatorVersion: manifest.generatorVersion as 1 | 2 | 3 | 4,
     id: string(manifest.id, "manifest.id"),
     name: string(manifest.name, "manifest.name", 80),
     seed: string(manifest.seed, "manifest.seed", 128),
@@ -208,7 +215,11 @@ export function validateSave(value: unknown): SaveData {
   fields(armorInput, ["head", "chest", "legs", "feet"], "player.armor");
   const armor = {} as Record<ArmorSlot, Slot>;
   for (const key of ["head", "chest", "legs", "feet"] as const) {
-    armor[key] = stack(armorInput[key], `player.armor.${key}`);
+    armor[key] = stack(
+      armorInput[key],
+      `player.armor.${key}`,
+      validatedManifest.version,
+    );
     if (armor[key] && ITEMS[armor[key]!.id].armorSlot !== key)
       bad(`player.armor.${key} 装备位置错误`);
   }
@@ -228,7 +239,13 @@ export function validateSave(value: unknown): SaveData {
         change.id,
         "changes.id",
         0,
-        manifest.version === 1 ? 27 : manifest.version === 2 ? 67 : 65535,
+        manifest.version === 1
+          ? 27
+          : manifest.version === 2
+            ? 67
+            : manifest.version === 3
+              ? 83
+              : 65535,
         true,
       );
       if (!BLOCKS[id]) bad("未知方块");
@@ -257,7 +274,12 @@ export function validateSave(value: unknown): SaveData {
       if (occupied.get(key) !== 15) bad("箱子数据没有对应箱子方块");
       containers[key] = {
         kind: "chest",
-        slots: slots(container.slots, 27, "chest.slots"),
+        slots: slots(
+          container.slots,
+          27,
+          "chest.slots",
+          validatedManifest.version,
+        ),
       };
     } else if (container.kind === "furnace") {
       fields(
@@ -274,7 +296,12 @@ export function validateSave(value: unknown): SaveData {
       );
       containers[key] = {
         kind: "furnace",
-        slots: slots(container.slots, 3, "furnace.slots"),
+        slots: slots(
+          container.slots,
+          3,
+          "furnace.slots",
+          validatedManifest.version,
+        ),
         burn: number(container.burn, "furnace.burn", 0, burnTotal),
         burnTotal,
         progress: number(container.progress, "furnace.progress", 0, 1_000_000),
@@ -377,7 +404,7 @@ export function validateSave(value: unknown): SaveData {
     const id = string(drop.id, "drop.id");
     if (dropIds.has(id)) bad("掉落标识重复");
     dropIds.add(id);
-    const item = stack(drop.stack, "drop.stack");
+    const item = stack(drop.stack, "drop.stack", validatedManifest.version);
     if (!item) return bad("掉落物不能为空");
     return {
       id,
@@ -481,7 +508,7 @@ export function validateSave(value: unknown): SaveData {
     if (at.y < -16 || at.y > 95) bad(`${path} 高度无效`);
     return at;
   };
-  if (manifest.version === 3) {
+  if (Number(manifest.version) >= 3) {
     const input = record(data.fluids, "fluids");
     fields(input, ["version", "clock", "scanCursor", "tasks"], "fluids");
     if (input.version !== 1) bad("流体状态版本无效");
@@ -593,7 +620,12 @@ export function validateSave(value: unknown): SaveData {
       health: number(player.health, "player.health", 0, 20),
       hunger: number(player.hunger, "player.hunger", 0, 20),
       oxygen: number(player.oxygen, "player.oxygen", 0, 20),
-      inventory: slots(player.inventory, 36, "player.inventory"),
+      inventory: slots(
+        player.inventory,
+        36,
+        "player.inventory",
+        validatedManifest.version,
+      ),
       armor,
       selected: number(player.selected, "player.selected", 0, 8, true),
       spawn: vector(player.spawn, "player.spawn"),

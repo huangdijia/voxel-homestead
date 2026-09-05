@@ -18,6 +18,7 @@ import { Simulation, createNewSave } from "./Simulation";
 import { GameAudio } from "./audio";
 import { EntityRenderer } from "./EntityRenderer";
 import { BLOCKS, ITEMS } from "./registry";
+import { mineralAppearance } from "./mineral-appearance";
 import { downloadSave, saveWorld } from "./storage";
 import { CheckpointWriter } from "./checkpoint-writer";
 import { RECIPES } from "./recipes";
@@ -560,8 +561,7 @@ export class Game implements GameUIBridge {
       };
       const item = held ? ITEMS[held.id] : null;
       if (item?.tool) {
-        const metal =
-          item.tier === 3 ? 0xd1d5ce : item.tier === 2 ? 0x8e999d : 0xb9945a;
+        const metal = new THREE.Color(item.color ?? "#b9945a").getHex();
         add(0x997247, 0, 0, 0, 0.055, 0.39, 0.055);
         if (item.tool === "sword") add(metal, 0, 0.29, 0, 0.08, 0.34, 0.035);
         else if (item.tool === "pickaxe")
@@ -574,9 +574,11 @@ export class Game implements GameUIBridge {
         } else add(metal, 0, 0.22, 0, 0.14, 0.17, 0.055);
         this.hand.rotation.z = -0.4;
       } else if (item?.block !== undefined) {
-        const block = BLOCKS[item.block];
+        const block = BLOCKS[item.block],
+          mineral = mineralAppearance(item.block);
         const mat = new THREE.MeshLambertMaterial({
-          map: atlasTile(block?.texture ?? 0),
+          map: atlasTile(mineral?.tile ?? block?.texture ?? 0),
+          color: mineral ? new THREE.Color(...mineral.base) : 0xffffff,
           depthTest: false,
         });
         this.handMaterials.push(mat);
@@ -584,6 +586,123 @@ export class Game implements GameUIBridge {
         mesh.scale.setScalar(0.25);
         mesh.renderOrder = 100;
         this.hand.add(mesh);
+        if (mineral) {
+          // One additional mesh for all crystal details, sharing the same atlas
+          // and palette as terrain. Single-sided quads cannot show back-face
+          // grains through the block even though the hand ignores world depth.
+          const positions: number[] = [],
+            normals: number[] = [],
+            uvs: number[] = [],
+            colors: number[] = [],
+            indices: number[] = [];
+          const source = this.handGeometry.getAttribute("position"),
+            sourceNormals = this.handGeometry.getAttribute("normal"),
+            sourceIndices = this.handGeometry.index!;
+          const patch = (
+            face: number,
+            u: number,
+            v: number,
+            width: number,
+            height: number,
+            tint: number[],
+            lift = 0.0015,
+          ) => {
+            const first = face * 4,
+              base = positions.length / 3;
+            const p0 = new THREE.Vector3().fromBufferAttribute(source, first),
+              alongU = new THREE.Vector3()
+                .fromBufferAttribute(source, first + 1)
+                .sub(p0),
+              alongV = new THREE.Vector3()
+                .fromBufferAttribute(source, first + 2)
+                .sub(p0),
+              normal = new THREE.Vector3().fromBufferAttribute(
+                sourceNormals,
+                first,
+              );
+            for (const [pu, pv] of [
+              [u, v],
+              [u + width, v],
+              [u, v + height],
+              [u + width, v + height],
+            ]) {
+              const point = p0
+                .clone()
+                .addScaledVector(alongU, pu)
+                .addScaledVector(alongV, pv)
+                .addScaledVector(normal, lift);
+              positions.push(point.x, point.y, point.z);
+              normals.push(normal.x, normal.y, normal.z);
+              uvs.push(pu, 1 - pv);
+              colors.push(...tint);
+            }
+            for (let index = face * 6; index < face * 6 + 6; index++)
+              indices.push(base + sourceIndices.getX(index) - first);
+          };
+          for (let face = 0; face < 6; face++) {
+            if (mineral.kind === "ore" || mineral.kind === "raw") {
+              for (const [u, v, w, h] of mineral.kind === "raw"
+                ? [
+                    [0.05, 0.08, 0.39, 0.31],
+                    [0.53, 0.14, 0.39, 0.4],
+                    [0.19, 0.52, 0.34, 0.39],
+                    [0.65, 0.67, 0.26, 0.26],
+                  ]
+                : [
+                    [0.14, 0.16, 0.18, 0.12],
+                    [0.58, 0.3, 0.18, 0.21],
+                    [0.31, 0.64, 0.26, 0.12],
+                    [0.73, 0.73, 0.1, 0.12],
+                  ]) {
+                patch(face, u, v, w, h, mineral.grain);
+                patch(
+                  face,
+                  u + w * 0.18,
+                  v + h * 0.58,
+                  w * 0.6,
+                  h * 0.42,
+                  mineral.highlight,
+                  0.0025,
+                );
+              }
+            } else if (mineral.kind === "slate") {
+              patch(face, 0, 0.25, 1, 0.055, mineral.grain);
+              patch(face, 0.22, 0.69, 0.78, 0.055, mineral.grain);
+            } else {
+              patch(face, 0.08, 0.08, 0.84, 0.84, mineral.grain);
+              patch(face, 0.08, 0.84, 0.84, 0.08, mineral.highlight, 0.0025);
+              patch(face, 0.08, 0.15, 0.07, 0.69, mineral.highlight, 0.0025);
+              patch(face, 0.66, 0.22, 0.14, 0.09, mineral.highlight, 0.0025);
+            }
+          }
+          const geometry = new THREE.BufferGeometry();
+          geometry.setAttribute(
+            "position",
+            new THREE.Float32BufferAttribute(positions, 3),
+          );
+          geometry.setAttribute(
+            "normal",
+            new THREE.Float32BufferAttribute(normals, 3),
+          );
+          geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+          geometry.setAttribute(
+            "color",
+            new THREE.Float32BufferAttribute(colors, 3),
+          );
+          geometry.setIndex(indices);
+          const details = new THREE.MeshLambertMaterial({
+            map: atlasTile(15),
+            vertexColors: true,
+            depthTest: false,
+          });
+          // Both item switches and Game.dispose already dispose handMaterials.
+          details.addEventListener("dispose", () => geometry.dispose());
+          this.handMaterials.push(details);
+          const crystals = new THREE.Mesh(geometry, details);
+          crystals.scale.setScalar(0.25);
+          crystals.renderOrder = 101;
+          this.hand.add(crystals);
+        }
         this.hand.rotation.set(0.1, -0.5, 0.1);
       } else if (item) {
         add(

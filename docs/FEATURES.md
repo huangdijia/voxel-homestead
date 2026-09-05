@@ -52,7 +52,7 @@
 | M1-SETTINGS-01 | M1 | 视距、音量、灵敏度、视野、画质，本机设置保存；鼠标锁定失败提示 | 已实现／待浏览器全面验收 | [设置截图](screenshots/ui-settings.png)、[锁定失败提示截图](screenshots/ui-pause.png)；实现见 `App.tsx` 与 `Game.ts`，暂无专用设置持久化端到端测试 | 调整各设置并重开应用，核对渲染与交互效果；IAB 生产版已实测锁定失败后启动拖动视角，并开关背包、暂停／保存；其他设置效果及失焦恢复仍按浏览器逐项验收。 |
 | M1-PERF-01 | M1 | 帧率／区块状态采集、有界区块任务与检查点写入 | 已实现／Chrome 指定场景通过 | [engine-world.test.ts](../tests/engine-world.test.ts)：`keeps a bounded loaded set across a simulated 15-minute walk with all jobs completing`；[engine-benchmark.test.ts](../tests/engine-benchmark.test.ts)：可选 CPU 基准 `measures 676 streamed chunks and repeated nearby edits`（无渲染器） | [Chrome 900 秒实测](browser-performance.json)：本机 M1／16GB、1440×900、DPR 1、中等画质、视距 6，平均 59.99887 FPS、p95 18.2 ms，满足 ≥55 FPS／≤33 ms；返回后区块／几何体／贴图数量稳定。资源约每 15 秒采样，范围不等于绝对峰值；自动飞行不替代手动控制或其他浏览器验收。 |
 
-M1 基线注册表曾包含 28 个方块状态、48 个物品定义、27 个合成配方、6 个熔炉配方和 4 种生物；这是首期范围记录，不是当前总量。M2 农牧增量加入干湿耕地、28 个作物生长状态、草丛及 9 个堆肥桶状态，并增加种植、食物和农具定义；本轮继续加入流体状态、黑曜石、永久叶、橡树苗、苹果与熔岩桶。具体当前条目以 `src/game/registry.ts`、`src/game/recipes.ts` 及 [内容审计基线](parity/README.md) 为准。
+M1 基线注册表曾包含 28 个方块状态、48 个物品定义、27 个合成配方、6 个熔炉配方和 4 种生物；这是首期范围记录，不是当前总量。M2 农牧增量加入干湿耕地、28 个作物生长状态、草丛及 9 个堆肥桶状态，并增加种植、食物和农具定义；自然更新增量加入流体状态、黑曜石、永久叶、橡树苗、苹果与熔岩桶；矿物增量再增加 27 个方块、55 个物品、50 个配方和 19 条熔炼规则，见 [矿物与装备说明](MINERALS.md)。具体当前条目以 `src/game/registry.ts`、`src/game/recipes.ts` 及 [内容审计基线](parity/README.md) 为准。
 
 ## 当前近似与边界
 
@@ -63,7 +63,7 @@ M1 基线注册表曾包含 28 个方块状态、48 个物品定义、27 个合�
 - 光照是天空竖直遮挡加近处点光，不是原版完整方块光传播；方块光强估计可能穿墙。天气仍未实现。
 - 饥饿与护甲遵循首期简化规则，尚未包含饱和度、所有伤害来源与全部数值。
 - 只支持生存普通难度和创造；先支持电脑键鼠，移动端展示菜单但不提供触控游玩。
-- 当前写入存档版本 3，读取兼容版本 1／2／3；首次升级保存与保留对应版本旧检查点在同一 IndexedDB 事务内完成。旧世界保留生成器 1／2，新世界使用会在深层洞穴生成熔岩的生成器 3；保存格式升级不会为旧生成器新增天然熔岩，未知未来版本被拒绝。流体队列、自然更新队列与暂存下落方块一并保存。世界列表提供升级前备份导出；上一轮版本 1→2 的 Chrome 升级、下载及恢复证据见 [M2 验证](M2-VALIDATION.md)，本轮版本 3 的规则与验证范围见 [自然更新说明](NATURAL-UPDATES.md)。
+- 当前写入存档版本 4，读取兼容版本 1／2／3／4。首次升级保存与保留对应版本旧检查点在同一 IndexedDB 事务内完成，旧世界保留生成器 1／2／3，新世界使用生成器 4；旧生成器不会因保存格式升级而新增天然矿物。流体与自然队列仍完整保存。历史自然更新证据见 [自然更新说明](NATURAL-UPDATES.md)，矿物增量与版本 3→4 验证见 [矿物与装备说明](MINERALS.md)。
 
 ## M2：完整主世界生存
 
@@ -80,6 +80,14 @@ M1 基线注册表曾包含 28 个方块状态、48 个物品定义、27 个合�
 | M2-HUSBANDRY-02 | M2 | 成年白羊剪毛、重复剪毛保护、草地长毛、幼体不掉成年资源 | 已实现／待浏览器全面验收 | [agriculture-integration.test.ts](../tests/agriculture-integration.test.ts)：`shears only once, regrows wool after grazing, and drops no adult resources from babies`；[agriculture-visuals.test.ts](../tests/agriculture-visuals.test.ts)：羊毛层切换、幼体模型与材料资源复用 | 用剪刀获得 1–3 个羊毛并消耗一次耐久；剪过毛的羊／幼羊不能重复产出，累计在草方块吃草约 30 秒后恢复。染色羊和其他剪刀用途待实现。 |
 | M2-SAVE-01 | M2 | 保存农牧状态及流体／自然更新调度；版本 1／2→3 原子备份与导入导出 | 已实现／待浏览器全面验收 | [agriculture-storage.test.ts](../tests/agriculture-storage.test.ts)：农业数据、历史版本备份与导入导出；[farming.test.ts](../tests/farming.test.ts)：生长调度与随机状态；[agriculture-audit.test.ts](../tests/agriculture-audit.test.ts)：60 Hz 快照校验、最长世界名备份；[natural-integration.test.ts](../tests/natural-integration.test.ts)：版本 3 调度状态与迁移 | 在作物生长、堆肥熟成、幼崽出生、刚剪毛和流体传播中保存重载，核对数量、剩余时间及待处理队列；确认生成器 1／2 保持、对应旧版本备份和故障回滚。本轮 3 次检查点比较已一致，页面重载与截图已完成，版本 2→3 保留生成器 2 且原始备份完全一致；替身事务测试不能替代浏览器实际故障验收。 |
 | M2-VISUAL-01 | M2 | 各阶段立体细茎／叶／麦穗，干湿沟垄，堆肥填料，幼体／剪毛羊／爱心及农牧像素图标 | 已实现／待浏览器全面验收 | [agriculture-visuals.test.ts](../tests/agriculture-visuals.test.ts)：全部植物模型非退化／范围有界、可选取而无碰撞、cutout 层、15/16 耕地、0.875 堆肥桶、资源复用和 20 项独立 SVG；[farming.test.ts](../tests/farming.test.ts)：`bounded scheduling and saved deterministic state` | 真实世界与背包辨认四类成熟作物、所有阶段、幼体和剪毛状态；密集农田和养殖场需新增实际帧率／资源检查，不复用 M1 的 900 秒结论。 |
+
+### 矿物增量
+
+| ID | 阶段 | 本轮局部实现 | 状态与验收范围 |
+| --- | --- | --- | --- |
+| M2-MINERALS-01 | M2 | 铜、金、红石、青金石、钻石、绿宝石、深层矿石与深板岩 | 生成器 4 的独立压缩分布；种子、负坐标、边界与旧生成器一致性见 [矿物记录](MINERALS.md)。不关闭完整高度、群系与矿脉分布域。 |
+| M2-EQUIPMENT-01 | M2 | 金／钻石工具与护甲，独立挖掘速度、采集等级和韧性 | 天然钻石→钻石镐→黑曜石以及配方／耐久／死亡拾回由专属测试与浏览器记录验收；附魔、攻击边缘规则、全部装备材质仍待完成。 |
+| M2-MATERIALS-01 | M2 | 粗铜／粗金熔炼、材料压块拆回、粒锭互换 | 校验材料扣除、满背包失败、熔炼中保存和恢复；红石块没有电路行为，铜没有氧化，绿宝石没有交易功能。 |
 
 ### M2 尚未完成的功能域
 

@@ -1,3 +1,4 @@
+import { canHarvest, miningDuration, damageAfterArmor } from "./equipment";
 import { FluidSystem } from "./fluids";
 import { NaturalUpdatesSystem } from "./natural-updates";
 import { fluidSurfaceHeights } from "../engine/shapes";
@@ -63,8 +64,8 @@ export function createNewSave(
   const spawn = { x: 0.5, y: surfaceHeight(worldSeed, 0, 0) + 1.05, z: 0.5 };
   return {
     manifest: {
-      version: 3,
-      generatorVersion: 3,
+      version: 4,
+      generatorVersion: 4,
       id: uid(),
       name: name.trim() || "新的世界",
       seed: worldSeed,
@@ -484,14 +485,26 @@ export class Simulation {
     }
   }
   damage(amount: number, reason = "attack") {
-    if (this.creative || this.player.dead || this.hurtCooldown > 0) return;
+    if (
+      !Number.isFinite(amount) ||
+      amount <= 0 ||
+      this.creative ||
+      this.player.dead ||
+      this.hurtCooldown > 0
+    )
+      return;
     const armor = Object.values(this.player.armor).reduce(
       (v, s) => v + (s ? ITEMS[s.id]?.armorPoints || 0 : 0),
       0,
     );
+    const toughness = Object.values(this.player.armor).reduce(
+      (sum, stack) =>
+        sum + (stack ? (ITEMS[stack.id]?.armorToughness ?? 0) : 0),
+      0,
+    );
     const protectedHit = ["attack", "explosion", "lava"].includes(reason);
     const dealt = protectedHit
-      ? amount * (1 - Math.min(0.8, armor * 0.04))
+      ? damageAfterArmor(amount, armor, toughness)
       : amount;
     this.player.health = Math.max(0, this.player.health - dealt);
     this.hurtCooldown = 0.45;
@@ -501,7 +514,9 @@ export class Simulation {
       for (const key of armorKeys) {
         const s = this.player.armor[key];
         if (s) {
-          s.durability = (s.durability ?? ITEMS[s.id].maxDurability ?? 100) - 1;
+          s.durability =
+            (s.durability ?? ITEMS[s.id].maxDurability ?? 100) -
+            Math.max(1, Math.floor(amount / 4));
           if (s.durability <= 0) this.player.armor[key] = null;
         }
       }
@@ -674,17 +689,7 @@ export class Simulation {
       this.mining = 0;
     }
     const tool = this.held ? ITEMS[this.held.id] : null;
-    const efficient = def.tool && tool?.tool === def.tool;
-    const speed = efficient
-      ? tool.tier === 3
-        ? 6
-        : tool.tier === 2
-          ? 4
-          : 2
-      : 1;
-    const duration = this.creative
-      ? 0.14
-      : Math.max(0.15, (def.hardness * (efficient ? 1 : 1.5)) / speed);
+    const duration = this.creative ? 0.14 : miningDuration(def, tool);
     const old = this.mining;
     this.mining = Math.min(1, this.mining + dt / duration);
     if (Math.floor(this.mining * 4) > Math.floor(old * 4)) this.sound("dig");
@@ -718,8 +723,7 @@ export class Simulation {
       return;
     const def = BLOCKS[id],
       tool = this.held ? ITEMS[this.held.id] : null;
-    const eligible =
-      !def?.tier || (tool?.tool === "pickaxe" && (tool.tier ?? 0) >= def.tier);
+    const eligible = canHarvest(def, tool);
     let drop = def?.drop;
     if (id === 3) drop = "cobblestone";
     if (id === 9) drop = "coal";
@@ -775,11 +779,18 @@ export class Simulation {
         if (this.farming.nextRandom() < 0.005)
           this.spawnDrop({ id: "apple", count: 1 }, p);
       }
-    } else if (drop && !this.creative && (exploded || eligible))
+    } else if (drop && !this.creative && (exploded || eligible)) {
+      const range = def.dropCount ?? [1, 1];
+      const count =
+        range[0] +
+        (range[0] === range[1]
+          ? 0
+          : Math.floor(this.farming.nextRandom() * (range[1] - range[0] + 1)));
       this.spawnDrop(
-        { id: drop, count: 1 },
+        { id: drop, count },
         { x: p.x + 0.5, y: p.y + 0.1, z: p.z + 0.5 },
       );
+    }
     if (!exploded) {
       if (wear) this.wearTool();
       this.exhaustion += 0.025;
@@ -1784,7 +1795,7 @@ export class Simulation {
           });
       }
     return {
-      manifest: { ...this.manifest, version: 3, updatedAt: Date.now() },
+      manifest: { ...this.manifest, version: 4, updatedAt: Date.now() },
       player: p,
       time: this.time,
       changes: this.world.getChanges(),

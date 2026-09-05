@@ -58,8 +58,8 @@ export type ContainerState =
       progress: number;
     };
 export interface SaveManifest {
-  version: 1 | 2 | 3;
-  generatorVersion: 1 | 2 | 3;
+  version: 1 | 2 | 3 | 4;
+  generatorVersion: 1 | 2 | 3 | 4;
   id: string;
   name: string;
   seed: string;
@@ -99,12 +99,14 @@ export interface BlockDefinition {
   topTexture?: number;
   bottomTexture?: number;
   drop?: string;
+  dropCount?: readonly [number, number];
   tool?: "pickaxe" | "axe" | "shovel";
   tier?: number;
   shape?:
     "cube" | "slab" | "door" | "ladder" | "torch" | "bed" | "crop" | "farmland";
 }
 export interface ItemDefinition {
+  introducedVersion?: 4;
   id: string;
   name: string;
   category: "building" | "tools" | "materials" | "food";
@@ -115,6 +117,7 @@ export interface ItemDefinition {
   tool?: "pickaxe" | "axe" | "shovel" | "sword" | "hoe";
   tier?: number;
   maxDurability?: number;
+  miningSpeed?: number;
   damage?: number;
   food?: number;
   foodRemainder?: string;
@@ -122,6 +125,7 @@ export interface ItemDefinition {
   fuelRemainder?: string;
   armorSlot?: ArmorSlot;
   armorPoints?: number;
+  armorToughness?: number;
 }
 export interface RecipeDefinition {
   id: string;
