@@ -9,21 +9,29 @@
   "generatedBy": "node scripts/build-parity-catalog.mjs",
   "deterministic": true,
   "localSourceSnapshot": {
+    "src/engine/world-height.ts": {
+      "sha256": "29889a768a391c36176abdb3df70b30885ef03eafed2d7d98773f76f56b19184",
+      "bytes": 266
+    },
     "src/game/enchantments.ts": {
-      "sha256": "39eed1f86b8929f85782b9cf0f13ed94ffbebabba2ab46d94074bea746535049",
-      "bytes": 7584
+      "sha256": "677248979328a6324071b9ea32fdb3489d76326f7030deab132b16d6af29d99f",
+      "bytes": 8096
     },
     "src/game/inventory.ts": {
-      "sha256": "316ff3be2390b976b8ef27386cfa2e281e5525895fc0563130b8a6aa59972e11",
-      "bytes": 3759
+      "sha256": "5a6659a5f804bf85652adb1e620c2834d0f4704178d6fc461ee8e4f7ab58fb51",
+      "bytes": 3842
     },
     "src/game/recipes.ts": {
-      "sha256": "dbbb310170219b1b61763b84e167f515a9fe8d19405928c0ee1b69aaa16da54a",
-      "bytes": 9227
+      "sha256": "9e64bcd0773e5e26b2432f61c3a4608eb22e04e7dad81aabacde1129ea59d98c",
+      "bytes": 9498
     },
     "src/game/registry.ts": {
-      "sha256": "2c08f7650343da43adb3a6370ed04049d295b8428e8bf215e34ef79b8f5f3bb2",
-      "bytes": 14274
+      "sha256": "2b945199824201a47e2a713002cab4f43347c870222d5de7c243664f0776491d",
+      "bytes": 15737
+    },
+    "src/game/types.ts": {
+      "sha256": "5256ee50e85fdad691a674ec7e9d62ac128ed2836a0701a451a6f702bc8182f3",
+      "bytes": 7244
     }
   },
   "totals": {
@@ -34,9 +42,9 @@
   },
   "behaviorBacklog": {
     "file": "behavior-cases.json",
-    "count": 43,
+    "count": 48,
     "acceptedCases": 0,
-    "sourceSha256": "9ed9594473e9000b19e9d4dfeb576d65b30c6dd392e9e9d44701456ff1c9f0c9"
+    "sourceSha256": "9329135eb6087b26d37e864f50343cf4fedf9263fe10a4fcd9e94095cbb8487f"
   },
   "domains": {
     "blocks": {
@@ -50,8 +58,8 @@
         "M3": 197
       },
       "implementationCounts": {
-        "not-mapped": 996,
-        "partial-unverified": 64
+        "not-mapped": 991,
+        "partial-unverified": 69
       },
       "acceptancePassed": 0
     },
@@ -66,8 +74,8 @@
         "M3": 219
       },
       "implementationCounts": {
-        "not-mapped": 1198,
-        "partial-unverified": 135
+        "not-mapped": 1192,
+        "partial-unverified": 141
       },
       "acceptancePassed": 0
     },
@@ -209,9 +217,9 @@
         "M3": 204
       },
       "implementationCounts": {
-        "definition-match-unverified": 76,
-        "not-mapped": 1251,
-        "output-candidate-unverified": 143
+        "definition-match-unverified": 79,
+        "not-mapped": 1238,
+        "output-candidate-unverified": 153
       },
       "acceptancePassed": 0
     }

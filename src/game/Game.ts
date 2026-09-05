@@ -2,6 +2,7 @@ import * as THREE from "three";
 import type {
   ContainerState,
   EnchantingView,
+  WorkshopView,
   GameCommand,
   GameSnapshot,
   GameUIBridge,
@@ -288,13 +289,23 @@ export class Game implements GameUIBridge {
     this.publish();
   }
   private keyDown = (e: KeyboardEvent) => {
-    if ((e.target as HTMLElement)?.matches("input,textarea,select")) return;
+    if (
+      (e.target as HTMLElement)?.matches("input,textarea,select") &&
+      e.code !== "Escape"
+    )
+      return;
     if (e.code === "Escape") {
       if (
         !this.paused ||
-        ["inventory", "workbench", "chest", "furnace", "enchanting"].includes(
-          this.overlay ?? "",
-        )
+        [
+          "inventory",
+          "workbench",
+          "chest",
+          "furnace",
+          "enchanting",
+          "anvil",
+          "grindstone",
+        ].includes(this.overlay ?? "")
       ) {
         e.preventDefault();
         e.stopPropagation();
@@ -404,6 +415,8 @@ export class Game implements GameUIBridge {
       "chest",
       "furnace",
       "enchanting",
+      "anvil",
+      "grindstone",
     ].includes(this.overlay ?? "");
     if ((!this.paused || inventoryOpen) && this.world.ready) {
       this.accumulator = Math.min(0.12, this.accumulator + dt);
@@ -842,6 +855,12 @@ export class Game implements GameUIBridge {
       case "enchant":
         sim.enchant(command.option);
         break;
+      case "workshopName":
+        sim.setWorkshopName(command.name);
+        break;
+      case "takeWorkshopOutput":
+        sim.takeWorkshopOutput(command.shift ?? false);
+        break;
       case "setTime":
         if (sim.creative) sim.time = ((command.time % 24000) + 24000) % 24000;
         break;
@@ -1053,6 +1072,9 @@ export class Game implements GameUIBridge {
   getEnchanting(): EnchantingView | null {
     return this.simulation.getEnchanting();
   }
+  getWorkshop(): WorkshopView | null {
+    return this.simulation.getWorkshop();
+  }
   getContainer(): ContainerState | null {
     return this.simulation.container;
   }
@@ -1069,20 +1091,23 @@ export class Game implements GameUIBridge {
     return this.simulation.cursor;
   }
   takeCraftOutput() {
-    if (this.simulation.station === "enchanting") return;
+    if (["enchanting", "anvil", "grindstone"].includes(this.simulation.station))
+      return;
     this.simulation.takeCraftOutput();
     this.publish();
   }
   getCraftOutput(): Slot {
-    if (this.simulation.station === "enchanting") return null;
+    if (["enchanting", "anvil", "grindstone"].includes(this.simulation.station))
+      return null;
     return this.simulation.craftOutput;
   }
-  giveItem(id: string) {
-    this.simulation.giveItem(id);
+  giveItem(id: string, enchantment?: string) {
+    this.simulation.giveItem(id, enchantment);
     this.publish();
   }
   getRecipes(): RecipeDefinition[] {
-    if (this.simulation.station === "enchanting") return [];
+    if (["enchanting", "anvil", "grindstone"].includes(this.simulation.station))
+      return [];
     return RECIPES.filter(
       (r) =>
         this.simulation.station === "workbench" || r.station === "inventory",

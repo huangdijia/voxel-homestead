@@ -184,7 +184,7 @@ describe('legacy migration and original checkpoint backups', () => {
     expect(loaded).toEqual(legacy);
     expect(await loadMigrationBackup(legacy.manifest.id)).toBeNull();
     const next = upgrade(loaded!);
-    expect(next.manifest.version).toBe(6); expect(next.manifest.generatorVersion).toBe(1);
+    expect(next.manifest.version).toBe(7); expect(next.manifest.generatorVersion).toBe(1);
     expect(next.farming!.plots).toEqual([]); expect(next.composters).toEqual({});
     expect(validateSave(next)).toEqual(next);
     expect(await loadWorld(legacy.manifest.id)).toEqual(legacy);

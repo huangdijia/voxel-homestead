@@ -59,7 +59,9 @@ export const ENCHANTMENTS: Readonly<
 });
 export function canApplyEnchantment(itemId: string, id: string): boolean {
   const item = ITEMS[itemId];
-  if (!item?.maxDurability || !Object.hasOwn(ENCHANTMENTS, id)) return false;
+  if (!item || !Object.hasOwn(ENCHANTMENTS, id)) return false;
+  if (itemId === "book" || itemId === "enchanted_book") return true;
+  if (!item.maxDurability) return false;
   const digging =
     item.tool === "pickaxe" ||
     item.tool === "axe" ||
@@ -87,11 +89,18 @@ export function canApplyEnchantment(itemId: string, id: string): boolean {
 export function canOfferEnchantment(itemId: string, id: string): boolean {
   return (
     canApplyEnchantment(itemId, id) &&
+    itemId !== "enchanted_book" &&
     itemId !== "shears" &&
-    (id !== "sharpness" || ITEMS[itemId]?.tool === "sword")
+    (id !== "sharpness" || itemId === "book" || ITEMS[itemId]?.tool === "sword")
   );
 }
-export function validateEnchantments(itemId: string, value: unknown): boolean {
+/** Schema 7 preserves creative-anvil metadata on any registered item; active effects remain item-specific. */
+export function validateEnchantments(
+  itemId: string,
+  value: unknown,
+  allowAnyItem = false,
+): boolean {
+  if (!Object.hasOwn(ITEMS, itemId)) return false;
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const prototype = Object.getPrototypeOf(value);
   if (prototype !== Object.prototype && prototype !== null) return false;
@@ -99,7 +108,8 @@ export function validateEnchantments(itemId: string, value: unknown): boolean {
   if (!entries.length || entries.length > 8) return false;
   for (const [id, level] of entries) {
     if (
-      !canApplyEnchantment(itemId, id) ||
+      !Object.hasOwn(ENCHANTMENTS, id) ||
+      (!allowAnyItem && !canApplyEnchantment(itemId, id)) ||
       typeof level !== "number" ||
       !Number.isInteger(level) ||
       level < 1 ||
@@ -119,6 +129,7 @@ export function enchantmentLevel(
   stack: Slot | undefined,
   id: EnchantmentId,
 ): number {
+  if (stack?.id === "book" || stack?.id === "enchanted_book") return 0;
   const level = stack?.enchantments?.[id];
   return stack &&
     canApplyEnchantment(stack.id, id) &&
@@ -129,6 +140,7 @@ export function enchantmentLevel(
     : 0;
 }
 export function enchantability(itemId: string): number {
+  if (itemId === "book") return 1;
   const item = ITEMS[itemId];
   if (!item?.maxDurability || (!item.tool && !item.armorSlot)) return 0;
   const material = itemId.split("_")[0];

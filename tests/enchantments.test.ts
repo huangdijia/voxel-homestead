@@ -100,7 +100,7 @@ describe("eight supported Java enchantments", () => {
       ["iron_helmet", "gold_chestplate", "diamond_boots"].map(enchantability),
     ).toEqual([9, 25, 10]);
     expect(enchantability("shears")).toBe(0);
-    expect(enchantability("book")).toBe(0);
+    expect(enchantability("book")).toBe(1);
   });
 });
 describe("observable enchantment effects", () => {

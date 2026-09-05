@@ -14,6 +14,54 @@ export interface ProgressionBlockPart {
   face?: number;
 }
 const progressionParts = new Map<number, readonly ProgressionBlockPart[]>();
+export type GrindstoneAttachment = "floor" | "wall" | "ceiling";
+export function grindstoneBlockId(
+  attachment: GrindstoneAttachment,
+  facing: number,
+): number {
+  return (
+    120 +
+    ["floor", "wall", "ceiling"].indexOf(attachment) * 4 +
+    (((Math.floor(facing) % 4) + 4) % 4)
+  );
+}
+/** Facing: north(-Z), east(+X), south(+Z), west(-X). Wall support is opposite facing. */
+export function workshopBlockState(
+  id: number,
+):
+  | { kind: "anvil"; damage: number; axis: number }
+  | { kind: "grindstone"; attachment: GrindstoneAttachment; facing: number }
+  | null {
+  if (id >= 114 && id <= 119)
+    return {
+      kind: "anvil",
+      damage: Math.floor((id - 114) / 2),
+      axis: (id - 114) % 2,
+    };
+  if (id >= 120 && id <= 131)
+    return {
+      kind: "grindstone",
+      attachment: (["floor", "wall", "ceiling"] as const)[
+        Math.floor((id - 120) / 4)
+      ],
+      facing: (id - 120) % 4,
+    };
+  return null;
+}
+const workshopCollisions = new Map<number, BlockBox[]>();
+function rotateBox(box: BlockBox, turns: number): BlockBox {
+  let result = box;
+  for (let turn = 0; turn < turns; turn++)
+    result = [
+      1 - result[5],
+      result[1],
+      result[0],
+      1 - result[2],
+      result[4],
+      result[3],
+    ];
+  return result;
+}
 /** Original small voxel models shared by terrain and held items. */
 export function progressionBlockParts(
   id: number,
@@ -115,6 +163,107 @@ export function progressionBlockParts(
         }
       add(sideBox(face, 0, 0.47, 1, 0.055), [0.8, 0.62, 0.35], 11, face);
     }
+  } else if (id >= 114 && id <= 131) {
+    const state = workshopBlockState(id)!;
+    const structural: BlockBox[] = [];
+    const transform = (box: BlockBox): BlockBox => {
+      if (state.kind === "anvil") return rotateBox(box, state.axis);
+      const mounted: BlockBox =
+        state.attachment === "ceiling"
+          ? [box[0], 1 - box[4], box[2], box[3], 1 - box[1], box[5]]
+          : state.attachment === "wall"
+            ? [box[0], box[2], 1 - box[4], box[3], box[5], 1 - box[1]]
+            : box;
+      return rotateBox(mounted, state.facing);
+    };
+    const piece = (
+      box: BlockBox,
+      tint: ProgressionBlockPart["tint"],
+      tile = 15,
+      solid = true,
+    ) => {
+      const transformed = transform(box);
+      add(transformed, tint, tile);
+      if (solid) structural.push(transformed);
+    };
+    if (state.kind === "anvil") {
+      piece([0.125, 0, 0.125, 0.875, 0.25, 0.875], [0.34, 0.36, 0.38]);
+      piece([0.25, 0.25, 0.1875, 0.75, 0.3125, 0.8125], [0.44, 0.46, 0.47]);
+      piece([0.375, 0.3125, 0.25, 0.625, 0.625, 0.75], [0.3, 0.32, 0.34]);
+      piece([0.1875, 0.625, 0, 0.8125, 1, 1], [0.49, 0.51, 0.53]);
+      // Thin recessed-looking dark seams distinguish wear without enlarging collision.
+      if (state.damage > 0) {
+        piece(
+          [0.187, 0.77, 0.25, 0.188, 0.91, 0.29],
+          [0.13, 0.15, 0.17],
+          15,
+          false,
+        );
+        piece(
+          [0.187, 0.72, 0.28, 0.188, 0.8, 0.42],
+          [0.13, 0.15, 0.17],
+          15,
+          false,
+        );
+        piece(
+          [0.187, 0.64, 0.4, 0.188, 0.75, 0.44],
+          [0.13, 0.15, 0.17],
+          15,
+          false,
+        );
+      }
+      if (state.damage > 1) {
+        piece(
+          [0.812, 0.84, 0.55, 0.813, 0.99, 0.59],
+          [0.12, 0.13, 0.15],
+          15,
+          false,
+        );
+        piece(
+          [0.812, 0.79, 0.46, 0.813, 0.87, 0.58],
+          [0.12, 0.13, 0.15],
+          15,
+          false,
+        );
+        piece(
+          [0.812, 0.67, 0.44, 0.813, 0.82, 0.48],
+          [0.12, 0.13, 0.15],
+          15,
+          false,
+        );
+      }
+    } else {
+      for (const x of [0.0625, 0.75]) {
+        piece([x, 0, 0.375, x + 0.1875, 0.625, 0.625], [0.57, 0.41, 0.25], 11);
+        piece(
+          [x - 0.03125, 0, 0.3125, x + 0.21875, 0.125, 0.6875],
+          [0.42, 0.31, 0.2],
+          11,
+        );
+      }
+      piece(
+        [0.125, 0.46875, 0.4375, 0.875, 0.59375, 0.5625],
+        [0.38, 0.32, 0.25],
+      );
+      // Three interlocking boxes form a pixel wheel with clipped corners and open sides.
+      piece(
+        [0.3125, 0.3125, 0.1875, 0.6875, 0.75, 0.8125],
+        [0.65, 0.65, 0.59],
+        3,
+      );
+      piece(
+        [0.3125, 0.1875, 0.3125, 0.6875, 0.875, 0.6875],
+        [0.68, 0.68, 0.62],
+        3,
+      );
+      piece(
+        [0.296875, 0.4375, 0.40625, 0.703125, 0.625, 0.59375],
+        [0.43, 0.45, 0.41],
+      );
+    }
+    workshopCollisions.set(id, structural);
+  } else if (id >= 132 && id <= 134) {
+    add([0, id === 133 ? 0.5 : 0, 0, 1, id === 132 ? 0.5 : 1, 1], [1, 1, 1], 3);
   }
   if (parts.length) progressionParts.set(id, parts);
   return parts;
@@ -223,7 +372,8 @@ export function isOpaque(id: number): boolean {
     id === 82 ||
     id === 83 ||
     id === 111 ||
-    id === 112
+    id === 112 ||
+    (id >= 114 && id <= 133)
   )
     return false;
   return (
@@ -255,8 +405,13 @@ export function collisionBoxes(id: number): BlockBox[] {
     return [];
   if (id === 28 || id === 29) return [[0, 0, 0, 1, 15 / 16, 1]];
   if (id === 112) return [[0, 0, 0, 1, 0.75, 1]];
+  if (id >= 114 && id <= 131) {
+    progressionBlockParts(id);
+    return workshopCollisions.get(id)!;
+  }
   if (id >= 59 && id <= 67) return [[0, 0, 0, 1, 0.875, 1]];
-  if (id === 21) return [[0, 0, 0, 1, 0.5, 1]];
+  if (id === 21 || id === 132) return [[0, 0, 0, 1, 0.5, 1]];
+  if (id === 133) return [[0, 0.5, 0, 1, 1, 1]];
   if (id === 22 || id === 27) return [[0, 0, 0, 1, 0.5625, 1]];
   if (id === 18 || id === 25) return [[0, 0, 0.8125, 1, 1, 1]];
   if (id === 19 || id === 26) return [[0, 0, 0, 0.1875, 1, 1]];

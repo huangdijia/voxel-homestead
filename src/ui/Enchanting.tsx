@@ -51,16 +51,16 @@ export function EnchantingWorkspace({
           <h3>让装备拥有新的力量</h3>
           <p>
             {freeEnchanting
-              ? "放入装备即可附魔，无需经验或青金石。"
-              : "放入装备与青金石，再选择一项附魔。"}
+              ? "放入装备即可附魔，无需经验或青金石；也可放入一本书。"
+              : "放入装备或书与青金石，再选择一项附魔。"}
           </p>
         </div>
       </div>
       <div className="enchanting-layout">
         <div className="enchanting-inputs">
           <label>
-            <span>工具 / 护甲</span>
-            {renderSlot(slots[0] ?? null, 0, "装备")}
+            <span>装备 / 书</span>
+            {renderSlot(slots[0] ?? null, 0, "装备或书")}
           </label>
           <span className="enchanting-join">
             <Icon name="plus" size={14} />
@@ -69,7 +69,7 @@ export function EnchantingWorkspace({
             <span>{freeEnchanting ? "青金石（可留空）" : "青金石"}</span>
             {renderSlot(slots[1] ?? null, 1, "青金石")}
           </label>
-          <small>附魔后，点击装备取回。</small>
+          <small>附魔后，点击物品取回。</small>
         </div>
         <div className="enchanting-offers" aria-label="可选附魔">
           {view?.offers.length
@@ -117,7 +117,7 @@ export function EnchantingWorkspace({
                   </span>
                   <span className="enchanting-offer-copy">
                     <strong>等待合适的装备</strong>
-                    <small>放入一件尚未附魔的工具或护甲</small>
+                    <small>放入一件尚未附魔的装备或一本书</small>
                   </span>
                 </button>
               ))}

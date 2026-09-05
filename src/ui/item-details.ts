@@ -9,13 +9,15 @@ export function enchantmentLabel(id: string, level: number): string {
 }
 export function hasEnchantments(stack?: ItemStack | null): boolean {
   return (
-    !!stack?.enchantments &&
-    Object.values(stack.enchantments).some((level) => level > 0)
+    stack?.id === "enchanted_book" ||
+    (!!stack?.enchantments &&
+      Object.values(stack.enchantments).some((level) => level > 0))
   );
 }
 export function itemDescription(stack: ItemStack): string {
   return [
-    ITEMS[stack.id]?.name ?? stack.id,
+    stack.customName || ITEMS[stack.id]?.name || stack.id,
+    ...(stack.customName ? [ITEMS[stack.id]?.name ?? stack.id] : []),
     ...Object.entries(stack.enchantments ?? {})
       .filter(([, level]) => level > 0)
       .map(([id, level]) => enchantmentLabel(id, level)),

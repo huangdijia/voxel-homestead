@@ -48,7 +48,11 @@
 
 所有条目的 `acceptance.status` 均为 **`not-run`**，本基线的逐项验收通过数为 **0**。这不否定已有 M1 集成测试；它说明那些测试结果尚未按本目录每条目标、源码版本、浏览器和状态边界建立验收关联。脚本不会根据“测试文件存在”或“注册表出现”自动升级状态。
 
-[local-evidence.json](local-evidence.json) 保存实际读取的 `registry.ts`、`recipes.ts`、`inventory.ts`、`enchantments.ts` 哈希、别名、定义及反向映射。例子包括 `log → minecraft:oak_log`、`raw_beef → minecraft:beef`、四段门定义 → `minecraft:oak_door`、多阶段作物 → 一个带 `age` 属性的方块。附魔表通过 TypeScript AST 读取 `ENCHANTMENTS` 的 8 个声明及源码行，不执行玩法模块；42 个目标中的其余 34 个仍未映射。本轮甘蔗、纸、皮革、书、附魔台、书架、牛肉和牛的注册信息也只作局部定义证据，附魔效果、酿造、牛的繁殖与全部获取路径均不能据此自动验收。玩法范围说明见 [ENCHANTING.md](../ENCHANTING.md)。
+[local-evidence.json](local-evidence.json) 保存实际读取的 `registry.ts`、`recipes.ts`、`inventory.ts`、`enchantments.ts`、`types.ts`、`world-height.ts` 哈希、别名、定义及反向映射。例子包括 `log → minecraft:oak_log`、`raw_beef → minecraft:beef`、四段门定义 → `minecraft:oak_door`、多阶段作物 → 一个带 `age` 属性的方块。附魔表通过 TypeScript AST 读取 `ENCHANTMENTS` 的 8 个声明及源码行，不执行玩法模块；42 个目标中的其余 34 个仍未映射。甘蔗、纸、皮革、书、附魔台、书架、牛肉和牛的注册信息只作局部定义证据，附魔效果、酿造、繁殖与全部获取路径不能据此自动验收。玩法范围说明见 [ENCHANTING.md](../ENCHANTING.md)。
+
+工坊扩展新增铁砧、开裂/损坏铁砧、砂轮、石台阶及附魔书的局部映射。每类铁砧的 2 个本地轴向表示映射到对应基础方块，不能代替源数据的 4 个 `facing` 状态验收；砂轮的 12 个本地状态归入同一 `minecraft:grindstone`，源 `face × facing` 的 12 种组合仍需逐项证据；石台阶的下半/上半/双层 3 个几何表示归入同一 `minecraft:stone_slab`，源数据另有 `waterlogged`，共 6 个状态，不因归并而标记全量完成。`minecraft:enchanted_book` 仅有一个通用物品定义映射，**不代表所有附魔种类、等级或组合已实现**，仍只有原 8 种附魔局部映射。工坊相关行为拆到 `B-STATION-02/03`、`B-MAGIC-02`、`B-BLOCK-02`，全部保持待验。
+
+`schemaContract` 从类型声明独立读取本地存档版本 `1..7` 与地形生成器版本 `1..6`。**存档 v7 不改变生成器 6，也不把旧世界重生成新版本**；这只是本项目类型契约，不是 Mojang 存档格式，也不能证明实际迁移已成功。命名、此前操作成本、书本储存附魔、命名容器与铁砧下落的验证、备份和故障恢复必须由 `B-DATA-03` 的运行证据核实。
 
 源合成表没有原版资源位置，因此每条 ID 是 `prismarine:recipe/<数值产物ID>/<原始组合记录SHA256前20位>`。保存源文件 JSON Pointer 可定位原记录；同一产物的木材变体不能当成不同的官方配方资源。当前本地木板的 1×1 有序配方与源无序记录没有被严格匹配；这是保守映射差异，不是已证明游戏不能合成木板。
 
@@ -90,4 +94,4 @@ node scripts/build-parity-catalog.mjs --fetch --self-test
 
 此命令只从锁定提交下载同一批 JSON/README，并在写入前校验原哈希和字节数；不升级来源，不下载游戏素材。`--check` 与 `--fetch` 不能同时使用。无时间戳进入生成产物，同一来源和本地源码快照可逐字节重建。
 
-`--self-test` 用内存中的故障样本确认重复 ID、非法阶段、虚假验收通过、失效源指针和数量减少都会被拒绝，并验证配方镜像等价与材料数量差异。它验证的是清单生成器，不能代替游戏测试。本次校验记录见 [VERIFICATION.md](VERIFICATION.md)。
+`--self-test` 用内存中的故障样本确认重复 ID、非法阶段、虚假验收通过、失效源指针和数量减少都会被拒绝，并验证配方镜像等价与材料数量差异。当前 14 项自检还约束工坊状态别名、通用附魔书不扩张 42 种附魔映射、本地存档 v7 与生成器 v6 分离。它验证的是清单生成器，不能代替游戏测试。本次校验记录见 [VERIFICATION.md](VERIFICATION.md)。

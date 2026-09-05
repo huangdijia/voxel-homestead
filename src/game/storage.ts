@@ -79,6 +79,13 @@ function string(value: unknown, path: string, max = 128): string {
     return bad(`${path} 文本无效`);
   return value;
 }
+function customName(value: unknown, path: string, saveVersion: number): string {
+  if (saveVersion < 7) bad(`${path} 旧版本不支持自定义名称`);
+  const name = string(value, path, 50);
+  if (/[\u0000-\u001f\u007f-\u009f§]/.test(name))
+    bad(`${path} 名称不能包含控制字符或格式代码`);
+  return name;
+}
 function boolean(value: unknown, path: string): boolean {
   if (typeof value !== "boolean") return bad(`${path} 必须为布尔值`);
   return value;
@@ -97,10 +104,14 @@ function vector(value: unknown, path: string, integer = false): Vec3 {
     z: number(v.z, `${path}.z`, -30_000_000, 30_000_000, integer),
   };
 }
-function stack(value: unknown, path: string, saveVersion = 6): Slot {
+function stack(value: unknown, path: string, saveVersion = 7): Slot {
   if (value === null) return null;
   const v = record(value, path);
-  fields(v, ["id", "count", "durability", "enchantments"], path);
+  fields(
+    v,
+    ["id", "count", "durability", "enchantments", "customName", "repairCost"],
+    path,
+  );
   const id = string(v.id, `${path}.id`);
   const item = ITEMS[id];
   if (!item || !Object.hasOwn(ITEMS, id)) return bad(`${path} 物品不存在`);
@@ -120,9 +131,32 @@ function stack(value: unknown, path: string, saveVersion = 6): Slot {
       true,
     );
   } else if (item.maxDurability) result.durability = item.maxDurability;
+  if (v.customName !== undefined) {
+    result.customName = customName(
+      v.customName,
+      `${path}.customName`,
+      saveVersion,
+    );
+  }
+  if (v.repairCost !== undefined) {
+    if (saveVersion < 7) bad(`${path} 旧版本不支持铁砧操作记录`);
+    result.repairCost = number(
+      v.repairCost,
+      `${path}.repairCost`,
+      0,
+      2147483647,
+      true,
+    );
+  }
+  if (id === "enchanted_book" && v.enchantments === undefined)
+    bad(`${path} 附魔书必须包含附魔`);
   if (v.enchantments !== undefined) {
     if (saveVersion < 6) bad(`${path} 旧版本不支持附魔`);
-    if (!validateEnchantments(id, v.enchantments)) bad(`${path} 附魔数据无效`);
+    if (
+      !validateEnchantments(id, v.enchantments, saveVersion >= 7) ||
+      (saveVersion < 7 && (id === "book" || id === "enchanted_book"))
+    )
+      bad(`${path} 附魔数据无效`);
     result.enchantments = {
       ...record(v.enchantments, `${path}.enchantments`),
     } as Record<string, number>;
@@ -133,7 +167,7 @@ function slots(
   value: unknown,
   count: number,
   path: string,
-  saveVersion = 6,
+  saveVersion = 7,
 ): Slot[] {
   const values = array(value, path, count);
   if (values.length !== count) return bad(`${path} 必须有 ${count} 格`);
@@ -180,7 +214,7 @@ export function validateSave(value: unknown): SaveData {
     "manifest",
   );
   if (
-    ![1, 2, 3, 4, 5, 6].includes(manifest.version as number) ||
+    ![1, 2, 3, 4, 5, 6, 7].includes(manifest.version as number) ||
     ![1, 2, 3, 4, 5, 6].includes(manifest.generatorVersion as number)
   )
     return bad("不支持此存档或地形生成器版本；原始文件未被修改");
@@ -206,7 +240,7 @@ export function validateSave(value: unknown): SaveData {
   if (manifest.mode !== "survival" && manifest.mode !== "creative")
     return bad("游戏模式无效");
   const validatedManifest: SaveManifest = {
-    version: manifest.version as 1 | 2 | 3 | 4 | 5 | 6,
+    version: manifest.version as 1 | 2 | 3 | 4 | 5 | 6 | 7,
     generatorVersion: manifest.generatorVersion as 1 | 2 | 3 | 4 | 5 | 6,
     id: string(manifest.id, "manifest.id"),
     name: string(manifest.name, "manifest.name", 80),
@@ -275,7 +309,9 @@ export function validateSave(value: unknown): SaveData {
               ? 83
               : Number(manifest.version) < 6
                 ? 110
-                : 65535,
+                : Number(manifest.version) < 7
+                  ? 113
+                  : 65535,
         true,
       );
       if (!BLOCKS[id]) bad("未知方块");
@@ -299,11 +335,22 @@ export function validateSave(value: unknown): SaveData {
     )
       bad("容器坐标无效");
     const container = record(value, `containers.${key}`);
+    const named =
+      container.customName === undefined
+        ? {}
+        : {
+            customName: customName(
+              container.customName,
+              `containers.${key}.customName`,
+              validatedManifest.version,
+            ),
+          };
     if (container.kind === "chest") {
-      fields(container, ["kind", "slots"], "chest");
+      fields(container, ["kind", "slots", "customName"], "chest");
       if (occupied.get(key) !== 15) bad("箱子数据没有对应箱子方块");
       containers[key] = {
         kind: "chest",
+        ...named,
         slots: slots(
           container.slots,
           27,
@@ -314,7 +361,15 @@ export function validateSave(value: unknown): SaveData {
     } else if (container.kind === "furnace") {
       fields(
         container,
-        ["kind", "slots", "burn", "burnTotal", "progress", "experience"],
+        [
+          "kind",
+          "slots",
+          "burn",
+          "burnTotal",
+          "progress",
+          "experience",
+          "customName",
+        ],
         "furnace",
       );
       if (container.experience !== undefined && validatedManifest.version < 6)
@@ -328,6 +383,7 @@ export function validateSave(value: unknown): SaveData {
       );
       containers[key] = {
         kind: "furnace",
+        ...named,
         slots: slots(
           container.slots,
           3,
@@ -609,6 +665,7 @@ export function validateSave(value: unknown): SaveData {
         "scanCursor",
         "queue",
         "falling",
+        "anvilFalls",
       ],
       "natural",
     );
@@ -627,12 +684,27 @@ export function validateSave(value: unknown): SaveData {
     const falling = array(state.falling, "natural.falling", 128).map(
       (value) => {
         const entry = record(value, "falling");
-        fields(entry, ["x", "y", "z", "id"], "falling");
+        fields(entry, ["x", "y", "z", "id", "distance"], "falling");
         const at = blockPosition(entry, "falling"),
           key = `${at.x},${at.y},${at.z}`;
         if (fallingSeen.has(key)) bad("下落方块重复");
         fallingSeen.add(key);
-        if (entry.id !== 4 && entry.id !== 5) bad("下落方块类型无效");
+        const anvil =
+          typeof entry.id === "number" &&
+          Number.isInteger(entry.id) &&
+          entry.id >= 114 &&
+          entry.id <= 119;
+        if (
+          entry.id !== 4 &&
+          entry.id !== 5 &&
+          !(validatedManifest.version >= 7 && anvil)
+        )
+          bad("下落方块类型无效");
+        if (
+          entry.distance !== undefined &&
+          (!anvil || validatedManifest.version < 7)
+        )
+          bad("该下落方块不支持铁砧距离记录");
         if (
           (occupied.get(key) ??
             sampleBlock(
@@ -644,9 +716,58 @@ export function validateSave(value: unknown): SaveData {
             )) === entry.id
         )
           bad("下落方块与世界方块重复");
-        return { ...at, id: entry.id as 4 | 5 };
+        return {
+          ...at,
+          id: entry.id as NaturalState["falling"][number]["id"],
+          ...(entry.distance === undefined
+            ? {}
+            : {
+                distance: number(
+                  entry.distance,
+                  "falling.distance",
+                  0,
+                  WORLD_MAX_Y - WORLD_MIN_Y + 1,
+                  true,
+                ),
+              }),
+        };
       },
     );
+    let anvilFalls: NaturalState["anvilFalls"];
+    if (state.anvilFalls !== undefined) {
+      if (validatedManifest.version < 7) bad("旧版本不支持铁砧下落状态");
+      const seen = new Set<string>();
+      anvilFalls = array(state.anvilFalls, "natural.anvilFalls", 128).map(
+        (value) => {
+          const entry = record(value, "anvil fall");
+          fields(entry, ["x", "y", "z", "distance"], "anvil fall");
+          const at = blockPosition(entry, "anvil fall"),
+            key = `${at.x},${at.y},${at.z}`;
+          if (seen.has(key) || fallingSeen.has(key)) bad("铁砧下落记录重复");
+          seen.add(key);
+          const id =
+            occupied.get(key) ??
+            sampleBlock(
+              validatedManifest.seed,
+              at.x,
+              at.y,
+              at.z,
+              validatedManifest.generatorVersion,
+            );
+          if (id < 114 || id > 119) bad("铁砧下落记录没有对应铁砧方块");
+          return {
+            ...at,
+            distance: number(
+              entry.distance,
+              "anvil fall.distance",
+              1,
+              WORLD_MAX_Y - WORLD_MIN_Y + 1,
+              true,
+            ),
+          };
+        },
+      );
+    }
     natural = {
       version: 1,
       randomState: number(
@@ -666,6 +787,7 @@ export function validateSave(value: unknown): SaveData {
       ),
       queue,
       falling,
+      ...(anvilFalls === undefined ? {} : { anvilFalls }),
     };
   }
   let progression: ProgressionState | undefined;

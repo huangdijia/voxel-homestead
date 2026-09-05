@@ -497,14 +497,66 @@ function progressionIcon(id: string): React.ReactNode | null {
         <path d="M5 5h5v1H5V5Zm0 3h1v3H5V8Zm3 2h2v1H8v-1Z" fill="#d09a5d" />
       </>
     );
-  if (id === "book")
+  if (id === "book" || id === "enchanted_book")
     return (
       <>
         <path d="m3 2 8-1 3 2v10l-9 2-3-2V3l1-1Z" fill="#583527" />
         <path d="m4 3 8-1 1 1-8 2-1-2Z" fill="#f0dfac" />
-        <path d="m4 5 9-2v9l-8 2-1-9Z" fill="#97513b" />
-        <path d="m3 4 2 1v9l-2-1V4Z" fill="#c38352" />
+        <path
+          d="m4 5 9-2v9l-8 2-1-9Z"
+          fill={id === "enchanted_book" ? "#78599b" : "#97513b"}
+        />
+        <path
+          d="m3 4 2 1v9l-2-1V4Z"
+          fill={id === "enchanted_book" ? "#b292ce" : "#c38352"}
+        />
         <path d="M8 6h3v1H8V6Zm0 2h2v1H8V8ZM5 12h2v1H5v-1Z" fill="#dcc174" />
+        {id === "enchanted_book" && (
+          <path d="M9 5h1v2h2v1h-2v2H9V8H7V7h2V5Z" fill="#efe1b9" />
+        )}
+      </>
+    );
+  if (["anvil", "chipped_anvil", "damaged_anvil"].includes(id))
+    return (
+      <>
+        <path d="M1 2h14v4l-4 2v3l3 2v2H2v-2l3-2V8L1 6V2Z" fill="#30353b" />
+        <path d="M1 2h14v2H1V2Zm3 11h8v1H4v-1Z" fill="#a0a5a5" />
+        <path
+          d="M2 4h12v2l-4 2H6L2 6V4Zm4 5h4v2H6V9ZM3 13l3-2h4l3 2H3Z"
+          fill="#666f72"
+        />
+        <path d="M5 8h1v3H5V8Zm5 0h1v3h-1V8Z" fill="#474f53" />
+        {id !== "anvil" && (
+          <path d="M4 2h1v2H4V2Zm1 2h2v1H5V4Zm1 1h1v2H6V5Z" fill="#252a32" />
+        )}
+        {id === "damaged_anvil" && (
+          <path d="M10 2h1v2h-1V2ZM9 4h2v1H9V4Zm0 1h1v2H9V5Z" fill="#252a32" />
+        )}
+      </>
+    );
+  if (id === "grindstone")
+    return (
+      <>
+        <path d="M1 8h3v7H1V8Zm11 0h3v7h-3V8Z" fill="#624d35" />
+        <path d="M2 9h1v5H2V9Zm11 0h1v5h-1V9Z" fill="#b28b54" />
+        <path
+          d="M5 1h6v1h2v2h1v6h-1v2h-2v1H5v-1H3v-2H2V4h1V2h2V1Z"
+          fill="#555c59"
+        />
+        <path d="M5 2h5v1h2v2h1v5h-2v2H5v-1H4V9H3V5h1V3h1V2Z" fill="#a7a998" />
+        <path d="M6 3h4v1H6V3ZM4 5h1v4H4V5Zm6 6h1v1h-1v-1Z" fill="#d5d3bd" />
+        <path d="M6 5h4v4H6V5Z" fill="#535b57" />
+        <path d="M7 6h2v2H7V6ZM1 14h4v1H1v-1Zm10 0h4v1h-4v-1Z" fill="#8b6a41" />
+      </>
+    );
+  if (id === "stone_slab")
+    return (
+      <>
+        <path d="m1 6 7-3 7 3v6l-7 3-7-3V6Z" fill="#616966" />
+        <path d="m1 6 7-3 7 3-7 3-7-3Z" fill="#b7b9a9" />
+        <path d="m1 7 7 3v4l-7-3V7Z" fill="#8c948b" />
+        <path d="m8 10 7-3v4l-7 3v-4Z" fill="#727c74" />
+        <path d="M6 5h3v1H6V5Zm-3 1h2v1H3V6Zm7 5h2v1h-2v-1Z" fill="#9fa797" />
       </>
     );
   if (id === "enchanting_table")

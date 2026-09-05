@@ -142,6 +142,9 @@ function roll(
       power = Math.floor(power / 2);
     }
   }
+  // Java removes one random enchantment from a book when more than one was rolled.
+  if (stack.id === "book" && chosen.length > 1)
+    chosen.splice(random.int(chosen.length), 1);
   return {
     requiredLevel,
     chosen,
@@ -179,7 +182,7 @@ function inputReason(
   seed: number,
   points: number,
 ): string | undefined {
-  if (!stack) return "放入一件未附魔装备";
+  if (!stack) return "放入一件未附魔装备或一本书";
   if (stack.count !== 1 || !enchantability(stack.id))
     return "该物品不能在附魔台附魔";
   if (stack.enchantments !== undefined) return "已有附魔，不能再次使用附魔台";
@@ -266,6 +269,7 @@ export function applyEnchantment(
   return {
     stack: {
       ...stack,
+      id: stack.id === "book" ? "enchanted_book" : stack.id,
       enchantments: Object.fromEntries(
         result.chosen.map((enchantment) => [enchantment.id, enchantment.level]),
       ),

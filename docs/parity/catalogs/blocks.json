@@ -25934,8 +25934,19 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "114",
+          "key": "anvil",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "115",
+          "key": "anvil_east_west",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/blocks/minecraft:anvil",
@@ -26003,8 +26014,19 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "116",
+          "key": "chipped_anvil",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "117",
+          "key": "chipped_anvil_east_west",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/blocks/minecraft:chipped_anvil",
@@ -26072,8 +26094,19 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "118",
+          "key": "damaged_anvil",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "119",
+          "key": "damaged_anvil_east_west",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/blocks/minecraft:damaged_anvil",
@@ -35177,8 +35210,24 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "132",
+          "key": "stone_slab",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "133",
+          "key": "stone_slab_upper",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "134",
+          "key": "stone_slab_double",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/blocks/minecraft:stone_slab",
@@ -50938,8 +50987,69 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "120",
+          "key": "grindstone",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "121",
+          "key": "grindstone_1",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "122",
+          "key": "grindstone_2",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "123",
+          "key": "grindstone_3",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "124",
+          "key": "grindstone_4",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "125",
+          "key": "grindstone_5",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "126",
+          "key": "grindstone_6",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "127",
+          "key": "grindstone_7",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "128",
+          "key": "grindstone_8",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "129",
+          "key": "grindstone_9",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "130",
+          "key": "grindstone_10",
+          "source": "src/game/registry.ts"
+        },
+        {
+          "id": "131",
+          "key": "grindstone_11",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/blocks/minecraft:grindstone",

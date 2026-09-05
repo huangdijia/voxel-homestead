@@ -11,6 +11,7 @@ import {
   SMELTING_EXPERIENCE,
   rollFractionalExperience,
   MAX_EXPERIENCE,
+  spendLevels,
 } from "./experience";
 import {
   durabilityConsumed,
@@ -20,13 +21,23 @@ import {
   enchantmentDamageMultiplier,
   consumesOxygen,
   enchantability,
+  ENCHANTMENTS,
 } from "./enchantments";
 import {
   countBookshelves,
   getEnchantingOffers,
   applyEnchantment,
 } from "./enchanting";
-import { fluidSurfaceHeights } from "../engine/shapes";
+import {
+  getAnvilResult,
+  getGrindstoneResult,
+  normalizeItemName,
+} from "./workshops";
+import {
+  fluidSurfaceHeights,
+  workshopBlockState,
+  grindstoneBlockId,
+} from "../engine/shapes";
 import { fluidInfo, isFluid, isWater, isLava } from "./fluid-blocks";
 import type {
   ArmorSlot,
@@ -37,6 +48,7 @@ import type {
   EntityState,
   ProgressionState,
   EnchantingView,
+  WorkshopView,
   GameMode,
   ItemStack,
   PlayerState,
@@ -96,7 +108,7 @@ export function createNewSave(
   const spawn = { x: 0.5, y: surfaceHeight(worldSeed, 0, 0, 6) + 1.05, z: 0.5 };
   return {
     manifest: {
-      version: 6,
+      version: 7,
       generatorVersion: 6,
       id: uid(),
       name: name.trim() || "新的世界",
@@ -175,8 +187,12 @@ export class Simulation {
   composters: Record<string, number>;
   craftSlots: Slot[] = Array(4).fill(null);
   cursor: Slot = null;
-  station: "inventory" | "workbench" | "enchanting" = "inventory";
+  station: "inventory" | "workbench" | "enchanting" | "anvil" | "grindstone" =
+    "inventory";
   enchantingPosition: Vec3 | null = null;
+  workshopPosition: Vec3 | null = null;
+  private workshopName = "";
+  private workshopInput: Slot = null;
   containerKey: string | null = null;
   mining = 0;
   miningKey = "";
@@ -196,7 +212,10 @@ export class Simulation {
   private mobPulse = 0;
   private age = 0;
   private entityVel = new Map<string, number>();
-  onOpen?: (kind: "workbench" | "chest" | "furnace" | "enchanting") => void;
+  onOpen?: (
+    kind:
+      "workbench" | "chest" | "furnace" | "enchanting" | "anvil" | "grindstone",
+  ) => void;
   constructor(
     public world: WorldPort,
     data: SaveData,
@@ -232,6 +251,8 @@ export class Simulation {
       {
         setBlock,
         dropItem: (position, stack) => this.spawnDrop(stack, position),
+        anvilImpact: (position, distance) =>
+          this.anvilImpact(position, distance),
       },
     );
     this.sugarCane = new SugarCaneSystem(
@@ -582,7 +603,19 @@ export class Simulation {
         sum + (stack ? (ITEMS[stack.id]?.armorToughness ?? 0) : 0),
       0,
     );
-    const protectedHit = ["attack", "explosion", "lava"].includes(reason);
+    const protectedHit = ["attack", "explosion", "lava", "anvil"].includes(
+      reason,
+    );
+    if (reason === "anvil" && this.player.armor.head) {
+      const helmet = this.player.armor.head;
+      helmet.durability =
+        (helmet.durability ?? ITEMS[helmet.id].maxDurability!) -
+        durabilityConsumed(helmet, Math.max(1, Math.floor(amount / 4)), () =>
+          this.farming.nextRandom(),
+        );
+      if (helmet.durability <= 0) this.player.armor.head = null;
+      amount *= 0.75;
+    }
     const physical = protectedHit
       ? damageAfterArmor(amount, armor, toughness)
       : amount;
@@ -613,6 +646,58 @@ export class Simulation {
         }
       }
     if (this.player.health <= 0) this.die();
+  }
+  private anvilImpact(at: Vec3, fallen: number) {
+    const amount = Math.min(40, Math.max(0, Math.ceil(fallen - 1) * 2));
+    if (!amount) return;
+    const touches = (position: Vec3, width: number, height: number) =>
+      position.x + width / 2 > at.x &&
+      position.x - width / 2 < at.x + 1 &&
+      position.z + width / 2 > at.z &&
+      position.z - width / 2 < at.z + 1 &&
+      position.y < at.y + 1 &&
+      position.y + height > at.y;
+    if (touches(this.player.position, 0.6, 1.8)) this.damage(amount, "anvil");
+    for (const entity of [...this.entities]) {
+      const baby = (entity.age ?? 0) < 0;
+      if (
+        !this.world.isReady(
+          entity.position.x,
+          entity.position.z,
+          entity.position.y,
+        ) ||
+        !touches(
+          entity.position,
+          baby ? 0.35 : 0.65,
+          ENTITIES[entity.kind].hostile ? 1.75 : baby ? 0.6 : 1.2,
+        )
+      )
+        continue;
+      entity.health -= amount;
+      if (entity.health > 0) continue;
+      if ((entity.playerHitTimer ?? 0) > 0)
+        this.spawnExperience(
+          mobExperience(entity.kind, baby, () => this.farming.nextRandom()),
+          entity.position,
+        );
+      if (!baby) {
+        if (entity.kind === "cow") {
+          for (const [id, range] of Object.entries(COW_DROP_RANGES)) {
+            const count =
+              range[0] +
+              Math.floor(this.farming.nextRandom() * (range[1] - range[0] + 1));
+            if (count) this.spawnDrop({ id, count }, entity.position);
+          }
+        } else
+          ENTITIES[entity.kind].drops.forEach((stack) => {
+            if (stack.id !== "wool" || !entity.sheared)
+              this.spawnDrop(stack, entity.position);
+          });
+      }
+      this.entities = this.entities.filter((e) => e.id !== entity.id);
+      this.entityVel.delete(entity.id);
+    }
+    this.sound("hit");
   }
   private die() {
     this.closeContainer();
@@ -995,6 +1080,9 @@ export class Simulation {
       this.spawnDrop(
         {
           id: drop,
+          ...(container?.customName
+            ? { customName: container.customName }
+            : {}),
           count: exploded
             ? count
             : fortuneDropCount(id, count, this.held, () =>
@@ -1149,6 +1237,15 @@ export class Simulation {
       this.onOpen?.("enchanting");
       return;
     }
+    const workshop = workshopBlockState(id);
+    if (workshop) {
+      this.closeContainer();
+      this.station = workshop.kind;
+      this.workshopPosition = { ...t };
+      this.craftSlots = [null, null];
+      this.onOpen?.(workshop.kind);
+      return;
+    }
     if (id === 14 || id === 15) {
       this.closeContainer();
       this.containerKey = posKey(t);
@@ -1217,7 +1314,53 @@ export class Simulation {
       return;
     const replaceable = (id: number) =>
       [0, 58, 83].includes(id) || isFluid(id) || !!cropAt(id);
-    if (!replaceable(this.world.getBlock(p.x, p.y, p.z))) return;
+    let placedId = def.block;
+    const hitY =
+      this.eye().y + Math.sin(this.player.pitch) * target.distance - t.y;
+    if (def.block === 132) {
+      const mergeTarget =
+        (id === 132 &&
+          (target.normal.y > 0 || (!target.normal.y && hitY >= 0.5))) ||
+        (id === 133 &&
+          (target.normal.y < 0 || (!target.normal.y && hitY < 0.5)));
+      if (mergeTarget) Object.assign(p, t);
+      const existing = this.world.getBlock(p.x, p.y, p.z);
+      placedId =
+        existing === 132 || existing === 133
+          ? 134
+          : target.normal.y < 0 || (!target.normal.y && hitY > 0.5)
+            ? 133
+            : 132;
+    }
+    if (!replaceable(this.world.getBlock(p.x, p.y, p.z)) && placedId !== 134)
+      return;
+    const facing =
+      (((2 - Math.round(this.player.yaw / (Math.PI / 2))) % 4) + 4) % 4;
+    if (def.block >= 114 && def.block <= 119)
+      placedId =
+        114 +
+        Math.floor((def.block - 114) / 2) * 2 +
+        (facing % 2 === 0 ? 1 : 0);
+    if (def.block === 120) {
+      const attachment =
+        target.normal.y > 0
+          ? "floor"
+          : target.normal.y < 0
+            ? "ceiling"
+            : "wall";
+      const wallFacing =
+        target.normal.z < 0
+          ? 0
+          : target.normal.x > 0
+            ? 1
+            : target.normal.z > 0
+              ? 2
+              : 3;
+      placedId = grindstoneBlockId(
+        attachment,
+        attachment === "wall" ? wallFacing : facing,
+      );
+    }
     if (def.block === 111 && !this.sugarCane.canPlace(p)) {
       this.toast("甘蔗需种在水边的草地、泥土或沙上，最高三格");
       return;
@@ -1234,7 +1377,10 @@ export class Simulation {
         this.toast("请等待相邻地形加载完成");
         return;
       }
-      if (!replaceable(this.world.getBlock(b.x, b.y, b.z))) {
+      if (
+        !replaceable(this.world.getBlock(b.x, b.y, b.z)) &&
+        placedId !== 134
+      ) {
         this.toast("这里没有足够的空间");
         return;
       }
@@ -1276,7 +1422,23 @@ export class Simulation {
       const old = this.world.getBlock(b.x, b.y, b.z);
       if (old === 58 || old === 83 || cropAt(old)) this.breakBlock(b, old);
     }
-    if (!this.setBlock(p.x, p.y, p.z, def.block)) return;
+    if (!this.setBlock(p.x, p.y, p.z, placedId)) return;
+    if (held.customName && (def.block === 14 || def.block === 15))
+      this.containers[posKey(p)] =
+        def.block === 15
+          ? {
+              kind: "chest",
+              slots: Array(27).fill(null),
+              customName: held.customName,
+            }
+          : {
+              kind: "furnace",
+              slots: [null, null, null],
+              burn: 0,
+              burnTotal: 0,
+              progress: 0,
+              customName: held.customName,
+            };
     if (def.block === 18) this.setBlock(p.x, p.y + 1, p.z, 25);
     if (def.block === 22) this.setBlock(p.x, p.y, p.z + 1, 27);
     if (!this.creative) {
@@ -1591,6 +1753,9 @@ export class Simulation {
     this.craftSlots = Array(4).fill(null);
     this.station = "inventory";
     this.enchantingPosition = null;
+    this.workshopPosition = null;
+    this.workshopName = "";
+    this.workshopInput = null;
     this.containerKey = null;
   }
   get container() {
@@ -1599,7 +1764,8 @@ export class Simulation {
       : null;
   }
   get craftOutput() {
-    if (this.station === "enchanting") return null;
+    if (this.station !== "inventory" && this.station !== "workbench")
+      return null;
     return (
       matchRecipe(this.craftSlots, this.station === "workbench" ? 3 : 2)
         ?.output ?? null
@@ -1625,7 +1791,7 @@ export class Simulation {
     this.sound("craft");
   }
   craft(recipeId: string) {
-    if (this.station === "enchanting") return;
+    if (this.station !== "inventory" && this.station !== "workbench") return;
     const recipe = RECIPES.find((r) => r.id === recipeId);
     if (!recipe) return;
     if (recipe.station === "workbench" && this.station !== "workbench") {
@@ -1704,6 +1870,97 @@ export class Simulation {
     this.sound("craft");
     this.toast("附魔完成，新的力量已注入装备");
   }
+  getWorkshop(): WorkshopView | null {
+    const at = this.workshopPosition;
+    if (
+      !at ||
+      !["anvil", "grindstone"].includes(this.station) ||
+      this.player.dead ||
+      distance(this.eye(), { x: at.x + 0.5, y: at.y + 0.5, z: at.z + 0.5 }) >
+        6 ||
+      !this.world.isReady(at.x, at.z, at.y) ||
+      workshopBlockState(this.world.getBlock(at.x, at.y, at.z))?.kind !==
+        this.station
+    )
+      return null;
+    const left = this.craftSlots[0],
+      right = this.craftSlots[1];
+    if (left !== this.workshopInput) {
+      this.workshopInput = left;
+      this.workshopName = left ? (left.customName ?? ITEMS[left.id].name) : "";
+    }
+    return this.station === "anvil"
+      ? getAnvilResult(
+          left,
+          right,
+          this.workshopName,
+          this.progression.points,
+          this.creative,
+        )
+      : getGrindstoneResult(left, right);
+  }
+  setWorkshopName(name: string) {
+    if (this.station !== "anvil" || !this.getWorkshop()) return;
+    const normalized = normalizeItemName(name);
+    if (normalized !== null) this.workshopName = normalized;
+  }
+  takeWorkshopOutput(shift = false) {
+    const view = this.getWorkshop();
+    if (!view?.available || !view.output) return;
+    const output = clone(view.output);
+    let inventory: Slot[] | null = null;
+    if (shift) {
+      inventory = clone(this.player.inventory);
+      if (addItem(inventory, output)) {
+        this.toast("背包已满，先腾出空间");
+        return;
+      }
+    } else if (
+      this.cursor &&
+      (!compatibleStacks(this.cursor, output) ||
+        this.cursor.count + output.count > ITEMS[output.id].maxStack)
+    )
+      return;
+    const points =
+      view.kind === "anvil" && !this.creative
+        ? spendLevels(this.progression.points, view.levelCost)
+        : this.progression.points;
+    if (points === null) return;
+    // Commit once only after station, payment and destination have all been checked.
+    this.craftSlots[0] = null;
+    const right = this.craftSlots[1];
+    if (right) {
+      right.count -= view.materialCost;
+      if (right.count <= 0) this.craftSlots[1] = null;
+    }
+    if (inventory) this.player.inventory = inventory;
+    else if (this.cursor) this.cursor.count += output.count;
+    else this.cursor = output;
+    this.progression.points = points;
+    if (view.kind === "grindstone" && view.experienceMax > 0)
+      this.spawnExperience(
+        view.experienceMin +
+          Math.floor(
+            this.farming.nextRandom() *
+              (view.experienceMax - view.experienceMin + 1),
+          ),
+        this.player.position,
+      );
+    if (
+      view.kind === "anvil" &&
+      !this.creative &&
+      this.farming.nextRandom() < 0.12
+    ) {
+      const at = this.workshopPosition!;
+      const id = this.world.getBlock(at.x, at.y, at.z);
+      this.setBlock(at.x, at.y, at.z, id < 118 ? id + 2 : 0);
+      if (id >= 118) this.toast("铁砧已经损坏，成品已取出");
+    }
+    this.workshopInput = null;
+    this.workshopName = "";
+    this.dirty = true;
+    this.sound("craft");
+  }
   clickSlot(
     source: "inventory" | "craft" | "container" | "armor",
     index: number | string,
@@ -1734,7 +1991,18 @@ export class Simulation {
       this.cursor &&
       (i === 1
         ? this.cursor.id !== "lapis_lazuli"
-        : this.cursor.count !== 1 || enchantability(this.cursor.id) <= 0)
+        : enchantability(this.cursor.id) <= 0 ||
+          (this.cursor.count !== 1 && !right) ||
+          (!!slots[i] && compatibleStacks(slots[i]!, this.cursor)))
+    )
+      return;
+    if (
+      source === "craft" &&
+      this.station === "grindstone" &&
+      this.cursor &&
+      ((!ITEMS[this.cursor.id]?.maxDurability && !this.cursor.enchantments) ||
+        (this.cursor.count !== 1 && !right) ||
+        (!!slots[i] && compatibleStacks(slots[i]!, this.cursor)))
     )
       return;
     if (source === "container" && this.container?.kind === "furnace") {
@@ -1767,8 +2035,30 @@ export class Simulation {
                 : -1;
           if (dest < 0) return;
           const subset = [this.craftSlots[dest]];
-          slots[i] = addItem(subset, stack);
+          if (dest === 0) {
+            if (subset[0]) return;
+            subset[0] = { ...clone(stack), count: 1 };
+            stack.count--;
+            if (!stack.count) slots[i] = null;
+          } else slots[i] = addItem(subset, stack);
           this.craftSlots[dest] = subset[0];
+          this.dirty = true;
+          return;
+        }
+        if (this.station === "anvil" || this.station === "grindstone") {
+          const dest = this.craftSlots[0] ? 1 : 0;
+          if (this.craftSlots[dest]) return;
+          if (
+            this.station === "grindstone" &&
+            !item.maxDurability &&
+            !stack.enchantments
+          )
+            return;
+          const moved = this.station === "grindstone" ? 1 : stack.count;
+          this.craftSlots[dest] = { ...clone(stack), count: moved };
+          stack.count -= moved;
+          if (!stack.count) slots[i] = null;
+          this.dirty = true;
           return;
         }
         if (item.armorSlot && !this.player.armor[item.armorSlot]) {
@@ -1824,13 +2114,27 @@ export class Simulation {
     this.player.inventory[this.player.selected] = old;
     this.sound("equip");
   }
-  giveItem(id: string) {
+  giveItem(id: string, enchantment?: string) {
     if (!this.creative || !ITEMS[id]) return;
     const item = ITEMS[id];
     this.player.inventory[this.player.selected] = {
       id,
       count: item.maxStack,
       ...(item.maxDurability ? { durability: item.maxDurability } : {}),
+      ...(id === "enchanted_book"
+        ? {
+            enchantments: {
+              [enchantment && Object.hasOwn(ENCHANTMENTS, enchantment)
+                ? enchantment
+                : "unbreaking"]:
+                ENCHANTMENTS[
+                  (enchantment && Object.hasOwn(ENCHANTMENTS, enchantment)
+                    ? enchantment
+                    : "unbreaking") as keyof typeof ENCHANTMENTS
+                ].maxLevel,
+            },
+          }
+        : {}),
     };
     this.sound("pickup");
   }
@@ -1846,7 +2150,10 @@ export class Simulation {
       const room =
         recipe &&
         (!output ||
-          (output.id === recipe.output &&
+          (compatibleStacks(output, {
+            id: recipe.output,
+            count: recipe.count,
+          }) &&
             output.count + recipe.count <= ITEMS[recipe.output].maxStack));
       container.burn = Math.max(0, container.burn - dt);
       if (
@@ -2199,7 +2506,13 @@ export class Simulation {
           )
             continue;
           const id = this.world.getBlock(x, y, z);
-          if (id && id !== 24 && id !== 81 && !isFluid(id))
+          if (
+            id &&
+            id !== 24 &&
+            id !== 81 &&
+            !isFluid(id) &&
+            (BLOCKS[id]?.blastResistance ?? 0) < 1200
+          )
             this.breakBlock({ x, y, z }, id, true);
         }
   }
@@ -2219,7 +2532,7 @@ export class Simulation {
           });
       }
     return {
-      manifest: { ...this.manifest, version: 6, updatedAt: Date.now() },
+      manifest: { ...this.manifest, version: 7, updatedAt: Date.now() },
       player: p,
       time: this.time,
       changes: this.world.getChanges(),

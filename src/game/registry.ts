@@ -283,6 +283,7 @@ block(112, "enchanting_table", "附魔台", 3, {
   opaque: false,
   shape: "enchanting_table",
   hardness: 5,
+  blastResistance: 1200,
   tool: "pickaxe",
   tier: 1,
 });
@@ -292,6 +293,56 @@ block(113, "bookshelf", "书架", 11, {
   drop: "book",
   dropCount: [3, 3],
 });
+for (let damage = 0; damage < 3; damage++)
+  for (let axis = 0; axis < 2; axis++) {
+    const key = ["anvil", "chipped_anvil", "damaged_anvil"][damage];
+    block(
+      114 + damage * 2 + axis,
+      `${key}${axis ? "_east_west" : ""}`,
+      ["铁砧", "开裂的铁砧", "损坏的铁砧"][damage],
+      15,
+      {
+        opaque: false,
+        shape: "anvil",
+        hardness: 5,
+        blastResistance: 1200,
+        tool: "pickaxe",
+        tier: 1,
+        drop: key,
+      },
+    );
+  }
+for (let state = 0; state < 12; state++)
+  block(120 + state, state ? `grindstone_${state}` : "grindstone", "砂轮", 3, {
+    opaque: false,
+    shape: "grindstone",
+    hardness: 2,
+    tool: "pickaxe",
+    tier: 1,
+    drop: "grindstone",
+  });
+block(132, "stone_slab", "石台阶", 3, {
+  opaque: false,
+  shape: "slab",
+  hardness: 2,
+  tool: "pickaxe",
+  tier: 1,
+});
+block(133, "stone_slab_upper", "石台阶（上半）", 3, {
+  opaque: false,
+  shape: "slab",
+  hardness: 2,
+  tool: "pickaxe",
+  tier: 1,
+  drop: "stone_slab",
+});
+block(134, "stone_slab_double", "双层石台阶", 3, {
+  hardness: 2,
+  tool: "pickaxe",
+  tier: 1,
+  drop: "stone_slab",
+  dropCount: [2, 2],
+});
 
 export const ITEMS: Record<string, ItemDefinition> = {};
 for (const definition of Object.values(BLOCKS)) {
@@ -300,7 +351,8 @@ for (const definition of Object.values(BLOCKS)) {
     [19, 25, 26, 27, 29].includes(definition.id) ||
     (definition.id >= 30 && definition.id <= 57) ||
     (definition.id >= 60 && definition.id <= 75) ||
-    [77, 78, 79, 80, 82].includes(definition.id)
+    [77, 78, 79, 80, 82, 115, 117, 119, 133, 134].includes(definition.id) ||
+    (definition.id >= 121 && definition.id <= 131)
   )
     continue;
   ITEMS[definition.key] = {
@@ -310,11 +362,13 @@ for (const definition of Object.values(BLOCKS)) {
     maxStack: 64,
     block: definition.id,
     texture: definition.topTexture ?? definition.texture,
-    ...(definition.id >= 111
-      ? { introducedVersion: 6 as const }
-      : definition.id >= 84
-        ? { introducedVersion: 4 as const }
-        : {}),
+    ...(definition.id >= 114
+      ? { introducedVersion: 7 as const }
+      : definition.id >= 111
+        ? { introducedVersion: 6 as const }
+        : definition.id >= 84
+          ? { introducedVersion: 4 as const }
+          : {}),
   };
 }
 Object.assign(ITEMS.leaves, { block: 82 });
@@ -351,6 +405,10 @@ item("coal", "煤炭", "#333842", { fuel: 80 });
 item("charcoal", "木炭", "#51473a", { fuel: 80 });
 item("raw_iron", "粗铁", "#c89976");
 item("iron_ingot", "铁锭", "#c4d0d5");
+item("enchanted_book", "附魔书", "#9673bb", {
+  maxStack: 1,
+  introducedVersion: 7,
+});
 for (const [id, name, color] of [
   ["raw_copper", "粗铜", "#c17a52"],
   ["raw_gold", "粗金", "#d4a844"],

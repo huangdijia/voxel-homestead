@@ -22,7 +22,8 @@ export const PERMANENT_LEAVES = 82;
 export const OAK_SAPLING = 83;
 
 export interface FallingNaturalBlock extends Vec3 {
-  id: 4 | 5;
+  id: 4 | 5 | 114 | 115 | 116 | 117 | 118 | 119;
+  distance?: number;
 }
 export interface NaturalState {
   version: 1;
@@ -32,10 +33,13 @@ export interface NaturalState {
   queue: Vec3[];
   /** Only blocks removed from the world but not yet successfully placed. */
   falling: FallingNaturalBlock[];
+  /** Distance of anvils currently represented by a moving world voxel. */
+  anvilFalls?: Array<Vec3 & { distance: number }>;
 }
 export interface NaturalCallbacks {
   setBlock(x: number, y: number, z: number, id: number): boolean;
   dropItem(position: Vec3, item: ItemStack): void;
+  anvilImpact?(position: Vec3, distance: number): void;
 }
 
 const directions = [
@@ -56,13 +60,18 @@ const validPosition = (p: Vec3) =>
   p.y <= NATURAL_MAX_Y;
 const isLeaf = (id: number) => id === NATURAL_LEAVES || id === PERMANENT_LEAVES;
 const isSand = (id: number): id is 4 | 5 => id === 4 || id === 5;
+const isAnvil = (id: number): id is 114 | 115 | 116 | 117 | 118 | 119 =>
+  id >= 114 && id <= 119;
+const isFalling = (id: number): id is FallingNaturalBlock["id"] =>
+  isSand(id) || isAnvil(id);
 const isNatural = (id: number) =>
-  isSand(id) || id === NATURAL_LEAVES || id === OAK_SAPLING;
+  isFalling(id) || id === NATURAL_LEAVES || id === OAK_SAPLING;
 const canDisplace = (id: number) => id === 0 || isFluid(id);
 const isFullSupport = (id: number) =>
-  !!BLOCKS[id]?.solid &&
-  (!BLOCKS[id].shape || BLOCKS[id].shape === "cube") &&
-  !(id >= 59 && id <= 67);
+  isAnvil(id) ||
+  (!!BLOCKS[id]?.solid &&
+    (!BLOCKS[id].shape || BLOCKS[id].shape === "cube") &&
+    !(id >= 59 && id <= 67));
 const blocksLight = (id: number) =>
   !!BLOCKS[id]?.opaque || id === 18 || id === 25;
 
@@ -75,6 +84,7 @@ const blocksLight = (id: number) =>
 export class NaturalUpdatesSystem {
   private queue = new Map<string, Vec3>();
   private falling = new Map<string, FallingNaturalBlock>();
+  private anvilFalls = new Map<string, Vec3 & { distance: number }>();
   private randomState: number;
   private accumulator = 0;
   private scanCursor = 0;
@@ -118,11 +128,40 @@ export class NaturalUpdatesSystem {
       this.queue.set(keyOf(p), { x: p.x, y: p.y, z: p.z });
     }
     for (const p of saved.falling) {
-      if (!validPosition(p) || !isSand(p.id) || this.falling.has(keyOf(p)))
+      if (
+        !validPosition(p) ||
+        !isFalling(p.id) ||
+        this.falling.has(keyOf(p)) ||
+        (p.distance !== undefined &&
+          (!isAnvil(p.id) ||
+            !Number.isInteger(p.distance) ||
+            p.distance < 0 ||
+            p.distance > 384))
+      )
         throw new Error("无效或重复的下落方块");
       if (this.loaded(p) && this.get(p) === p.id)
         throw new Error("下落方块与世界方块重复");
-      this.falling.set(keyOf(p), { x: p.x, y: p.y, z: p.z, id: p.id });
+      this.falling.set(keyOf(p), { ...p });
+    }
+    if (
+      saved.anvilFalls &&
+      (!Array.isArray(saved.anvilFalls) ||
+        saved.anvilFalls.length > NATURAL_FALLING_MAX)
+    )
+      throw new Error("无效的铁砧下落记录");
+    for (const p of saved.anvilFalls ?? []) {
+      if (
+        !validPosition(p) ||
+        !Number.isInteger(p.distance) ||
+        p.distance < 1 ||
+        p.distance > 384 ||
+        this.anvilFalls.has(keyOf(p)) ||
+        this.falling.has(keyOf(p)) ||
+        (this.loaded(p) && !isAnvil(this.get(p)))
+      )
+        throw new Error("无效或重复的铁砧下落位置");
+      this.anvilFalls.set(keyOf(p), { ...p });
+      this.enqueue(p, true);
     }
   }
 
@@ -167,6 +206,7 @@ export class NaturalUpdatesSystem {
   /** Call after an external edit; repeated notifications do not duplicate work. */
   notifyBlockChanged(p: Vec3, oldId: number, newId: number): void {
     if (!validPosition(p) || oldId === newId) return;
+    if (!this.writing.has(keyOf(p))) this.anvilFalls.delete(keyOf(p));
     const cargo = this.falling.get(keyOf(p));
     if (
       cargo &&
@@ -209,7 +249,15 @@ export class NaturalUpdatesSystem {
   }
   private dropSand(p: FallingNaturalBlock): void {
     this.falling.delete(keyOf(p));
-    this.drop(p, { id: p.id === 4 ? "sand" : "gravel", count: 1 });
+    this.anvilFalls.delete(keyOf(p));
+    this.drop(p, { id: BLOCKS[p.id].drop!, count: 1 });
+  }
+  private landAnvil(p: Vec3, id: number, distance: number) {
+    this.anvilFalls.delete(keyOf(p));
+    if (!isAnvil(id) || distance < 2) return;
+    this.callbacks.anvilImpact?.(p, distance);
+    if (this.nextRandom() < 0.05 + (distance - 1) * 0.05)
+      this.write(p, id < 118 ? id + 2 : 0);
   }
   private continueFall(p: FallingNaturalBlock): void {
     // A previously unloaded malformed checkpoint must not turn one saved voxel
@@ -217,6 +265,13 @@ export class NaturalUpdatesSystem {
     // call notifyBlockChanged and already resolve cargo before this can happen.
     if (this.get(p) === p.id) {
       this.falling.delete(keyOf(p));
+      if (isAnvil(p.id) && p.distance)
+        this.anvilFalls.set(keyOf(p), {
+          x: p.x,
+          y: p.y,
+          z: p.z,
+          distance: p.distance,
+        });
       this.enqueue(p);
       return;
     }
@@ -231,6 +286,11 @@ export class NaturalUpdatesSystem {
       if (this.falling.has(keyOf(below))) return;
       if (!this.write(below, p.id)) return;
       this.falling.delete(keyOf(p));
+      if (isAnvil(p.id))
+        this.anvilFalls.set(keyOf(below), {
+          ...below,
+          distance: Math.min(384, (p.distance ?? 0) + 1),
+        });
       this.moved.add(keyOf(below));
       this.enqueue(below);
       return;
@@ -239,13 +299,14 @@ export class NaturalUpdatesSystem {
       if (!this.write(p, p.id)) return;
       this.falling.delete(keyOf(p));
       this.moved.add(keyOf(p));
+      this.landAnvil(p, p.id, p.distance ?? 0);
       return;
     }
     // Slabs, farmland, beds, doors, plants and hollow composters are preserved.
     // A grid-aligned full voxel cannot rest on their partial collision surfaces.
     this.dropSand(p);
   }
-  private sand(p: Vec3, id: 4 | 5): void {
+  private sand(p: Vec3, id: FallingNaturalBlock["id"]): void {
     if (this.moved.has(keyOf(p))) {
       this.enqueue(p);
       return;
@@ -256,11 +317,17 @@ export class NaturalUpdatesSystem {
         this.enqueue(p);
         return;
       }
-      if (isFullSupport(this.get(below))) return;
+      if (isFullSupport(this.get(below))) {
+        this.landAnvil(p, id, this.anvilFalls.get(keyOf(p))?.distance ?? 0);
+        return;
+      }
     }
     if (
       this.falling.size >= NATURAL_FALLING_MAX ||
-      this.falling.has(keyOf(p))
+      this.falling.has(keyOf(p)) ||
+      (isAnvil(id) &&
+        !this.anvilFalls.has(keyOf(p)) &&
+        this.anvilFalls.size >= NATURAL_FALLING_MAX)
     ) {
       this.enqueue(p);
       return;
@@ -269,7 +336,14 @@ export class NaturalUpdatesSystem {
       this.enqueue(p);
       return;
     }
-    const cargo = { ...p, id };
+    const cargo: FallingNaturalBlock = {
+      ...p,
+      id,
+      ...(isAnvil(id)
+        ? { distance: this.anvilFalls.get(keyOf(p))?.distance ?? 0 }
+        : {}),
+    };
+    this.anvilFalls.delete(keyOf(p));
     this.falling.set(keyOf(p), cargo);
     this.continueFall(cargo);
   }
@@ -481,7 +555,7 @@ export class NaturalUpdatesSystem {
         continue;
       }
       const id = this.get(p);
-      if (isSand(id)) this.sand(p, id);
+      if (isFalling(id)) this.sand(p, id);
       else if (id === NATURAL_LEAVES) this.leaf(p);
       else if (id === OAK_SAPLING) {
         if (p.y > NATURAL_MIN_Y && !this.loaded({ ...p, y: p.y - 1 })) {
@@ -509,6 +583,9 @@ export class NaturalUpdatesSystem {
       scanCursor: this.scanCursor,
       queue: [...this.queue.values()].map((p) => ({ ...p })),
       falling: [...this.falling.values()].map((p) => ({ ...p })),
+      ...(this.anvilFalls.size
+        ? { anvilFalls: [...this.anvilFalls.values()].map((p) => ({ ...p })) }
+        : {}),
     };
   }
 }

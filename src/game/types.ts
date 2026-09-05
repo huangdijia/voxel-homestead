@@ -10,6 +10,8 @@ export type ItemStack = {
   count: number;
   durability?: number;
   enchantments?: Record<string, number>;
+  customName?: string;
+  repairCost?: number;
 };
 export type Slot = ItemStack | null;
 export type ArmorSlot = "head" | "chest" | "legs" | "feet";
@@ -57,7 +59,7 @@ export interface BlockChange extends Vec3 {
   id: number;
 }
 export type ContainerState =
-  | { kind: "chest"; slots: Slot[] }
+  | { kind: "chest"; slots: Slot[]; customName?: string }
   | {
       kind: "furnace";
       slots: Slot[];
@@ -65,9 +67,10 @@ export type ContainerState =
       burnTotal: number;
       progress: number;
       experience?: number;
+      customName?: string;
     };
 export interface SaveManifest {
-  version: 1 | 2 | 3 | 4 | 5 | 6;
+  version: 1 | 2 | 3 | 4 | 5 | 6 | 7;
   generatorVersion: GeneratorVersion;
   id: string;
   name: string;
@@ -103,6 +106,17 @@ export interface EnchantingView {
   progress: number;
   offers: EnchantingOffer[];
 }
+export interface WorkshopView {
+  kind: "anvil" | "grindstone";
+  output: Slot;
+  levelCost: number;
+  materialCost: number;
+  experienceMin: number;
+  experienceMax: number;
+  available: boolean;
+  reason?: string;
+  name: string;
+}
 export interface SaveData {
   manifest: SaveManifest;
   player: PlayerState;
@@ -132,6 +146,7 @@ export interface BlockDefinition {
   solid: boolean;
   opaque: boolean;
   hardness: number;
+  blastResistance?: number;
   texture: number;
   topTexture?: number;
   bottomTexture?: number;
@@ -148,10 +163,12 @@ export interface BlockDefinition {
     | "bed"
     | "crop"
     | "farmland"
-    | "enchanting_table";
+    | "enchanting_table"
+    | "anvil"
+    | "grindstone";
 }
 export interface ItemDefinition {
-  introducedVersion?: 4 | 6;
+  introducedVersion?: 4 | 6 | 7;
   id: string;
   name: string;
   category: "building" | "tools" | "materials" | "food";
@@ -207,7 +224,9 @@ export type GameCommand =
   | { type: "respawn" }
   | { type: "craft"; recipeId: string }
   | { type: "setTime"; time: number }
-  | { type: "enchant"; option: 0 | 1 | 2 };
+  | { type: "enchant"; option: 0 | 1 | 2 }
+  | { type: "workshopName"; name: string }
+  | { type: "takeWorkshopOutput"; shift?: boolean };
 export interface WorldEvent {
   type: "sound" | "toast" | "inventory" | "damage" | "block";
   message?: string;
@@ -232,6 +251,8 @@ export type Overlay =
   | "inventory"
   | "workbench"
   | "enchanting"
+  | "anvil"
+  | "grindstone"
   | "chest"
   | "furnace"
   | "death"
@@ -246,6 +267,7 @@ export interface GameUIBridge {
   openInventory(station?: "inventory" | "workbench"): void;
   getCraftSlots(): Slot[];
   getEnchanting(): EnchantingView | null;
+  getWorkshop(): WorkshopView | null;
   getContainer(): ContainerState | null;
   clickSlot(
     source: "inventory" | "craft" | "container" | "armor",
@@ -256,7 +278,7 @@ export interface GameUIBridge {
   getCursor(): Slot;
   takeCraftOutput(): void;
   getCraftOutput(): Slot;
-  giveItem(id: string): void;
+  giveItem(id: string, enchantment?: string): void;
   getRecipes(): RecipeDefinition[];
   save(): Promise<void>;
   exportCheckpoint(): void;

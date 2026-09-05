@@ -1,20 +1,28 @@
 {
   "sourceSnapshot": {
+    "src/engine/world-height.ts": {
+      "sha256": "29889a768a391c36176abdb3df70b30885ef03eafed2d7d98773f76f56b19184",
+      "bytes": 266
+    },
     "src/game/enchantments.ts": {
-      "sha256": "39eed1f86b8929f85782b9cf0f13ed94ffbebabba2ab46d94074bea746535049",
-      "bytes": 7584
+      "sha256": "677248979328a6324071b9ea32fdb3489d76326f7030deab132b16d6af29d99f",
+      "bytes": 8096
     },
     "src/game/inventory.ts": {
-      "sha256": "316ff3be2390b976b8ef27386cfa2e281e5525895fc0563130b8a6aa59972e11",
-      "bytes": 3759
+      "sha256": "5a6659a5f804bf85652adb1e620c2834d0f4704178d6fc461ee8e4f7ab58fb51",
+      "bytes": 3842
     },
     "src/game/recipes.ts": {
-      "sha256": "dbbb310170219b1b61763b84e167f515a9fe8d19405928c0ee1b69aaa16da54a",
-      "bytes": 9227
+      "sha256": "9e64bcd0773e5e26b2432f61c3a4608eb22e04e7dad81aabacde1129ea59d98c",
+      "bytes": 9498
     },
     "src/game/registry.ts": {
-      "sha256": "2c08f7650343da43adb3a6370ed04049d295b8428e8bf215e34ef79b8f5f3bb2",
-      "bytes": 14274
+      "sha256": "2b945199824201a47e2a713002cab4f43347c870222d5de7c243664f0776491d",
+      "bytes": 15737
+    },
+    "src/game/types.ts": {
+      "sha256": "5256ee50e85fdad691a674ec7e9d62ac128ed2836a0701a451a6f702bc8182f3",
+      "bytes": 7244
     }
   },
   "statusRule": "Definition matches and existing test names are leads, not executed per-entry acceptance. No acceptance is promoted by this generator.",
@@ -36,7 +44,12 @@
     "cooked_pork": "cooked_porkchop",
     "raw_mutton": "mutton",
     "raw_beef": "beef",
-    "wet_farmland": "farmland"
+    "wet_farmland": "farmland",
+    "anvil_east_west": "anvil",
+    "chipped_anvil_east_west": "chipped_anvil",
+    "damaged_anvil_east_west": "damaged_anvil",
+    "stone_slab_upper": "stone_slab",
+    "stone_slab_double": "stone_slab"
   },
   "cropAliases": {
     "wheat": "wheat",
@@ -45,12 +58,37 @@
     "beetroot": "beetroots"
   },
   "composterAlias": "composter_1..composter_8 -> minecraft:composter; state acceptance remains unverified",
+  "grindstoneAlias": "grindstone_1..grindstone_11 -> minecraft:grindstone; each source face/facing state remains subject to acceptance",
+  "schemaContract": {
+    "saveVersions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "generatorVersions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "basis": "AST-declared local type contracts only; import validation, migration and terrain compatibility require separate behavior evidence.",
+    "source": {
+      "save": "src/game/types.ts",
+      "generator": "src/engine/world-height.ts"
+    }
+  },
   "counts": {
-    "blocks": 114,
-    "items": 137,
+    "blocks": 135,
+    "items": 143,
     "entities": 5,
     "enchantments": 8,
-    "craftingRecipes": 90,
+    "craftingRecipes": 93,
     "smeltingRecipes": 27
   },
   "unmatchedLocal": {
@@ -509,6 +547,72 @@
       "output": {
         "id": "minecraft:oak_slab",
         "count": 6
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "stone_slab",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:stone",
+          "minecraft:stone",
+          "minecraft:stone"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:stone_slab",
+        "count": 6
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "anvil",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_block",
+          "minecraft:iron_block",
+          "minecraft:iron_block"
+        ],
+        [
+          null,
+          "minecraft:iron_ingot",
+          null
+        ],
+        [
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:anvil",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "grindstone",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:stick",
+          "minecraft:stone_slab",
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:oak_planks",
+          null,
+          "minecraft:oak_planks"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:grindstone",
+        "count": 1
       },
       "station": "workbench"
     },
@@ -2687,6 +2791,27 @@
       "acceptance": "not-run"
     },
     {
+      "id": "stone_slab",
+      "exactSourceRecords": [
+        "prismarine:recipe/264/f429d90146f44862047c"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "anvil",
+      "exactSourceRecords": [
+        "prismarine:recipe/419/ef43bf9e05ff7b74ad51"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "grindstone",
+      "exactSourceRecords": [
+        "prismarine:recipe/1210/5a0b410c69a198d619dd"
+      ],
+      "acceptance": "not-run"
+    },
+    {
       "id": "bed",
       "exactSourceRecords": [
         "prismarine:recipe/964/ae2efa00ac9161705a6a"
@@ -3233,7 +3358,11 @@
     "tests/enchanting-resources.test.ts",
     "tests/enchanting-resources-generator.test.ts",
     "tests/sugar-cane.test.ts",
-    "tests/enchanting-integration.test.ts"
+    "tests/enchanting-integration.test.ts",
+    "tests/workshop-metadata.test.ts",
+    "tests/workshops.test.ts",
+    "tests/workshop-integration.test.ts",
+    "tests/workshop-visuals.test.ts"
   ],
   "candidateTestRule": "Locate relevant cases in these files; file existence does not certify any catalog row. Enchantment, resource, livestock and other partial definitions remain unverified until entry-specific acceptance is linked."
 }

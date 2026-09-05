@@ -560,7 +560,11 @@ function GameInterface({
         }
         return;
       }
-      if ((e.target as HTMLElement)?.matches("input,select,textarea")) return;
+      if (
+        (e.target as HTMLElement)?.matches("input,select,textarea") &&
+        e.code !== "Escape"
+      )
+        return;
       if (e.code === "F3") {
         e.preventDefault();
         setDebug((v) => !v);
@@ -575,9 +579,15 @@ function GameInterface({
           game.setPaused(true);
           setOverlay("pause");
         } else if (
-          ["inventory", "workbench", "chest", "furnace", "enchanting"].includes(
-            overlay,
-          )
+          [
+            "inventory",
+            "workbench",
+            "chest",
+            "furnace",
+            "enchanting",
+            "anvil",
+            "grindstone",
+          ].includes(overlay)
         )
           void resume();
       }
@@ -727,9 +737,15 @@ function GameInterface({
         </div>
       )}
       {snapshot.ready &&
-        ["inventory", "workbench", "chest", "furnace", "enchanting"].includes(
-          overlay || "",
-        ) && (
+        [
+          "inventory",
+          "workbench",
+          "chest",
+          "furnace",
+          "enchanting",
+          "anvil",
+          "grindstone",
+        ].includes(overlay || "") && (
           <Inventory
             game={game}
             snapshot={snapshot}
@@ -869,7 +885,9 @@ function HUD({
           className={`selected-item-name ${hasEnchantments(current) ? "enchanted-name" : ""}`}
           title={current ? itemDescription(current) : "空手"}
         >
-          {current ? ITEMS[current.id]?.name || current.id : "空手"}
+          {current
+            ? current.customName || ITEMS[current.id]?.name || current.id
+            : "空手"}
         </div>
         {player.oxygen < 20 && snapshot.manifest.mode === "survival" && (
           <div className="oxygen-row">

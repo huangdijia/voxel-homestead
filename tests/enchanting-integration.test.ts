@@ -111,9 +111,9 @@ afterEach(() => {
 });
 
 describe("experience survives real rule transitions", () => {
-  it("starts v6 empty and keeps experience out of item inventory", () => {
+  it("starts v7 empty and keeps experience out of item inventory", () => {
     const save = createNewSave("空世界", "xp", "survival");
-    expect(save.manifest).toMatchObject({ version: 6, generatorVersion: 6 });
+    expect(save.manifest).toMatchObject({ version: 7, generatorVersion: 6 });
     expect(validateSave(save)).toEqual(save);
     expect(save.player.inventory.every((s) => s === null)).toBe(true);
     expect(save.progression?.points).toBe(0);
@@ -539,7 +539,7 @@ describe("equipment effects are consumed by Simulation", () => {
   });
 });
 
-describe("version six save validation and migration", () => {
+describe("current save validation and migration of the version six gameplay extension", () => {
   it("round trips fractional levels, orbs, enchantments, cane and furnace bank as an independent import", async () => {
     vi.stubGlobal("indexedDB", new IDBFactory());
     const { sim, world } = fixture();
@@ -580,7 +580,7 @@ describe("version six save validation and migration", () => {
     await saveWorld(sim.snapshot());
     expect(await loadMigrationBackup(old.manifest.id, 5)).toEqual(old);
     expect((await loadWorld(old.manifest.id))?.manifest).toMatchObject({
-      version: 6,
+      version: 7,
       generatorVersion: 5,
     });
   });
@@ -607,8 +607,9 @@ describe("version six save validation and migration", () => {
       },
     ],
     [
-      "wrong-item",
+      "wrong-item in old v6 schema",
       (s: SaveData) => {
+        s.manifest.version = 6;
         s.player.inventory[0] = {
           id: "dirt",
           count: 1,

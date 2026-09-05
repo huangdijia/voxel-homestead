@@ -9,7 +9,9 @@ import type {
 import { ITEMS } from "../game/registry";
 import { Icon, ItemIcon, StackView } from "./Icons";
 import { EnchantingWorkspace } from "./Enchanting";
-import { itemDescription } from "./item-details";
+import { WorkshopWorkspace } from "./Workshop";
+import { ENCHANTMENTS } from "../game/enchantments";
+import { enchantmentLabel, itemDescription } from "./item-details";
 
 const categories = [
   { id: "all", name: "全部物品" },
@@ -41,15 +43,20 @@ export function Inventory({
   const isCreative = snapshot.manifest.mode === "creative";
   const crafting = overlay === "inventory" || overlay === "workbench";
   const title =
-    overlay === "workbench"
+    container?.customName ||
+    (overlay === "workbench"
       ? "工作台"
       : overlay === "enchanting"
         ? "附魔台"
-        : overlay === "chest"
-          ? "储物箱"
-          : overlay === "furnace"
-            ? "熔炉"
-            : "背包与合成";
+        : overlay === "anvil"
+          ? "铁砧"
+          : overlay === "grindstone"
+            ? "砂轮"
+            : overlay === "chest"
+              ? "储物箱"
+              : overlay === "furnace"
+                ? "熔炉"
+                : "背包与合成");
   useEffect(() => {
     const fn = (e: MouseEvent) => setMouse({ x: e.clientX, y: e.clientY });
     window.addEventListener("mousemove", fn);
@@ -117,7 +124,7 @@ export function Inventory({
       onContextMenu={(e) => e.preventDefault()}
     >
       <section
-        className={`inventory-window ${overlay === "enchanting" ? "enchanting-window" : ""}`}
+        className={`inventory-window ${["enchanting", "anvil", "grindstone"].includes(overlay ?? "") ? "enchanting-window" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-label={title}
@@ -140,6 +147,17 @@ export function Inventory({
             {overlay === "enchanting" && (
               <EnchantingWorkspace
                 view={game.getEnchanting()}
+                slots={craft}
+                game={game}
+                renderSlot={(stack, index, label) =>
+                  slot(stack, index, "craft", label)
+                }
+              />
+            )}
+            {(overlay === "anvil" || overlay === "grindstone") && (
+              <WorkshopWorkspace
+                kind={overlay}
+                view={game.getWorkshop()}
                 slots={craft}
                 game={game}
                 renderSlot={(stack, index, label) =>
@@ -324,6 +342,7 @@ export function Inventory({
                     {Object.values(ITEMS)
                       .filter(
                         (item) =>
+                          item.id !== "enchanted_book" &&
                           (category === "all" || item.category === category) &&
                           item.name.includes(query),
                       )
@@ -337,6 +356,35 @@ export function Inventory({
                           <ItemIcon id={item.id} />
                         </button>
                       ))}
+                    {(category === "all" || category === "materials") &&
+                      Object.values(ENCHANTMENTS)
+                        .filter((enchantment) =>
+                          `附魔书 ${enchantment.name}`.includes(query),
+                        )
+                        .map((enchantment) => (
+                          <button
+                            key={`book-${enchantment.id}`}
+                            className="item-slot creative-book"
+                            title={`附魔书 · ${enchantmentLabel(enchantment.id, enchantment.maxLevel)} · 点击获取`}
+                            aria-label={`获取附魔书 ${enchantmentLabel(enchantment.id, enchantment.maxLevel)}`}
+                            onClick={() =>
+                              game.giveItem("enchanted_book", enchantment.id)
+                            }
+                          >
+                            <StackView
+                              stack={{
+                                id: "enchanted_book",
+                                count: 1,
+                                enchantments: {
+                                  [enchantment.id]: enchantment.maxLevel,
+                                },
+                              }}
+                            />
+                            <span className="creative-book-label">
+                              {enchantment.name}
+                            </span>
+                          </button>
+                        ))}
                   </div>
                   <p className="recipe-hint">点击物品，将一组物品放入背包。</p>
                 </>

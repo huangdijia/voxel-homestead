@@ -104,16 +104,45 @@ const localEnchantments = enchantmentInitializer.arguments[0].properties.map((pr
 });
 assert(localEnchantments.length > 0 && new Set(localEnchantments.map((entry) => entry.id)).size === localEnchantments.length, 'Empty/duplicate local enchantments');
 
+// Save and generator versions are distinct local contracts, not Minecraft data versions.
+async function readTypeSource(relative) {
+  const content = await fs.readFile(path.join(root, relative), 'utf8');
+  localSources[relative] = { sha256: hash(content), bytes: Buffer.byteLength(content) };
+  return ts.createSourceFile(relative, content, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+}
+function numericUnion(node, name) {
+  assert(node && ts.isUnionTypeNode(node), `Unsupported numeric union: ${name}`);
+  const values = node.types.map((entry) => {
+    assert(ts.isLiteralTypeNode(entry) && ts.isNumericLiteral(entry.literal), `Invalid numeric type: ${name}`);
+    return Number(entry.literal.text);
+  });
+  assert(values.length > 0 && values.every(Number.isSafeInteger) && new Set(values).size === values.length, `Invalid version values: ${name}`);
+  return values.sort((a, b) => a - b);
+}
+const typesAst = await readTypeSource('src/game/types.ts');
+const manifestType = typesAst.statements.find((statement) => ts.isInterfaceDeclaration(statement) && statement.name.text === 'SaveManifest');
+const manifestVersion = manifestType?.members.find((member) => member.name && ts.isIdentifier(member.name) && member.name.text === 'version');
+const generatorAst = await readTypeSource('src/engine/world-height.ts');
+const generatorType = generatorAst.statements.find((statement) => ts.isTypeAliasDeclaration(statement) && statement.name.text === 'GeneratorVersion');
+const schemaContract = {
+  saveVersions: numericUnion(manifestVersion?.type, 'SaveManifest.version'),
+  generatorVersions: numericUnion(generatorType?.type, 'GeneratorVersion'),
+  basis: 'AST-declared local type contracts only; import validation, migration and terrain compatibility require separate behavior evidence.',
+  source: { save: 'src/game/types.ts', generator: 'src/engine/world-height.ts' },
+};
+
 const aliases = {
   grass: 'grass_block', log: 'oak_log', leaves: 'oak_leaves', planks: 'oak_planks', workbench: 'crafting_table',
   door: 'oak_door', door_open: 'oak_door', door_top: 'oak_door', door_top_open: 'oak_door',
   slab: 'oak_slab', bed: 'white_bed', bed_head: 'white_bed', wool: 'white_wool',
   raw_pork: 'porkchop', cooked_pork: 'cooked_porkchop', raw_mutton: 'mutton', raw_beef: 'beef', wet_farmland: 'farmland',
+  anvil_east_west: 'anvil', chipped_anvil_east_west: 'chipped_anvil', damaged_anvil_east_west: 'damaged_anvil',
+  stone_slab_upper: 'stone_slab', stone_slab_double: 'stone_slab',
 };
 const cropNames = { wheat: 'wheat', carrot: 'carrots', potato: 'potatoes', beetroot: 'beetroots' };
 function canonical(localId) {
   const crop = /^(wheat|carrot|potato|beetroot)_crop_\d+$/.exec(localId);
-  return `minecraft:${crop ? cropNames[crop[1]] : /^composter_[1-8]$/.test(localId) ? 'composter' : aliases[localId] ?? localId.replace(/^wood_/, 'wooden_').replace(/^gold_(pickaxe|axe|shovel|sword|hoe|helmet|chestplate|leggings|boots)$/, 'golden_$1')}`;
+  return `minecraft:${crop ? cropNames[crop[1]] : /^composter_[1-8]$/.test(localId) ? 'composter' : /^grindstone_(?:[1-9]|1[01])$/.test(localId) ? 'grindstone' : aliases[localId] ?? localId.replace(/^wood_/, 'wooden_').replace(/^gold_(pickaxe|axe|shovel|sword|hoe|helmet|chestplate|leggings|boots)$/, 'golden_$1')}`;
 }
 const baselineBlocks = new Set(Object.values(BLOCKS).filter((entry) => entry.id <= 27).map((entry) => canonical(entry.key)));
 const baselineItems = new Set([
@@ -335,6 +364,18 @@ if (args.has('--self-test')) {
   for (const entry of catalog.enchantments.filter((entry) => entry.implementation.localDefinitions.length))
     assert(entry.acceptance.status === 'not-run' && entry.implementation.localDefinitions[0].maxLevel === entry.reference.maxLevel, `Unverified enchantment definition mismatch: ${entry.id}`);
   selfTests.push('eight source-backed enchantment mappings remain unaccepted');
+  for (const [id, count] of [['anvil', 2], ['chipped_anvil', 2], ['damaged_anvil', 2], ['grindstone', 12], ['stone_slab', 3]]) {
+    const entry = catalog.blocks.find((row) => row.id === `minecraft:${id}`);
+    assert(entry?.implementation.localDefinitions.length === count && entry.implementation.status === 'partial-unverified' && entry.acceptance.status === 'not-run', `Workshop states must map conservatively: ${id}`);
+  }
+  assert(canonical('grindstone_12') === 'minecraft:grindstone_12', 'Do not silently map undeclared grindstone states');
+  selfTests.push('workshop state aliases preserve unaccepted target variants');
+  const storedBook = catalog.items.find((entry) => entry.id === 'minecraft:enchanted_book');
+  assert(storedBook?.implementation.localDefinitions.length === 1 && storedBook.implementation.status === 'partial-unverified' && storedBook.acceptance.status === 'not-run', 'A generic enchanted book definition is not acceptance of every stored enchantment variant');
+  assert(catalog.enchantments.filter((entry) => entry.implementation.status === 'not-mapped').length === 34, 'Enchanted books must not map additional unimplemented enchantments');
+  selfTests.push('enchanted book definition does not imply all 42 enchantments');
+  assert(JSON.stringify(schemaContract.saveVersions) === '[1,2,3,4,5,6,7]' && JSON.stringify(schemaContract.generatorVersions) === '[1,2,3,4,5,6]', 'Review save and generator version baselines separately');
+  selfTests.push('save schema seven leaves generator version six unchanged');
 }
 
 const countBy = (entries, callback) => Object.fromEntries([...new Set(entries.map(callback))].sort().map((key) => [key, entries.filter((entry) => callback(entry) === key).length]));
@@ -356,10 +397,12 @@ const localEvidence = {
   sourceSnapshot: index.localSourceSnapshot,
   statusRule: 'Definition matches and existing test names are leads, not executed per-entry acceptance. No acceptance is promoted by this generator.',
   aliases, cropAliases: cropNames, composterAlias: 'composter_1..composter_8 -> minecraft:composter; state acceptance remains unverified',
+  grindstoneAlias: 'grindstone_1..grindstone_11 -> minecraft:grindstone; each source face/facing state remains subject to acceptance',
+  schemaContract,
   counts: { blocks: Object.keys(BLOCKS).length, items: Object.keys(ITEMS).length, entities: Object.keys(ENTITIES).length, enchantments: localEnchantments.length, craftingRecipes: RECIPES.length, smeltingRecipes: Object.keys(SMELTING).length },
   unmatchedLocal, enchantmentDefinitions: localEnchantments, craftingRecipes: localRecipes, smeltingRecipes: localSmelting,
   localRecipeLinks: localRecipes.map((recipe) => ({ id: recipe.id, exactSourceRecords: catalog.recipes.filter((entry) => entry.implementation.localRecipes.includes(recipe.id)).map((entry) => entry.id), acceptance: 'not-run' })),
-  candidateTestFiles: ['tests/rules.test.ts', 'tests/simulation.test.ts', 'tests/survival-systems.test.ts', 'tests/engine.test.ts', 'tests/engine-world.test.ts', 'tests/storage.test.ts', 'tests/enchantments.test.ts', 'tests/experience.test.ts', 'tests/enchanting-resources.test.ts', 'tests/enchanting-resources-generator.test.ts', 'tests/sugar-cane.test.ts', 'tests/enchanting-integration.test.ts'],
+  candidateTestFiles: ['tests/rules.test.ts', 'tests/simulation.test.ts', 'tests/survival-systems.test.ts', 'tests/engine.test.ts', 'tests/engine-world.test.ts', 'tests/storage.test.ts', 'tests/enchantments.test.ts', 'tests/experience.test.ts', 'tests/enchanting-resources.test.ts', 'tests/enchanting-resources-generator.test.ts', 'tests/sugar-cane.test.ts', 'tests/enchanting-integration.test.ts', 'tests/workshop-metadata.test.ts', 'tests/workshops.test.ts', 'tests/workshop-integration.test.ts', 'tests/workshop-visuals.test.ts'],
   candidateTestRule: 'Locate relevant cases in these files; file existence does not certify any catalog row. Enchantment, resource, livestock and other partial definitions remain unverified until entry-specific acceptance is linked.',
 };
 const outputs = new Map([

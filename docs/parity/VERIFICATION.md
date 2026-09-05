@@ -36,3 +36,25 @@
 实际执行 `node --check scripts/build-parity-catalog.mjs`、`node scripts/build-parity-catalog.mjs --self-test` 和 `node scripts/build-parity-catalog.mjs --check --self-test` 均通过；本次未重新下载来源。自检共 11 项，新增覆盖牛肉别名、M2 排期及 8 条附魔映射仍未验收的约束。
 
 仍为 **5,953 条内容、42 个附魔目标（8 条 `partial-unverified`、34 条 `not-mapped`）、43 条独立行为用例、10 类缺失领域、0 条逐项验收通过**。本次只验证枚举、映射和可复现性，不把已写代码或整文件测试结果提升为内容域全量完成。
+
+
+## 2026-09-05 铁砧、砂轮与存档 v7 映射更新
+
+实际执行 `node --check scripts/build-parity-catalog.mjs`、`node scripts/build-parity-catalog.mjs --self-test`、`node scripts/build-parity-catalog.mjs --check --self-test`，退出码均为 0。此次使用既有锁定来源，未重新下载。自检从 11 增至 **14 项**：新增检查铁砧/砂轮/台阶状态别名保持未验收、通用附魔书不能覆盖其余 34 种附魔、存档 v7 与生成器 v6 分开固定。
+
+独立 Python 标准库复核全部 **15 个来源文件**与 **6 个本地源码文件**的 SHA256/大小，验证 5,953 个唯一验收 ID 与 48 条行为用例全部仍为待验，并核对新增状态归并数量。生成器 SHA256：`14e4a9a1c6b1ae47a218222138f46db343e29fb3e74cea987c6dd397fe0ec6aa`。本次源码快照如下；之后若源码变化，应以重新生成的 local-evidence/index 和新运行记录为准：
+
+| 本地文件 | SHA256 |
+| --- | --- |
+| `src/engine/world-height.ts` | `29889a768a391c36176abdb3df70b30885ef03eafed2d7d98773f76f56b19184` |
+| `src/game/enchantments.ts` | `677248979328a6324071b9ea32fdb3489d76326f7030deab132b16d6af29d99f` |
+| `src/game/inventory.ts` | `5a6659a5f804bf85652adb1e620c2834d0f4704178d6fc461ee8e4f7ab58fb51` |
+| `src/game/recipes.ts` | `9e64bcd0773e5e26b2432f61c3a4608eb22e04e7dad81aabacde1129ea59d98c` |
+| `src/game/registry.ts` | `6cc4eecc48ce40365467f7caf741993a640dd799118b203671a913ddcff2c41f` |
+| `src/game/types.ts` | `e9bd1e18ed3792f1d86e21498d7ea7e7089dd0737e645d62330721eed944d0ae` |
+
+本地共有 **135 个方块表示（含空气）、143 个物品定义、5 个生物定义、8 个附魔定义、93 个合成定义、27 个熔炼定义**。映射后为 69 个目标方块、141 个目标物品、5 个实体、14 个食物和 8 个附魔的局部定义证据；这些跨域数值有重叠，不能相加为完成率。新增铁砧三种损坏级别各有 2 个本地轴向表示，砂轮有 12 个，石台阶有 3 个；目标数据中铁砧每级有 4 朝向、砂轮有 12 个 face/facing 组合、石台阶含水属性展开为 6 个状态，均未自动提升为状态全量验收。
+
+合成组合为 **79 条严格定义匹配、153 条仅同产物候选、1,238 条未映射**。新石台阶、铁砧和砂轮各匹配一条源组合，其余木材或目标特殊配方不会因同名自动通过。新增 5 条行为规格覆盖台阶状态、铁砧、砂轮、书本附魔与本地 v7 迁移，原 43 条保留为 **48 条**。
+
+**12 个领域、5,953 条内容、42 个附魔目标（8 局部映射、34 未映射）、10 类缺失领域、0 条内容验收通过、0 条行为验收通过**均保持明确。类型 AST 读取的存档版本为 1..7、生成器仍为 1..6；这不是运行迁移证明。当前子任务没有运行浏览器或判定工坊玩法通过，游戏测试与实际交互证据由项目验证记录另行提供。

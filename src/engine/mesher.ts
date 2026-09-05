@@ -681,7 +681,7 @@ export function buildChunk(request: ChunkRequest): ChunkResult {
           addMineral(x, y, z, id, mineral);
         } else if (fluidInfo(id)) {
           addFluid(x, y, z, id);
-        } else if (id >= 111 && id <= 113) {
+        } else if (id >= 111 && id <= 134) {
           for (const part of progressionBlockParts(id)) {
             if (part.face !== undefined) {
               const d = directions[part.face];

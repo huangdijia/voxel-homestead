@@ -232,11 +232,11 @@ describe("deterministic enchantment table offers", () => {
       ).toBe(true);
     }
   });
-  it("rejects enchanted/stacked/non-equipment input and malformed choices without mutations", () => {
+  it("rejects enchanted/stacked/unsupported input and malformed choices without mutations", () => {
     for (const input of [
       { ...pick, enchantments: { fortune: 3 } },
       { ...pick, count: 2 },
-      { id: "book", count: 1 },
+      { id: "enchanted_book", count: 1, enchantments: { efficiency: 1 } },
       { id: "shears", count: 1 },
       { id: "stone", count: 1 },
     ]) {

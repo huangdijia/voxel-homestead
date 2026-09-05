@@ -32,6 +32,19 @@ recipe("torch_charcoal", ["C", "S"], { C: "charcoal", S: "stick" }, "torch", 4);
 recipe("door", ["PP", "PP", "PP"], { P: "planks" }, "door", 3);
 recipe("ladder", ["S S", "SSS", "S S"], { S: "stick" }, "ladder", 3);
 recipe("slab", ["PPP"], { P: "planks" }, "slab", 6);
+recipe("stone_slab", ["SSS"], { S: "stone" }, "stone_slab", 6);
+recipe(
+  "anvil",
+  ["BBB", " I ", "III"],
+  { B: "iron_block", I: "iron_ingot" },
+  "anvil",
+);
+recipe(
+  "grindstone",
+  ["SCS", "P P"],
+  { S: "stick", C: "stone_slab", P: "planks" },
+  "grindstone",
+);
 recipe("bed", ["WWW", "PPP"], { W: "wool", P: "planks" }, "bed");
 for (const [material, ingredient, suffix] of [
   ["wood", "planks", ""],

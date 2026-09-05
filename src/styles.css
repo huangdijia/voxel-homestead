@@ -2882,6 +2882,135 @@ button:not(.item-slot):not(.hotbar-slot):not(.recipe) kbd {
     scroll-behavior: auto !important;
   }
 }
+.workshop-workspace {
+  margin-bottom: 22px;
+  padding: 17px;
+  background: #f0eedf;
+  border: 1px solid #d6d6c1;
+}
+.workshop-name {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 18px;
+  color: #647057;
+  font-size: 11px;
+}
+.workshop-name > span {
+  display: flex;
+  justify-content: space-between;
+}
+.workshop-name small {
+  color: #949780;
+  font-size: 10px;
+}
+.workshop-name input {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid #bfc7ac;
+  border-bottom: 2px solid #aeb697;
+  border-radius: 2px;
+  padding: 10px 12px;
+  background: #fbfaef;
+  color: #444f3e;
+  font: inherit;
+  font-size: 13px;
+}
+.workshop-name input:focus-visible {
+  outline: 2px solid #829768;
+  outline-offset: 2px;
+}
+.workshop-name input:disabled {
+  opacity: 0.6;
+}
+.workshop-flow {
+  display: grid;
+  grid-template-columns: 1fr 20px 1.6fr 26px 1fr;
+  align-items: center;
+  gap: 9px;
+  color: #a1a58e;
+  padding: 12px 4px 17px;
+}
+.workshop-flow > svg {
+  margin-top: 20px;
+}
+.workshop-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+}
+.workshop-input > span {
+  min-height: 14px;
+  font-size: 10px;
+  text-align: center;
+  color: #7d856c;
+}
+.workshop-input > .item-slot {
+  width: 54px;
+  height: 54px;
+}
+.workshop-result > .item-slot:disabled {
+  cursor: default;
+  opacity: 0.62;
+}
+.workshop-status {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding-top: 12px;
+  border-top: 1px solid #ccd1bb;
+  color: #8a917b;
+  font-size: 11px;
+}
+.workshop-status.available > span {
+  color: #647d42;
+}
+.workshop-status strong {
+  color: #9e7159;
+  font-weight: 500;
+}
+.workshop-note {
+  margin: 10px 0 0;
+  color: #8f957e;
+  font-size: 10px;
+  line-height: 1.7;
+}
+.workshop-note > span {
+  display: block;
+}
+.creative-grid .creative-book {
+  padding-bottom: 10px;
+}
+.creative-book-label {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  font-size: 8px;
+  line-height: 10px;
+  color: #6a597d;
+  text-align: center;
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .workshop-workspace {
+    padding: 12px 8px;
+  }
+  .workshop-flow {
+    gap: 5px;
+    grid-template-columns: 1fr 14px 1.4fr 18px 1fr;
+  }
+  .workshop-input > .item-slot {
+    width: 45px;
+    height: 45px;
+  }
+  .workshop-input > span {
+    font-size: 9px;
+  }
+}
 
 /* Keep the inventory actions visible on short desktop viewports. */
 .inventory-window {

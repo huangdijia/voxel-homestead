@@ -397,7 +397,7 @@ describe("height-aware save format", () => {
       new HeightWorld(0, old.changes),
       old,
     ).snapshot();
-    expect(next.manifest.version).toBe(6);
+    expect(next.manifest.version).toBe(7);
     expect(next.manifest.generatorVersion).toBe(4);
     expect(next.player).toEqual(old.player);
     await saveWorld(next);

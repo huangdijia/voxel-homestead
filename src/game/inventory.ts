@@ -13,6 +13,8 @@ const copy = (stack: ItemStack): ItemStack => ({
 });
 export const compatibleStacks = (a: ItemStack, b: ItemStack) =>
   a.id === b.id &&
+  a.customName === b.customName &&
+  (a.repairCost ?? 0) === (b.repairCost ?? 0) &&
   (a.durability ?? ITEMS[a.id]?.maxDurability) ===
     (b.durability ?? ITEMS[b.id]?.maxDurability) &&
   Object.keys(a.enchantments ?? {}).length ===
@@ -30,7 +32,7 @@ export function countItem(slots: Slot[], id: string): number {
 export function addItem(slots: Slot[], stack: ItemStack): ItemStack | null {
   const definition = ITEMS[stack.id];
   if (!definition || !Number.isSafeInteger(stack.count) || stack.count < 1)
-    return { ...stack };
+    return copy(stack);
   const remaining = copy(stack);
   for (const slot of slots) {
     if (!slot || !compatibleStacks(slot, remaining)) continue;
