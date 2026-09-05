@@ -618,7 +618,20 @@ export class Simulation {
     position: Vec3,
     id = this.world.getBlock(position.x, position.y, position.z),
     exploded = false,
+    wear = true,
   ) {
+    const blockX = Math.floor(position.x),
+      blockY = Math.floor(position.y),
+      blockZ = Math.floor(position.z);
+    // Side effects must follow a successful authoritative edit, including explosion edges.
+    if (
+      !this.world.isReady(blockX, blockZ) ||
+      this.world.getBlock(blockX, blockY, blockZ) !== id ||
+      !BLOCKS[id]
+    )
+      return;
+    const pairedZ = id === 22 ? blockZ + 1 : id === 27 ? blockZ - 1 : blockZ;
+    if (!this.world.isReady(blockX, pairedZ)) return;
     if (id === 0 || id === 6 || (id === 24 && (!this.creative || exploded)))
       return;
     const def = BLOCKS[id],
@@ -636,6 +649,7 @@ export class Simulation {
       z: Math.floor(position.z),
     };
     this.setBlock(p.x, p.y, p.z, 0);
+    if (this.world.getBlock(p.x, p.y, p.z) !== 0) return;
     delete this.composters[posKey(p)];
     if (id === 18 || id === 19) {
       this.setBlock(p.x, p.y + 1, p.z, 0);
@@ -674,7 +688,7 @@ export class Simulation {
         { x: p.x + 0.5, y: p.y + 0.1, z: p.z + 0.5 },
       );
     if (!exploded) {
-      this.wearTool();
+      if (wear) this.wearTool();
       this.exhaustion += 0.025;
       this.sound("break");
     }
@@ -705,7 +719,7 @@ export class Simulation {
         along > 0 &&
         along < nearest &&
         side < 0.75 &&
-        (!wall || along < distance(eye, wall.position) + 0.6)
+        (!wall || along < wall.distance)
       ) {
         victim = e;
         nearest = along;
@@ -748,6 +762,10 @@ export class Simulation {
       def = held ? ITEMS[held.id] : null;
     const target = this.target();
     if (held && this.interactAnimal(held.id)) return;
+    if (target && !this.world.isReady(target.position.x, target.position.z)) {
+      this.toast("请等待目标地形加载完成");
+      return;
+    }
     if (target && this.interactComposter(target)) return;
     if (held && this.interactFarm(held.id, target)) return;
     if (def?.food && !this.creative) {
@@ -899,6 +917,7 @@ export class Simulation {
     const p = target.position;
     if (target.id === 67) {
       this.setBlock(p.x, p.y, p.z, 59);
+      if (this.world.getBlock(p.x, p.y, p.z) !== 59) return true;
       this.spawnDrop(
         { id: "bone_meal", count: 1 },
         { x: p.x + 0.5, y: p.y + 0.7, z: p.z + 0.5 },
@@ -960,11 +979,12 @@ export class Simulation {
     if (!target) return false;
     const p = target.position,
       id = target.id;
-    if (ITEMS[item]?.tool === "hoe") {
+    if (ITEMS[item]?.tool === "hoe" && (id === 1 || id === 2)) {
       if ((id === 1 || id === 2) && target.normal.y >= 0) {
         const above = this.world.getBlock(p.x, p.y + 1, p.z);
         if (above === 0 || above === 58) {
-          if (above === 58) this.breakBlock({ ...p, y: p.y + 1 }, above);
+          if (above === 58)
+            this.breakBlock({ ...p, y: p.y + 1 }, above, false, false);
           this.setBlock(p.x, p.y, p.z, FARMLAND.dry);
           this.wearTool();
           this.sound("dig");
@@ -983,13 +1003,15 @@ export class Simulation {
     ) {
       if (p.y < 95 && this.world.getBlock(p.x, p.y + 1, p.z) === 0) {
         this.setBlock(p.x, p.y + 1, p.z, crop.firstId);
+        if (this.world.getBlock(p.x, p.y + 1, p.z) !== crop.firstId)
+          return true;
         this.useHeld();
         this.sound("place");
         this.toast("种下了作物，保持水分和光照，等待它成熟");
       } else this.toast("耕地上方已经有东西了");
       return true;
     }
-    if (item === "bone_meal") {
+    if (item === "bone_meal" && (id === 1 || cropAt(id))) {
       if (this.farming.fertilize(p)) {
         this.useHeld();
         this.sound("place");
@@ -1050,9 +1072,14 @@ export class Simulation {
     const eye = this.eye(),
       dir = this.direction(),
       wall = raycastVoxel(this.world, eye, dir, 3.2, false, true);
-    const max = wall ? Math.min(3.2, distance(eye, wall.position)) : 3.2;
+    const max = wall ? Math.min(3.2, wall.distance) : 3.2;
     const animal = this.entities
-      .filter((e) => !ENTITIES[e.kind].hostile && e.health > 0)
+      .filter(
+        (e) =>
+          !ENTITIES[e.kind].hostile &&
+          e.health > 0 &&
+          this.world.isReady(e.position.x, e.position.z),
+      )
       .map((e) => {
         const height = (e.age ?? 0) < 0 ? 0.28 : 0.55;
         const dx = e.position.x - eye.x,

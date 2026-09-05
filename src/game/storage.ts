@@ -52,6 +52,11 @@ function number(
     return bad(`${path} 数值无效`);
   return value;
 }
+function below(value: unknown, path: string, upperExclusive: number): number {
+  const result = number(value, path, 0, upperExclusive);
+  if (result >= upperExclusive) return bad(`${path} 数值无效`);
+  return result;
+}
 function string(value: unknown, path: string, max = 128): string {
   if (typeof value !== "string" || !value.trim().length || value.length > max)
     return bad(`${path} 文本无效`);
@@ -408,12 +413,7 @@ export function validateSave(value: unknown): SaveData {
       return {
         ...at,
         moisture: number(plot.moisture, "farming.moisture", 0, 7, true),
-        drySeconds: number(
-          plot.drySeconds,
-          "farming.drySeconds",
-          0,
-          9.999999999,
-        ),
+        drySeconds: below(plot.drySeconds, "farming.drySeconds", 10),
         growthRemaining: number(
           plot.growthRemaining,
           "farming.growthRemaining",
@@ -437,12 +437,7 @@ export function validateSave(value: unknown): SaveData {
         true,
       ),
       clock,
-      accumulator: number(
-        farm.accumulator,
-        "farming.accumulator",
-        0,
-        0.2499999999,
-      ),
+      accumulator: below(farm.accumulator, "farming.accumulator", 0.25),
       scanCursor: number(
         farm.scanCursor,
         "farming.scanCursor",
@@ -666,11 +661,13 @@ export async function migrationBackupIds(): Promise<string[]> {
 export async function exportMigrationBackup(id: string): Promise<void> {
   const backup = await loadMigrationBackup(id);
   if (!backup) throw new Error("没有找到升级前备份");
-  backup.manifest.name += "（升级前备份）";
-  downloadSave(backup);
+  downloadSave(backup, `${backup.manifest.name}（升级前备份）`);
 }
 // Download a detached live checkpoint without reading or writing IndexedDB.
-export function downloadSave(data: SaveData): void {
+export function downloadSave(
+  data: SaveData,
+  filename = data.manifest.name,
+): void {
   const contents = JSON.stringify(data);
   const link = document.createElement("a");
   const url = URL.createObjectURL(
@@ -678,7 +675,7 @@ export function downloadSave(data: SaveData): void {
   );
   try {
     link.href = url;
-    link.download = `${data.manifest.name.replace(/[<>:"/\\|?*\u0000-\u001f]/g, "_")}.voxel.json`;
+    link.download = `${filename.replace(/[<>:"/\\|?*\u0000-\u001f]/g, "_")}.voxel.json`;
     document.body.append(link);
     link.click();
   } finally {

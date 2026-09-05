@@ -183,7 +183,8 @@ export function raycastVoxel(
   direction: Vec3,
   max = 5,
   includeWater = false,
-): { position: Vec3; normal: Vec3; id: number } | null {
+  solidOnly = false,
+): { position: Vec3; normal: Vec3; id: number; distance: number } | null {
   const magnitude = Math.hypot(direction.x, direction.y, direction.z);
   if (magnitude < EPSILON || max <= 0) return null;
   const d = {
@@ -217,7 +218,11 @@ export function raycastVoxel(
   ) {
     const id = world.getBlock(voxel.x, voxel.y, voxel.z);
     let hit: { distance: number; normal: Vec3 } | null = null;
-    for (const box of includeWater && id === 6 ? [[0, 0, 0, 1, 1, 1] as BlockBox] : selectionBoxes(id)) {
+    for (const box of includeWater && id === 6
+      ? [[0, 0, 0, 1, 1, 1] as BlockBox]
+      : solidOnly
+        ? collisionBoxes(id)
+        : selectionBoxes(id)) {
       const candidate = rayBox(origin, d, voxel, box);
       if (
         candidate &&
@@ -226,7 +231,13 @@ export function raycastVoxel(
       )
         hit = candidate;
     }
-    if (hit) return { position: { ...voxel }, normal: hit.normal, id };
+    if (hit)
+      return {
+        position: { ...voxel },
+        normal: hit.normal,
+        id,
+        distance: hit.distance,
+      };
     const axis =
       next.x < next.y
         ? next.x < next.z

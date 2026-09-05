@@ -1,0 +1,24 @@
+{
+  "afterVersion": 2,
+  "armorSame": true,
+  "at": "2026-09-05T00:55:37.516Z",
+  "backupSame": true,
+  "backupVersion": 1,
+  "beforeVersion": 1,
+  "changesSame": true,
+  "generatorVersion": 1,
+  "id": "6b8c315b-b73f-4ef6-b835-901f033d127c",
+  "inventorySame": true,
+  "name": "旧档升级 · 浏览器验收（导入）",
+  "downloadReimport": {
+    "id": "a4e74dfa-db45-4957-a0bd-8efe7d305686",
+    "independent": true,
+    "version": 1
+  },
+  "uiBackupDownload": {
+    "bytes": 13941,
+    "generatorVersion": 1,
+    "internalName": "旧档升级 · 浏览器验收（导入）",
+    "version": 1
+  }
+}

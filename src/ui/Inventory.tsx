@@ -130,7 +130,7 @@ export function Inventory({
           <button
             className="icon-button dark-icon"
             onClick={close}
-            title="返回游戏（E / Esc）"
+            title="返回游戏（E）"
           >
             <Icon name="close" />
           </button>

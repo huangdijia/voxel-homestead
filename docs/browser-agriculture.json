@@ -1,0 +1,1306 @@
+{
+  "businessPassed": true,
+  "checkpoints": [
+    {
+      "animals": [
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "35e2b762-57e2-4466-80e8-211bee15829b",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "69785f6f-dc41-461f-a68f-0dffa6050493",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "b0d39e48-68b9-4bc4-be01-f706c90c05a7",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "a5882afe-4e89-4c12-807e-4c8a243ac025",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "391262ce-f8ee-47e7-a60e-c08ec5715c2d",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "6d9fbb4d-84ac-4597-a50d-95747a58f1f3",
+          "kind": "sheep",
+          "love": 0
+        }
+      ],
+      "composters": {
+        "-5,33,-4": 0.4999999999999996
+      },
+      "equal": true,
+      "farmPlots": 5,
+      "label": "composter_mid_maturation",
+      "saveId": "a3ca38db-d97f-4dc4-b366-f22cada88280",
+      "savedAt": 1788570109340
+    },
+    {
+      "animals": [
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "35e2b762-57e2-4466-80e8-211bee15829b",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "69785f6f-dc41-461f-a68f-0dffa6050493",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "b0d39e48-68b9-4bc4-be01-f706c90c05a7",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "a5882afe-4e89-4c12-807e-4c8a243ac025",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "391262ce-f8ee-47e7-a60e-c08ec5715c2d",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "6d9fbb4d-84ac-4597-a50d-95747a58f1f3",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 299.79999999999995,
+          "id": "acceptance-sheep-a",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 299.74999999999994,
+          "id": "acceptance-sheep-b",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 299.79999999999995,
+          "id": "acceptance-pig-a",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 299.74999999999994,
+          "id": "acceptance-pig-b",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": -1199.8000000000002,
+          "breedCooldown": 0,
+          "id": "1cbdfa44-fb65-4529-a2e2-77efa65d4a9b",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": -1199.8000000000002,
+          "breedCooldown": 0,
+          "id": "b81712f7-9a82-44c5-9ffd-173e3bb43cc8",
+          "kind": "pig",
+          "love": 0
+        }
+      ],
+      "composters": {},
+      "equal": true,
+      "farmPlots": 5,
+      "label": "two_babies_and_parent_cooldowns",
+      "saveId": "a3ca38db-d97f-4dc4-b366-f22cada88280",
+      "savedAt": 1788570109756
+    },
+    {
+      "animals": [
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "35e2b762-57e2-4466-80e8-211bee15829b",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "69785f6f-dc41-461f-a68f-0dffa6050493",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "b0d39e48-68b9-4bc4-be01-f706c90c05a7",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "a5882afe-4e89-4c12-807e-4c8a243ac025",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "391262ce-f8ee-47e7-a60e-c08ec5715c2d",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "6d9fbb4d-84ac-4597-a50d-95747a58f1f3",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 298.9999999999998,
+          "id": "acceptance-sheep-a",
+          "kind": "sheep",
+          "love": 0,
+          "sheared": true
+        },
+        {
+          "age": 0,
+          "breedCooldown": 298.94999999999976,
+          "id": "acceptance-sheep-b",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 298.9999999999998,
+          "id": "acceptance-pig-a",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 298.94999999999976,
+          "id": "acceptance-pig-b",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": -1199.000000000001,
+          "breedCooldown": 0,
+          "id": "1cbdfa44-fb65-4529-a2e2-77efa65d4a9b",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": -1199.000000000001,
+          "breedCooldown": 0,
+          "id": "b81712f7-9a82-44c5-9ffd-173e3bb43cc8",
+          "kind": "pig",
+          "love": 0
+        }
+      ],
+      "composters": {},
+      "equal": true,
+      "farmPlots": 5,
+      "label": "business_complete_sheared_sheep",
+      "saveId": "a3ca38db-d97f-4dc4-b366-f22cada88280",
+      "savedAt": 1788570109855
+    },
+    {
+      "animals": [
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "35e2b762-57e2-4466-80e8-211bee15829b",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "69785f6f-dc41-461f-a68f-0dffa6050493",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "b0d39e48-68b9-4bc4-be01-f706c90c05a7",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "a5882afe-4e89-4c12-807e-4c8a243ac025",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "391262ce-f8ee-47e7-a60e-c08ec5715c2d",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "id": "6d9fbb4d-84ac-4597-a50d-95747a58f1f3",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 298.9999999999998,
+          "id": "acceptance-sheep-a",
+          "kind": "sheep",
+          "love": 0,
+          "sheared": true
+        },
+        {
+          "age": 0,
+          "breedCooldown": 298.94999999999976,
+          "id": "acceptance-sheep-b",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 298.9999999999998,
+          "id": "acceptance-pig-a",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 298.94999999999976,
+          "id": "acceptance-pig-b",
+          "kind": "pig",
+          "love": 0
+        },
+        {
+          "age": -1199.000000000001,
+          "breedCooldown": 0,
+          "id": "1cbdfa44-fb65-4529-a2e2-77efa65d4a9b",
+          "kind": "sheep",
+          "love": 0
+        },
+        {
+          "age": -1199.000000000001,
+          "breedCooldown": 0,
+          "id": "b81712f7-9a82-44c5-9ffd-173e3bb43cc8",
+          "kind": "pig",
+          "love": 0
+        }
+      ],
+      "composters": {},
+      "equal": true,
+      "farmPlots": 33,
+      "label": "final_visual_fixture",
+      "saveId": "a3ca38db-d97f-4dc4-b366-f22cada88280",
+      "savedAt": 1788570110506
+    }
+  ],
+  "errors": [],
+  "finalSaveIds": [
+    "a3ca38db-d97f-4dc4-b366-f22cada88280"
+  ],
+  "fixtureGrants": [
+    {
+      "count": 1,
+      "durability": 59,
+      "id": "wood_hoe",
+      "kind": "inventory",
+      "phase": "business",
+      "reason": "Declared test input; not naturally earned by this harness."
+    },
+    {
+      "count": 1,
+      "id": "bucket",
+      "kind": "inventory",
+      "phase": "business",
+      "reason": "Declared test input; not naturally earned by this harness."
+    },
+    {
+      "count": 5,
+      "id": "wheat_seeds",
+      "kind": "inventory",
+      "phase": "business",
+      "reason": "Declared test input; not naturally earned by this harness."
+    },
+    {
+      "count": 24,
+      "id": "bone_meal",
+      "kind": "inventory",
+      "phase": "business",
+      "reason": "Declared test input; not naturally earned by this harness."
+    },
+    {
+      "count": 64,
+      "id": "leaves",
+      "kind": "inventory",
+      "phase": "business",
+      "reason": "Declared test input; not naturally earned by this harness."
+    },
+    {
+      "count": 1,
+      "id": "composter",
+      "kind": "inventory",
+      "phase": "business",
+      "reason": "Declared test input; not naturally earned by this harness."
+    },
+    {
+      "count": 1,
+      "id": "workbench",
+      "kind": "inventory",
+      "phase": "business",
+      "reason": "Declared test input; not naturally earned by this harness."
+    },
+    {
+      "count": 2,
+      "id": "carrot",
+      "kind": "inventory",
+      "phase": "business",
+      "reason": "Declared test input; not naturally earned by this harness."
+    },
+    {
+      "count": 1,
+      "durability": 238,
+      "id": "shears",
+      "kind": "inventory",
+      "phase": "business",
+      "reason": "Declared test input; not naturally earned by this harness."
+    },
+    {
+      "id": 6,
+      "kind": "block",
+      "phase": "business",
+      "position": {
+        "x": -6,
+        "y": 33,
+        "z": -9
+      },
+      "reason": "Single water source fixture; the bucket must move it to the irrigation hole."
+    },
+    {
+      "after": 10,
+      "before": 20,
+      "field": "hunger",
+      "kind": "player-state",
+      "phase": "business",
+      "reason": "Controlled hunger prerequisite for the eating assertion."
+    },
+    {
+      "entities": [
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "health": 8,
+          "id": "acceptance-sheep-a",
+          "kind": "sheep",
+          "love": 0,
+          "position": {
+            "x": -6.6,
+            "y": 33,
+            "z": 1.5
+          },
+          "timer": 100,
+          "yaw": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "health": 8,
+          "id": "acceptance-sheep-b",
+          "kind": "sheep",
+          "love": 0,
+          "position": {
+            "x": -5.3,
+            "y": 33,
+            "z": 1.5
+          },
+          "timer": 100,
+          "yaw": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "health": 10,
+          "id": "acceptance-pig-a",
+          "kind": "pig",
+          "love": 0,
+          "position": {
+            "x": 0.4,
+            "y": 33,
+            "z": 1.5
+          },
+          "timer": 100,
+          "yaw": 0
+        },
+        {
+          "age": 0,
+          "breedCooldown": 0,
+          "health": 10,
+          "id": "acceptance-pig-b",
+          "kind": "pig",
+          "love": 0,
+          "position": {
+            "x": 1.7,
+            "y": 33,
+            "z": 1.5
+          },
+          "timer": 100,
+          "yaw": 0
+        }
+      ],
+      "kind": "animals",
+      "phase": "business",
+      "reason": "Four adult breeder fixtures; love, babies and cooldowns are obtained through actual feeding and simulation."
+    },
+    {
+      "count": 1,
+      "durability": 250,
+      "id": "iron_hoe",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    },
+    {
+      "count": 1,
+      "id": "water_bucket",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    },
+    {
+      "count": 16,
+      "id": "wheat_seeds",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    },
+    {
+      "count": 8,
+      "id": "carrot",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    },
+    {
+      "count": 8,
+      "id": "potato",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    },
+    {
+      "count": 16,
+      "id": "beetroot_seeds",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    },
+    {
+      "count": 16,
+      "id": "bone_meal",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    },
+    {
+      "count": 8,
+      "id": "wheat",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    },
+    {
+      "count": 3,
+      "id": "bread",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    },
+    {
+      "count": 3,
+      "id": "baked_potato",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    },
+    {
+      "count": 1,
+      "id": "beetroot_soup",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    },
+    {
+      "count": 8,
+      "id": "beetroot",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    },
+    {
+      "count": 1,
+      "id": "bowl",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    },
+    {
+      "count": 1,
+      "id": "composter",
+      "kind": "inventory",
+      "phase": "visual_fixture",
+      "reason": "Final inventory presentation only; excluded from the business progression assertions."
+    }
+  ],
+  "fixturePens": [
+    {
+      "xMax": -3,
+      "xMin": -8,
+      "zMax": 5,
+      "zMin": 0
+    },
+    {
+      "xMax": 4,
+      "xMin": -1,
+      "zMax": 5,
+      "zMin": 0
+    }
+  ],
+  "fixturePlatform": {
+    "floorY": 32,
+    "grassBlocks": 702,
+    "purpose": "Isolated sky-lit flat terrain for repeatable rule and camera checks.",
+    "xMax": 15,
+    "xMin": -10,
+    "zMax": 10,
+    "zMin": -16
+  },
+  "fixturePositions": [
+    {
+      "phase": "business",
+      "reason": "All test interactions use explicit nearby standing positions on the declared platform."
+    },
+    {
+      "animals": [
+        {
+          "after": {
+            "x": 13.3,
+            "y": 33,
+            "z": -1.5
+          },
+          "before": {
+            "x": 4.971049910124237,
+            "y": 23,
+            "z": 2.7443750497462376
+          },
+          "id": "35e2b762-57e2-4466-80e8-211bee15829b"
+        },
+        {
+          "after": {
+            "x": 14.6,
+            "y": 33,
+            "z": -1.5
+          },
+          "before": {
+            "x": -6.980332815837558,
+            "y": 23,
+            "z": 2.438692772312833
+          },
+          "id": "69785f6f-dc41-461f-a68f-0dffa6050493"
+        },
+        {
+          "after": {
+            "x": 13.3,
+            "y": 33,
+            "z": -2.9
+          },
+          "before": {
+            "x": -1.7333769817500064,
+            "y": 23,
+            "z": 4.261541948707167
+          },
+          "id": "b0d39e48-68b9-4bc4-be01-f706c90c05a7"
+        },
+        {
+          "after": {
+            "x": 14.6,
+            "y": 33,
+            "z": -2.9
+          },
+          "before": {
+            "x": -8.818794852620373,
+            "y": 24,
+            "z": -8.325
+          },
+          "id": "a5882afe-4e89-4c12-807e-4c8a243ac025"
+        },
+        {
+          "after": {
+            "x": 13.3,
+            "y": 33,
+            "z": -4.3
+          },
+          "before": {
+            "x": 12.109225770374763,
+            "y": 25,
+            "z": -13.693683920899096
+          },
+          "id": "391262ce-f8ee-47e7-a60e-c08ec5715c2d"
+        },
+        {
+          "after": {
+            "x": 14.6,
+            "y": 33,
+            "z": -4.3
+          },
+          "before": {
+            "x": 8.675,
+            "y": 24.325,
+            "z": 1.090200941988752
+          },
+          "id": "6d9fbb4d-84ac-4597-a50d-95747a58f1f3"
+        }
+      ],
+      "phase": "business",
+      "reason": "Keep naturally spawned animals away from controlled feeding rays without deleting them."
+    }
+  ],
+  "limitations": [
+    "Equipment, five wheat seeds, fertilizer, two pig feed carrots, leaves and four adults are explicit developer inputs; their natural acquisition is not tested here.",
+    "Player positioning, elevated grass platform, water source and animal pens are developer fixtures. Commands are invoked programmatically, not via DOM keyboard/mouse events.",
+    "Natural growth advances fixed Simulation steps faster than wall time. Rendering performance and full Java 1.21.1 parity are not claimed.",
+    "The final four-crop display and inventory additions are screenshot fixtures created only after business assertions pass.",
+    "Checkpoint equality uses the real browser IndexedDB save/load path; the browser page is not reloaded by this script."
+  ],
+  "nextUIActions": "Use the normal Continue button for the real world view, E for inventory and Esc to pause. The final field/inventory is explicitly a visual fixture; business evidence is retained in earlier stages/checkpoints.",
+  "passed": true,
+  "renderer": {
+    "chunks": 125,
+    "drawCalls": 134,
+    "geometries": 48,
+    "pending": 0
+  },
+  "results": {
+    "animal_breeding": true,
+    "bucket_irrigation": true,
+    "composter_checkpoint": true,
+    "fresh_empty_world": true,
+    "harvest_bread_eat": true,
+    "natural_growth_and_fertilizer": true,
+    "shearing": true,
+    "till_and_plant": true,
+    "visual_fixture": true
+  },
+  "simulation": {
+    "advancedSeconds": 73.6,
+    "fixedStepSeconds": 0.05
+  },
+  "stages": [
+    {
+      "blockChanges": 0,
+      "emptyInventory": true,
+      "id": "fresh_empty_world",
+      "initialEntityCount": 0,
+      "inventory": [],
+      "passed": true,
+      "worldTime": 1000
+    },
+    {
+      "hoeUses": 5,
+      "id": "till_and_plant",
+      "inventory": [
+        {
+          "count": 1,
+          "durability": 54,
+          "id": "wood_hoe"
+        },
+        {
+          "count": 1,
+          "id": "bucket"
+        },
+        {
+          "count": 24,
+          "id": "bone_meal"
+        },
+        {
+          "count": 64,
+          "id": "leaves"
+        },
+        {
+          "count": 1,
+          "id": "composter"
+        },
+        {
+          "count": 1,
+          "id": "workbench"
+        },
+        {
+          "count": 2,
+          "id": "carrot"
+        },
+        {
+          "count": 1,
+          "durability": 238,
+          "id": "shears"
+        }
+      ],
+      "passed": true,
+      "plots": [
+        {
+          "x": -2,
+          "y": 32,
+          "z": -8
+        },
+        {
+          "x": -1,
+          "y": 32,
+          "z": -8
+        },
+        {
+          "x": 0,
+          "y": 32,
+          "z": -8
+        },
+        {
+          "x": 1,
+          "y": 32,
+          "z": -8
+        },
+        {
+          "x": 2,
+          "y": 32,
+          "z": -8
+        }
+      ],
+      "seedsConsumed": 5,
+      "worldTime": 1000
+    },
+    {
+      "channel": {
+        "x": 0,
+        "y": 32,
+        "z": -6
+      },
+      "channelTarget": {
+        "distance": 2.7534371517891585,
+        "id": 3,
+        "normal": {
+          "x": 0,
+          "y": 1,
+          "z": 0
+        },
+        "position": {
+          "x": 0,
+          "y": 31,
+          "z": -6
+        }
+      },
+      "id": "bucket_irrigation",
+      "inventory": [
+        {
+          "count": 1,
+          "durability": 54,
+          "id": "wood_hoe"
+        },
+        {
+          "count": 1,
+          "id": "bucket"
+        },
+        {
+          "count": 24,
+          "id": "bone_meal"
+        },
+        {
+          "count": 64,
+          "id": "leaves"
+        },
+        {
+          "count": 1,
+          "id": "composter"
+        },
+        {
+          "count": 1,
+          "id": "workbench"
+        },
+        {
+          "count": 2,
+          "id": "carrot"
+        },
+        {
+          "count": 1,
+          "durability": 238,
+          "id": "shears"
+        }
+      ],
+      "passed": true,
+      "source": {
+        "x": -6,
+        "y": 33,
+        "z": -9
+      },
+      "sourceTarget": {
+        "distance": 1.5704638773698216,
+        "id": 6,
+        "normal": {
+          "x": 0,
+          "y": 0,
+          "z": 1
+        },
+        "position": {
+          "x": -6,
+          "y": 33,
+          "z": -9
+        }
+      },
+      "totalBuckets": 1,
+      "wetPlots": 5,
+      "worldTime": 1020
+    },
+    {
+      "afterGrowth": [
+        31,
+        31,
+        32,
+        32,
+        32
+      ],
+      "beforeGrowth": [
+        30,
+        30,
+        30,
+        30,
+        30
+      ],
+      "fertilizerConsumed": 10,
+      "id": "natural_growth_and_fertilizer",
+      "inventory": [
+        {
+          "count": 1,
+          "durability": 54,
+          "id": "wood_hoe"
+        },
+        {
+          "count": 1,
+          "id": "bucket"
+        },
+        {
+          "count": 14,
+          "id": "bone_meal"
+        },
+        {
+          "count": 64,
+          "id": "leaves"
+        },
+        {
+          "count": 1,
+          "id": "composter"
+        },
+        {
+          "count": 1,
+          "id": "workbench"
+        },
+        {
+          "count": 2,
+          "id": "carrot"
+        },
+        {
+          "count": 1,
+          "durability": 238,
+          "id": "shears"
+        }
+      ],
+      "maturePlants": 5,
+      "naturalSeconds": 61,
+      "passed": true,
+      "worldTime": 2240
+    },
+    {
+      "breadCrafted": 1,
+      "breadEaten": 1,
+      "harvestedWheat": 5,
+      "hunger": 15,
+      "id": "harvest_bread_eat",
+      "inventory": [
+        {
+          "count": 1,
+          "durability": 49,
+          "id": "wood_hoe"
+        },
+        {
+          "count": 1,
+          "id": "bucket"
+        },
+        {
+          "count": 2,
+          "id": "wheat"
+        },
+        {
+          "count": 14,
+          "id": "bone_meal"
+        },
+        {
+          "count": 64,
+          "id": "leaves"
+        },
+        {
+          "count": 1,
+          "id": "composter"
+        },
+        {
+          "count": 2,
+          "id": "carrot"
+        },
+        {
+          "count": 1,
+          "durability": 238,
+          "id": "shears"
+        },
+        {
+          "count": 9,
+          "id": "wheat_seeds"
+        }
+      ],
+      "passed": true,
+      "wheatReservedForSheep": 2,
+      "worldTime": 2354
+    },
+    {
+      "boneMealProduced": 1,
+      "composter": {
+        "x": -5,
+        "y": 33,
+        "z": -4
+      },
+      "id": "composter_checkpoint",
+      "inventory": [
+        {
+          "count": 1,
+          "durability": 49,
+          "id": "wood_hoe"
+        },
+        {
+          "count": 1,
+          "id": "bucket"
+        },
+        {
+          "count": 2,
+          "id": "wheat"
+        },
+        {
+          "count": 15,
+          "id": "bone_meal"
+        },
+        {
+          "count": 48,
+          "id": "leaves"
+        },
+        {
+          "count": 2,
+          "id": "carrot"
+        },
+        {
+          "count": 1,
+          "durability": 238,
+          "id": "shears"
+        },
+        {
+          "count": 9,
+          "id": "wheat_seeds"
+        }
+      ],
+      "leavesConsumed": 16,
+      "passed": true,
+      "savedRemainingSeconds": 0.4999999999999996,
+      "worldTime": 2391
+    },
+    {
+      "babyIds": [
+        "1cbdfa44-fb65-4529-a2e2-77efa65d4a9b",
+        "b81712f7-9a82-44c5-9ffd-173e3bb43cc8"
+      ],
+      "breedingSeconds": 3.25,
+      "cooldowns": [
+        299.79999999999995,
+        299.74999999999994,
+        299.79999999999995,
+        299.74999999999994
+      ],
+      "fedAdultIds": [
+        "acceptance-sheep-a",
+        "acceptance-sheep-b",
+        "acceptance-pig-a",
+        "acceptance-pig-b"
+      ],
+      "id": "animal_breeding",
+      "inventory": [
+        {
+          "count": 1,
+          "durability": 49,
+          "id": "wood_hoe"
+        },
+        {
+          "count": 1,
+          "id": "bucket"
+        },
+        {
+          "count": 15,
+          "id": "bone_meal"
+        },
+        {
+          "count": 48,
+          "id": "leaves"
+        },
+        {
+          "count": 1,
+          "durability": 238,
+          "id": "shears"
+        },
+        {
+          "count": 9,
+          "id": "wheat_seeds"
+        }
+      ],
+      "passed": true,
+      "worldTime": 2456
+    },
+    {
+      "adultId": "acceptance-sheep-a",
+      "durabilityRemaining": 237,
+      "id": "shearing",
+      "inventory": [
+        {
+          "count": 1,
+          "durability": 49,
+          "id": "wood_hoe"
+        },
+        {
+          "count": 1,
+          "id": "bucket"
+        },
+        {
+          "count": 1,
+          "id": "wool"
+        },
+        {
+          "count": 15,
+          "id": "bone_meal"
+        },
+        {
+          "count": 48,
+          "id": "leaves"
+        },
+        {
+          "count": 1,
+          "durability": 237,
+          "id": "shears"
+        },
+        {
+          "count": 9,
+          "id": "wheat_seeds"
+        }
+      ],
+      "passed": true,
+      "repeatActionConserved": true,
+      "woolProduced": 1,
+      "worldTime": 2472
+    },
+    {
+      "id": "visual_fixture",
+      "inventory": [
+        {
+          "count": 1,
+          "durability": 49,
+          "id": "wood_hoe"
+        },
+        {
+          "count": 1,
+          "id": "bucket"
+        },
+        {
+          "count": 1,
+          "id": "wool"
+        },
+        {
+          "count": 31,
+          "id": "bone_meal"
+        },
+        {
+          "count": 48,
+          "id": "leaves"
+        },
+        {
+          "count": 1,
+          "durability": 250,
+          "id": "iron_hoe"
+        },
+        {
+          "count": 1,
+          "id": "water_bucket"
+        },
+        {
+          "count": 8,
+          "id": "carrot"
+        },
+        {
+          "count": 1,
+          "durability": 237,
+          "id": "shears"
+        },
+        {
+          "count": 25,
+          "id": "wheat_seeds"
+        },
+        {
+          "count": 8,
+          "id": "potato"
+        },
+        {
+          "count": 16,
+          "id": "beetroot_seeds"
+        },
+        {
+          "count": 8,
+          "id": "wheat"
+        },
+        {
+          "count": 3,
+          "id": "bread"
+        },
+        {
+          "count": 3,
+          "id": "baked_potato"
+        },
+        {
+          "count": 1,
+          "id": "beetroot_soup"
+        },
+        {
+          "count": 8,
+          "id": "beetroot"
+        },
+        {
+          "count": 1,
+          "id": "bowl"
+        },
+        {
+          "count": 1,
+          "id": "composter"
+        }
+      ],
+      "labelledFixture": true,
+      "passed": true,
+      "saveId": "a3ca38db-d97f-4dc4-b366-f22cada88280",
+      "worldTime": 2472
+    }
+  ],
+  "startedAt": "2026-09-05T01:01:46.649Z",
+  "verification": "Vite DEV Game + Simulation + VoxelWorld + IndexedDB integration; explicitly granted inputs and staged positions; accelerated simulation.",
+  "version": 1,
+  "visualFixture": {
+    "cropRows": [
+      {
+        "dz": -14,
+        "first": 30,
+        "floorY": 32,
+        "kind": "wheat",
+        "stages": 8,
+        "xStart": 4,
+        "z": -14
+      },
+      {
+        "dz": -12,
+        "first": 38,
+        "floorY": 32,
+        "kind": "carrot",
+        "stages": 8,
+        "xStart": 4,
+        "z": -12
+      },
+      {
+        "dz": -10,
+        "first": 46,
+        "floorY": 32,
+        "kind": "potato",
+        "stages": 8,
+        "xStart": 4,
+        "z": -10
+      },
+      {
+        "dz": -8,
+        "first": 54,
+        "floorY": 32,
+        "kind": "beetroot",
+        "stages": 4,
+        "xStart": 4,
+        "z": -8
+      }
+    ],
+    "manuallyPlacedCropBlocks": 28,
+    "observer": {
+      "pitch": -0.17932906865947476,
+      "support": "Two-block solid wooden observation platform; player is paused.",
+      "x": 13.5,
+      "y": 35,
+      "yaw": 0.7853981633974483,
+      "z": 3.5
+    },
+    "purpose": "Show all actual crop stages, irrigation, adult/baby models, sheared fleece and the new inventory icons.",
+    "retainedBabies": [
+      "1cbdfa44-fb65-4529-a2e2-77efa65d4a9b",
+      "b81712f7-9a82-44c5-9ffd-173e3bb43cc8"
+    ],
+    "separateFromBusinessVerification": true,
+    "shearedAdult": "acceptance-sheep-a"
+  },
+  "wallMilliseconds": 4089,
+  "world": {
+    "id": "a3ca38db-d97f-4dc4-b366-f22cada88280",
+    "mode": "survival",
+    "name": "麦风农场 · 完整回归",
+    "seed": "M2-farming-20260905"
+  }
+}

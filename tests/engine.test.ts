@@ -180,6 +180,7 @@ describe("voxel collision and interaction", () => {
       position: { x: -2, y: 0, z: 0 },
       normal: { x: 1, y: 0, z: 0 },
       id: 3,
+      distance: 1.5,
     });
     const beyond = raycastVoxel(
       world({ "1,0,0": 21, "2,0,0": 3 }),

@@ -29,6 +29,7 @@ import type {
 } from "./game/types";
 import { Icon, ItemIcon, StackView } from "./ui/Icons";
 import { Inventory } from "./ui/Inventory";
+import { InstallApp } from "./ui/InstallApp";
 import "./styles.css";
 
 const settingsKey = "block-journey-settings-v1";
@@ -161,6 +162,7 @@ export default function App() {
   };
   const quit = async () => {
     if (!game) return;
+    game.setPaused(true);
     await game.save();
     game.dispose();
     setGame(null);
@@ -185,216 +187,222 @@ export default function App() {
         className="world-canvas"
         aria-label="三维方块世界"
       />
-      {!game ? (
-        <div className="home-screen">
-          <header className="home-header">
-            <a
-              className="brand"
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                setModal(null);
-              }}
-              aria-label="方块纪行首页"
-            >
-              <span className="brand-mark">
-                <Icon name="cube" size={25} />
-              </span>
-              <span>
-                方块纪行
-                <span className="brand-divider" />
-                BLOCK JOURNEY
-              </span>
-            </a>
-            <div className="home-header-actions">
-              <span className="single-player">
-                <i />
-                单人世界
-              </span>
-              <button
-                className="header-button"
-                onClick={() => setModal("settings")}
+      <div className={!game ? "home-screen" : undefined}>
+        {!game && (
+          <>
+            <header className="home-header">
+              <a
+                className="brand"
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setModal(null);
+                }}
+                aria-label="方块纪行首页"
               >
-                <Icon name="settings" size={18} />
-                设置
-              </button>
-            </div>
-          </header>
-          <div className="home-content">
-            <section className="home-intro">
-              <div className="chapter-label">
-                <span />
-                从一块方块，开始一场冒险
-              </div>
-              <h1>
-                我的世界<span className="logo-period">.</span>
-              </h1>
-              <div className="home-subtitle">方块纪行</div>
-              <p className="intro-copy">
-                走进森林，向山野出发。
-                <br />
-                采集、创造、生存，亲手建造属于你的世界。
-              </p>
-              <button
-                className="button primary hero-button"
-                onClick={() => setModal("create")}
-                disabled={busy}
-              >
-                <Icon name="plus" size={22} />
-                创建新世界
-                <Icon name="arrow" size={20} />
-              </button>
-              <div className="intro-details">
-                <span>
-                  <Icon name="world" size={15} />
-                  种子生成 · 自由探索
+                <span className="brand-mark">
+                  <Icon name="cube" size={25} />
                 </span>
                 <span>
-                  <Icon name="cube" size={15} />
-                  生存 / 创造
+                  方块纪行
+                  <span className="brand-divider" />
+                  BLOCK JOURNEY
                 </span>
-              </div>
-            </section>
-            <section className="world-library">
-              <div className="library-header">
-                <div>
-                  <span className="eyebrow">继续你的旅程</span>
-                  <h2>
-                    你的世界
-                    <span>{worlds.length.toString().padStart(2, "0")}</span>
-                  </h2>
-                </div>
+              </a>
+              <div className="home-header-actions">
+                <span className="single-player">
+                  <i />
+                  单人世界
+                </span>
                 <button
-                  className="icon-button library-add"
-                  onClick={() => setModal("create")}
-                  title="创建新世界"
-                  disabled={busy}
+                  className="header-button"
+                  onClick={() => setModal("settings")}
                 >
-                  <Icon name="plus" />
+                  <Icon name="settings" size={18} />
+                  设置
                 </button>
               </div>
-              <div className="world-list">
-                {listLoading ? (
-                  <div className="world-list-loading">
-                    <span className="loader-small" />
-                    正在读取世界…
+            </header>
+            <div className="home-content">
+              <section className="home-intro">
+                <div className="chapter-label">
+                  <span />
+                  从一块方块，开始一场冒险
+                </div>
+                <h1>
+                  我的世界<span className="logo-period">.</span>
+                </h1>
+                <div className="home-subtitle">方块纪行</div>
+                <p className="intro-copy">
+                  走进森林，向山野出发。
+                  <br />
+                  采集、创造、生存，亲手建造属于你的世界。
+                </p>
+                <button
+                  className="button primary hero-button"
+                  onClick={() => setModal("create")}
+                  disabled={busy}
+                >
+                  <Icon name="plus" size={22} />
+                  创建新世界
+                  <Icon name="arrow" size={20} />
+                </button>
+                <div className="intro-details">
+                  <span>
+                    <Icon name="world" size={15} />
+                    种子生成 · 自由探索
+                  </span>
+                  <span>
+                    <Icon name="cube" size={15} />
+                    生存 / 创造
+                  </span>
+                </div>
+              </section>
+              <section className="world-library">
+                <div className="library-header">
+                  <div>
+                    <span className="eyebrow">继续你的旅程</span>
+                    <h2>
+                      你的世界
+                      <span>{worlds.length.toString().padStart(2, "0")}</span>
+                    </h2>
                   </div>
-                ) : worlds.length === 0 ? (
-                  <div className="world-empty">
-                    <span className="empty-cube">
-                      <Icon name="cube" size={56} />
-                    </span>
-                    <h3>这里，等着你的第一个世界</h3>
-                    <p>
-                      为世界取个名字，
-                      <br />
-                      从一片未经探索的原野开始。
-                    </p>
-                    <button
-                      className="text-button"
-                      onClick={() => setModal("create")}
-                    >
-                      开启第一场冒险 <Icon name="arrow" size={17} />
-                    </button>
-                  </div>
-                ) : (
-                  worlds.map((world) => (
-                    <article className="world-card" key={world.id}>
+                  <button
+                    className="icon-button library-add"
+                    onClick={() => setModal("create")}
+                    title="创建新世界"
+                    disabled={busy}
+                  >
+                    <Icon name="plus" />
+                  </button>
+                </div>
+                <div className="world-list">
+                  {listLoading ? (
+                    <div className="world-list-loading">
+                      <span className="loader-small" />
+                      正在读取世界…
+                    </div>
+                  ) : worlds.length === 0 ? (
+                    <div className="world-empty">
+                      <span className="empty-cube">
+                        <Icon name="cube" size={56} />
+                      </span>
+                      <h3>这里，等着你的第一个世界</h3>
+                      <p>
+                        为世界取个名字，
+                        <br />
+                        从一片未经探索的原野开始。
+                      </p>
                       <button
-                        className="world-card-main"
-                        onClick={() => void enter(world.id)}
-                        disabled={busy}
+                        className="text-button"
+                        onClick={() => setModal("create")}
                       >
-                        <div className="world-thumbnail">
-                          <ItemIcon id="grass" size={53} />
-                          <span className="thumbnail-sun" />
-                        </div>
-                        <div className="world-card-copy">
-                          <div>
-                            <h3>{world.name}</h3>
-                            <span className={`mode-badge ${world.mode}`}>
-                              {world.mode === "creative" ? "创造" : "生存"}
-                            </span>
-                          </div>
-                          <p>种子 {world.seed}</p>
-                          <small>
-                            {worldDate(world.updatedAt)}
-                            <span>·</span>
-                            {playedTime(world.playedSeconds)}
-                          </small>
-                        </div>
-                        <span className="world-enter">
-                          <Icon name="arrow" size={20} />
-                        </span>
+                        开启第一场冒险 <Icon name="arrow" size={17} />
                       </button>
-                      <div className="world-card-bottom">
-                        <span>
-                          <span className="status-dot" />
-                          本机存档
-                        </span>
-                        <div>
-                          {backupIds.includes(world.id) && (
+                    </div>
+                  ) : (
+                    worlds.map((world) => (
+                      <article className="world-card" key={world.id}>
+                        <button
+                          className="world-card-main"
+                          onClick={() => void enter(world.id)}
+                          disabled={busy}
+                        >
+                          <div className="world-thumbnail">
+                            <ItemIcon id="grass" size={53} />
+                            <span className="thumbnail-sun" />
+                          </div>
+                          <div className="world-card-copy">
+                            <div>
+                              <h3>{world.name}</h3>
+                              <span className={`mode-badge ${world.mode}`}>
+                                {world.mode === "creative" ? "创造" : "生存"}
+                              </span>
+                            </div>
+                            <p>种子 {world.seed}</p>
+                            <small>
+                              {worldDate(world.updatedAt)}
+                              <span>·</span>
+                              {playedTime(world.playedSeconds)}
+                            </small>
+                          </div>
+                          <span className="world-enter">
+                            <Icon name="arrow" size={20} />
+                          </span>
+                        </button>
+                        <div className="world-card-bottom">
+                          <span>
+                            <span className="status-dot" />
+                            本机存档
+                          </span>
+                          <div>
+                            {backupIds.includes(world.id) && (
+                              <button
+                                title={`导出 ${world.name} 升级前备份`}
+                                onClick={() => {
+                                  void exportMigrationBackup(world.id).catch(
+                                    (e) => setError(String(e)),
+                                  );
+                                }}
+                              >
+                                <Icon name="download" size={14} />
+                                升级前备份
+                              </button>
+                            )}
                             <button
-                              title={`导出 ${world.name} 升级前备份`}
+                              title={`导出 ${world.name}`}
                               onClick={() => {
-                                void exportMigrationBackup(world.id).catch(
-                                  (e) => setError(String(e)),
+                                void exportWorld(world.id).catch((e) =>
+                                  setError(String(e)),
                                 );
                               }}
                             >
                               <Icon name="download" size={14} />
-                              升级前备份
+                              导出
                             </button>
-                          )}
-                          <button
-                            title={`导出 ${world.name}`}
-                            onClick={() => {
-                              void exportWorld(world.id).catch((e) =>
-                                setError(String(e)),
-                              );
-                            }}
-                          >
-                            <Icon name="download" size={14} />
-                            导出
-                          </button>
-                          <button
-                            className="delete-world-button"
-                            title={`删除 ${world.name}`}
-                            onClick={() => setDeleteTarget(world)}
-                          >
-                            <Icon name="trash" size={14} />
-                          </button>
+                            <button
+                              className="delete-world-button"
+                              title={`删除 ${world.name}`}
+                              onClick={() => setDeleteTarget(world)}
+                            >
+                              <Icon name="trash" size={14} />
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    </article>
-                  ))
-                )}
-              </div>
-              <div className="library-footer">
-                <span>旅程会自动保存在此浏览器</span>
-                <button
-                  className="text-button"
-                  onClick={() => inputRef.current?.click()}
-                  disabled={busy}
-                >
-                  <Icon name="upload" size={15} />
-                  导入世界
+                      </article>
+                    ))
+                  )}
+                </div>
+                <div className="library-footer">
+                  <span>旅程会自动保存在此浏览器</span>
+                  <button
+                    className="text-button"
+                    onClick={() => inputRef.current?.click()}
+                    disabled={busy}
+                  >
+                    <Icon name="upload" size={15} />
+                    导入世界
+                  </button>
+                </div>
+              </section>
+            </div>
+            <footer className="home-footer">
+              <span>每一块，都有新的可能。</span>
+              <div>
+                <span className="version">耕作与牧场</span>
+                <button onClick={() => setModal("help")}>
+                  操作指南
+                  <Icon name="info" size={15} />
                 </button>
               </div>
-            </section>
-          </div>
-          <footer className="home-footer">
-            <span>每一块，都有新的可能。</span>
-            <div>
-              <span className="version">耕作与牧场</span>
-              <button onClick={() => setModal("help")}>
-                操作指南
-                <Icon name="info" size={15} />
-              </button>
-            </div>
-          </footer>
+            </footer>
+          </>
+        )}
+        <div style={!game ? { marginTop: 16, flexShrink: 0 } : undefined}>
+          <InstallApp visible={!game} />
         </div>
-      ) : (
+      </div>
+      {game && (
         <GameInterface
           game={game}
           settings={settings}
@@ -527,10 +535,9 @@ function GameInterface({
     setError("");
     try {
       await game.requestPointerLock();
-      game.setPaused(false);
-      setOverlay(null);
       setFirstEntry(false);
-    } catch {
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") return;
       setError(
         "浏览器未能锁定鼠标。请重试，或在 Chrome、Edge、Safari 中打开游戏。",
       );
@@ -558,13 +565,18 @@ function GameInterface({
         overlay !== "death"
       ) {
         e.preventDefault();
-        if (overlay === "settings") setOverlay("pause");
-        else void resume();
+        if (e.code === "Escape") {
+          game.setPaused(true);
+          setOverlay("pause");
+        } else if (
+          ["inventory", "workbench", "chest", "furnace"].includes(overlay)
+        )
+          void resume();
       }
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, [overlay, resume, help]);
+  }, [game, overlay, resume, help]);
   const openSettings = () => {
     game.setPaused(true);
     setOverlay("settings");
@@ -639,7 +651,6 @@ function GameInterface({
             >
               <Icon name={firstEntry ? "arrow" : "play"} size={19} />
               {firstEntry ? "进入世界" : "继续游戏"}
-              <kbd>Esc</kbd>
             </button>
             <div className="pause-secondary-actions">
               <button

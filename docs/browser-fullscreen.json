@@ -1,0 +1,39 @@
+{
+  "date": "2026-09-05T01:16:40.165Z",
+  "browser": "Chrome 152.0.7977.82",
+  "source": "localhost:5173 development",
+  "interaction": "Real enter/fallback button and native Chrome Escape key",
+  "pointerLockAttempt": "Browser rejected automated pointer-lock request; fallback explicitly chosen",
+  "before": {
+    "fullscreen": true,
+    "overlay": null,
+    "paused": false,
+    "time": 15837.666666677587
+  },
+  "after": {
+    "fullscreen": false,
+    "overlay": "pause",
+    "paused": true,
+    "time": 15839.000000010925
+  },
+  "production": {
+    "enter": {
+      "controller": true,
+      "fullscreen": "app in-game",
+      "online": false,
+      "pointerLocked": true
+    },
+    "inventory": {
+      "fullscreen": true,
+      "pointerLocked": false,
+      "ui": "背包与合成 visible"
+    },
+    "escape": {
+      "fullscreen": false,
+      "online": false,
+      "pauseVisible": true,
+      "pointerLocked": false
+    }
+  },
+  "productionInteraction": "Native Chrome accessibility click successfully acquired fullscreen and pointer lock; E inventory retained fullscreen; native Escape released both and displayed pause."
+}

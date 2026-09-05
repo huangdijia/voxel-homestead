@@ -13,6 +13,7 @@ import type {
   WorldEvent,
 } from "./types";
 import { VoxelWorld } from "../engine/world";
+import { selectionBoxes } from "../engine/shapes";
 import { Simulation, createNewSave } from "./Simulation";
 import { GameAudio } from "./audio";
 import { EntityRenderer } from "./EntityRenderer";
@@ -121,6 +122,10 @@ export class Game implements GameUIBridge {
   private rightDrag = 0;
   private rightHeld = false;
   private disposed = false;
+  private controlEpoch = 0;
+  private fullscreenTarget: HTMLElement | null = null;
+  private fullscreenOwned = false;
+  private fullscreenWanted = false;
   private raf = 0;
   private last = 0;
   private accumulator = 0;
@@ -230,6 +235,7 @@ export class Game implements GameUIBridge {
       if (document.pointerLockElement !== canvas && !this.paused)
         this.showOverlay("pause");
     }) as EventListener);
+    this.listen(document, "fullscreenchange", () => this.fullscreenChanged());
     this.listen(window, "blur", (() => {
       if (this.overlay !== "pause" && this.overlay !== "death")
         this.showOverlay("pause");
@@ -282,9 +288,15 @@ export class Game implements GameUIBridge {
   private keyDown = (e: KeyboardEvent) => {
     if ((e.target as HTMLElement)?.matches("input,textarea,select")) return;
     if (e.code === "Escape") {
-      if (!this.paused) {
+      if (
+        !this.paused ||
+        ["inventory", "workbench", "chest", "furnace"].includes(
+          this.overlay ?? "",
+        )
+      ) {
         e.preventDefault();
         e.stopPropagation();
+        this.simulation.closeContainer();
         this.showOverlay("pause");
       }
       return;
@@ -494,16 +506,22 @@ export class Game implements GameUIBridge {
     const t = sim.target();
     this.selection.visible = !!t && !this.paused && t.id !== 6;
     if (t) {
-      const shape = BLOCKS[t.id]?.shape;
+      const boxes = selectionBoxes(t.id);
+      const min = [0, 1, 2].map((axis) =>
+        Math.min(...boxes.map((box) => box[axis])),
+      );
+      const max = [3, 4, 5].map((axis) =>
+        Math.max(...boxes.map((box) => box[axis])),
+      );
       this.selection.position.set(
-        t.position.x + 0.5,
-        t.position.y + (shape === "slab" ? 0.25 : shape === "bed" ? 0.28 : 0.5),
-        t.position.z + 0.5,
+        t.position.x + (min[0] + max[0]) / 2,
+        t.position.y + (min[1] + max[1]) / 2,
+        t.position.z + (min[2] + max[2]) / 2,
       );
       this.selection.scale.set(
-        1,
-        shape === "slab" ? 0.5 : shape === "bed" ? 0.56 : 1,
-        1,
+        max[0] - min[0],
+        max[1] - min[1],
+        max[2] - min[2],
       );
     }
     this.entityRenderer.update(
@@ -658,16 +676,25 @@ export class Game implements GameUIBridge {
     this.publish();
   }
   private showOverlay(overlay: Overlay) {
+    this.controlEpoch++;
     this.overlay = overlay;
     this.paused = overlay !== null;
     this.keys.clear();
     this.primary = false;
     this.simulation.mining = 0;
     if (document.pointerLockElement === this.canvas) document.exitPointerLock();
+    if (overlay === "pause" || overlay === "death" || overlay === "settings")
+      this.exitGameFullscreen();
     this.onOverlay?.(overlay);
     this.publish();
   }
   setPaused(paused: boolean) {
+    if (paused) {
+      this.controlEpoch++;
+      this.exitGameFullscreen();
+      if (document.pointerLockElement === this.canvas)
+        document.exitPointerLock();
+    }
     if (!paused) {
       this.simulation.closeContainer();
       this.overlay = null;
@@ -678,31 +705,145 @@ export class Game implements GameUIBridge {
     this.accumulator = 0;
     this.publish();
   }
+  /** The app container includes the HUD and overlays, unlike a fullscreen canvas. */
+  private requestGameFullscreen(): Promise<string | null> {
+    const target =
+      this.canvas.closest<HTMLElement>(".app") ?? document.documentElement;
+    this.fullscreenTarget = target;
+    this.fullscreenWanted = true;
+    if (document.fullscreenElement === target) {
+      this.fullscreenOwned = true;
+      return Promise.resolve(null);
+    }
+    const unavailable = "未能进入全屏，已使用窗口模式。Esc 可暂停游戏。";
+    if (
+      document.fullscreenElement ||
+      typeof target.requestFullscreen !== "function"
+    ) {
+      this.fullscreenWanted = false;
+      return Promise.resolve(unavailable);
+    }
+    try {
+      return Promise.resolve(target.requestFullscreen()).then(
+        () => {
+          this.fullscreenOwned = document.fullscreenElement === target;
+          if (!this.fullscreenWanted || this.disposed)
+            this.exitGameFullscreen();
+          return this.fullscreenOwned ? null : unavailable;
+        },
+        () => unavailable,
+      );
+    } catch {
+      return Promise.resolve(unavailable);
+    }
+  }
+  private exitGameFullscreen() {
+    this.fullscreenWanted = false;
+    if (
+      this.fullscreenTarget &&
+      document.fullscreenElement === this.fullscreenTarget
+    ) {
+      try {
+        void document.exitFullscreen().catch(() => {});
+      } catch {}
+    }
+  }
+  private fullscreenChanged() {
+    if (
+      this.fullscreenTarget &&
+      document.fullscreenElement === this.fullscreenTarget
+    ) {
+      this.fullscreenOwned = true;
+      if (!this.fullscreenWanted || this.disposed) this.exitGameFullscreen();
+      return;
+    }
+    if (!this.fullscreenOwned) return;
+    this.fullscreenOwned = false;
+    this.fullscreenWanted = false;
+    // Native Esc may be consumed by the browser before any keydown reaches us.
+    if (!this.disposed && this.overlay !== "death") {
+      this.simulation.closeContainer();
+      this.showOverlay("pause");
+    }
+  }
+  private acquirePointerLock(): Promise<void> {
+    if (document.pointerLockElement === this.canvas) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const finish = (error?: unknown) => {
+        clearTimeout(timer);
+        document.removeEventListener("pointerlockchange", changed);
+        document.removeEventListener("pointerlockerror", failed);
+        if (error) reject(error);
+        else resolve();
+      };
+      const changed = () => {
+        if (document.pointerLockElement === this.canvas) finish();
+      };
+      const failed = () => finish(new Error("鼠标锁定未启用"));
+      const timer = setTimeout(
+        () => finish(new Error("鼠标锁定请求超时")),
+        8000,
+      );
+      document.addEventListener("pointerlockchange", changed);
+      document.addEventListener("pointerlockerror", failed);
+      try {
+        const result = this.canvas.requestPointerLock();
+        // Safari may return void and deliver the result only through events.
+        if (result && typeof result.then === "function")
+          result.then(changed, finish);
+        changed();
+      } catch (error) {
+        finish(error);
+      }
+    });
+  }
   async requestPointerLock() {
     if (this.disposed) return;
+    const epoch = ++this.controlEpoch;
     this.audio.unlock();
     if (this.mouseFallback) {
-      this.paused = false;
-      this.overlay = null;
+      const fullscreen = this.requestGameFullscreen();
+      this.setPaused(false);
       this.onOverlay?.(null);
       this.publish();
+      const warning = await fullscreen;
+      if (epoch !== this.controlEpoch || this.disposed)
+        throw new DOMException("进入游戏已取消", "AbortError");
+      if (warning) {
+        this.message = warning;
+        this.messageExpiry = this.elapsed + 8;
+        this.publish();
+      }
       return;
     }
     try {
-      await this.canvas.requestPointerLock();
+      // Pointer lock must be requested BEFORE fullscreen consumes user activation.
+      // Both calls occur synchronously in the original click/keyboard handler.
+      const pointer = this.acquirePointerLock();
+      const fullscreen = this.requestGameFullscreen();
+      const [, warning] = await Promise.all([pointer, fullscreen]);
+      if (epoch !== this.controlEpoch || this.disposed) {
+        if (document.pointerLockElement === this.canvas)
+          document.exitPointerLock();
+        throw new DOMException("进入游戏已取消", "AbortError");
+      }
       if (document.pointerLockElement === this.canvas) {
-        this.paused = false;
-        this.overlay = null;
+        this.setPaused(false);
         this.onOverlay?.(null);
-        this.message = "WASD 移动 · 左键挖掘 · 右键使用 · E 背包";
+        this.message =
+          warning ??
+          "WASD 移动 · 左键挖掘 · 右键使用 · E 背包 · Esc 暂停并退出全屏";
         this.messageExpiry = this.elapsed + 6;
         this.publish();
       } else {
         throw new Error("鼠标锁定未启用");
       }
     } catch (error) {
+      if (epoch !== this.controlEpoch || this.disposed)
+        throw new DOMException("进入游戏已取消", "AbortError");
       this.paused = true;
       this.overlay = "pause";
+      this.exitGameFullscreen();
       this.message = "鼠标锁定未成功，请点击「继续游戏」重试。";
       this.messageExpiry = Infinity;
       this.onOverlay?.("pause");
@@ -711,13 +852,23 @@ export class Game implements GameUIBridge {
     }
   }
   startMouseFallback() {
+    if (this.disposed) return;
     this.mouseFallback = true;
     this.audio.unlock();
+    const epoch = ++this.controlEpoch;
+    const fullscreen = this.requestGameFullscreen();
     this.setPaused(false);
     this.onOverlay?.(null);
     this.message = "拖动视角：按住右键环顾 · 轻点右键使用 · 左键挖掘";
     this.messageExpiry = this.elapsed + 10;
     this.publish();
+    void fullscreen.then((warning) => {
+      if (warning && epoch === this.controlEpoch && !this.disposed) {
+        this.message = `${warning} 按住右键环顾。`;
+        this.messageExpiry = this.elapsed + 10;
+        this.publish();
+      }
+    });
   }
   openInventory(station: "inventory" | "workbench" = "inventory") {
     this.simulation.startCraft(station);
@@ -826,6 +977,8 @@ export class Game implements GameUIBridge {
   dispose() {
     if (this.disposed) return;
     this.disposed = true;
+    this.controlEpoch++;
+    this.exitGameFullscreen();
     cancelAnimationFrame(this.raf);
     if (document.pointerLockElement === this.canvas) document.exitPointerLock();
     this.cleanup.forEach((f) => f());

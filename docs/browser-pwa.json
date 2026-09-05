@@ -1,0 +1,92 @@
+{
+  "date": "2026-09-05T01:19:40.674Z",
+  "url": "http://127.0.0.1:4173/",
+  "browser": "Chrome 152.0.7977.82",
+  "manifestErrors": [],
+  "installabilityErrors": [],
+  "nativeInstallDialog": {
+    "visible": true,
+    "name": "方块纪行 · 耕作与牧场",
+    "action": "Cancelled; no desktop application installed by test",
+    "cancelFeedbackVisible": true
+  },
+  "offline": {
+    "networkEmulatedOffline": true,
+    "httpCacheDisabled": true,
+    "navigatorOnline": false,
+    "uncachedProbe": "failed-as-expected",
+    "serviceWorkerControlled": true,
+    "reloadMenu": true,
+    "terrainWorkerLoaded": true,
+    "worldOpened": true,
+    "inventoryOpened": true,
+    "saveAndReload": {
+      "generatorVersion": 1,
+      "inventory": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "name": "导出验收20260905",
+      "playedSeconds": 18.800000000000217,
+      "time": 1375.9999999999227,
+      "version": 2
+    }
+  },
+  "productionFullscreen": {
+    "enter": {
+      "controller": true,
+      "fullscreen": "app in-game",
+      "online": false,
+      "pointerLocked": true
+    },
+    "inventory": {
+      "fullscreen": true,
+      "pointerLocked": false,
+      "ui": "背包与合成 visible"
+    },
+    "escape": {
+      "fullscreen": false,
+      "online": false,
+      "pauseVisible": true,
+      "pointerLocked": false
+    }
+  },
+  "limitations": [
+    "Desktop installation final acceptance was cancelled intentionally; appinstalled was tested with an event fixture only.",
+    "Chrome production core flow verified; Edge and Safari PWA installation not manually completed."
+  ]
+}

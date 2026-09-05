@@ -5,12 +5,12 @@
       "bytes": 3438
     },
     "src/game/recipes.ts": {
-      "sha256": "4dae936419b567c2f6827aac014b01b5a7c33e6ce8633da6ef0e08343bbb2833",
-      "bytes": 6887
+      "sha256": "f9bda2a0384fd8bc7ed71473ab18469a9d6d0f558c9733b5f0fab17f7405f909",
+      "bytes": 6898
     },
     "src/game/registry.ts": {
-      "sha256": "f686e9a996f4c12c1c813e232a601d1d99349efa56766219e2c0c75210df6ce4",
-      "bytes": 8557
+      "sha256": "f144ea365ae1ea622783ef3a4746deb4d717657a863aff5ed70b17555ee8c898",
+      "bytes": 8756
     }
   },
   "statusRule": "Definition matches and existing test names are leads, not executed per-entry acceptance. No acceptance is promoted by this generator.",

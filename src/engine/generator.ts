@@ -132,7 +132,14 @@ export function sampleBlock(
     const tree = treeAt(seed, x, y, z);
     if (tree) return tree;
     // Version 1 terrain remains byte-for-byte unchanged for existing saves.
-    if (generatorVersion >= 2 && y === top + 1 && top > SEA_LEVEL + 1 && Math.hypot(x, z) > 2 && hash(seedNumber(seed) + 521, x, y, z) < 0.24) return 58;
+    if (
+      generatorVersion >= 2 &&
+      y === top + 1 &&
+      top > SEA_LEVEL + 1 &&
+      Math.hypot(x, z) > 2 &&
+      hash(seedNumber(seed) + 521, x, y, z) < 0.24
+    )
+      return 58;
     return 0;
   }
   const s = seedNumber(seed);
