@@ -1,7 +1,21 @@
-export const WORLD_MIN_Y = -16;
-export const WORLD_MAX_Y = 95;
-export const SEA_LEVEL = 19;
-export const CHUNK_SIZE = 16;
+import {
+  WORLD_MIN_Y,
+  WORLD_MAX_Y,
+  SEA_LEVEL,
+  type GeneratorVersion,
+} from "./world-height.ts";
+export {
+  WORLD_MIN_Y,
+  WORLD_MAX_Y,
+  SEA_LEVEL,
+  CHUNK_SIZE,
+  type GeneratorVersion,
+} from "./world-height.ts";
+
+// These coordinates are part of the saved-world contract, not current bounds.
+const LEGACY_MIN_Y = -16;
+const LEGACY_MAX_Y = 95;
+const LEGACY_SEA_LEVEL = 19;
 
 const seeds = new Map<string, number>();
 export function seedNumber(seed: string): number {
@@ -42,9 +56,15 @@ function noise(seed: number, x: number, z: number, size: number): number {
   return (a + (b - a) * tx) * (1 - tz) + (c + (d - c) * tx) * tz;
 }
 const heights = new Map<string, number>();
-export function surfaceHeight(seed: string, x: number, z: number): number {
+export function surfaceHeight(
+  seed: string,
+  x: number,
+  z: number,
+  generatorVersion: GeneratorVersion = 1,
+): number {
   x = Math.floor(x);
   z = Math.floor(z);
+  if (generatorVersion === 5) return fullHeight(seed, x, z);
   const key = seed + ":" + x + "," + z;
   const cached = heights.get(key);
   if (cached !== undefined) return cached;
@@ -68,7 +88,13 @@ export function surfaceHeight(seed: string, x: number, z: number): number {
   return result;
 }
 
-function treeAt(seed: string, x: number, y: number, z: number): number {
+function treeAt(
+  seed: string,
+  x: number,
+  y: number,
+  z: number,
+  generatorVersion: GeneratorVersion = 1,
+): number {
   const s = seedNumber(seed),
     gx = Math.floor(x / 10),
     gz = Math.floor(z / 10);
@@ -87,7 +113,7 @@ function treeAt(seed: string, x: number, y: number, z: number): number {
       const tz = cz * 10 + 2 + Math.floor(hash(s, cx, 7, cz) * 6);
       if (
         Math.hypot(tx, tz) < 12 ||
-        (tx > 5 && tx < 35 && Math.abs(tz - 2) < 9)
+        (generatorVersion !== 5 && tx > 5 && tx < 35 && Math.abs(tz - 2) < 9)
       )
         continue;
       candidates.push([tx, tz, 4 + Math.floor(hash(s, cx, 8, cz) * 3)]);
@@ -96,8 +122,9 @@ function treeAt(seed: string, x: number, y: number, z: number): number {
     const dx = Math.abs(x - tx),
       dz = Math.abs(z - tz);
     if (dx > 2 || dz > 2) continue;
-    const floor = surfaceHeight(seed, tx, tz);
-    if (floor <= SEA_LEVEL + 1) continue;
+    const floor = surfaceHeight(seed, tx, tz, generatorVersion);
+    if (floor <= (generatorVersion === 5 ? SEA_LEVEL : LEGACY_SEA_LEVEL) + 1)
+      continue;
     const top = floor + tall;
     if (dx === 0 && dz === 0 && y > floor && y <= top) return 7;
     const dy = y - top;
@@ -196,22 +223,218 @@ function mineralAt(
   return y <= 0 ? deepMinerals[vein.id] : vein.id;
 }
 
+const fullHeights = new Map<string, number>();
+const fullVeins = new Map<string, MineralVein | null>();
+const fullGravelPockets = new Map<string, MineralVein | null>();
+const fullDeepMinerals: Record<number, number> = {
+  9: 92,
+  10: 93,
+  ...deepMinerals,
+};
+const clamp01 = (value: number): number => Math.max(0, Math.min(1, value));
+const triangle = (y: number, peak: number, spread: number): number =>
+  Math.max(0, 1 - Math.abs(y - peak) / spread);
+
+/** Version 5 has independent terrain, not a vertical rescale of older worlds. */
+function fullHeight(seed: string, x: number, z: number): number {
+  const key = `${seed}:${x},${z}`;
+  const known = fullHeights.get(key);
+  if (known !== undefined) return known;
+  const s = seedNumber(seed);
+  const continental = noise(s + 15013, x, z, 320);
+  const mountain = clamp01((noise(s + 15017, x, z, 168) - 0.52) / 0.48);
+  const inland = smooth(clamp01((continental - 0.3) / 0.35));
+  let y =
+    45 +
+    continental * 37 +
+    noise(s + 15031, x, z, 36) * 8 +
+    mountain ** 1.7 * 154 * inland +
+    noise(s + 15053, x, z, 11) * 3;
+  // The only spawn guarantee is dry, level footing and the two nearby trees.
+  // No mineral wall or pre-carved starter mine is carried into this generator.
+  const blend = smooth(clamp01((Math.hypot(x, z) - 8) / 24));
+  y = 68 * (1 - blend) + y * blend;
+  const result = Math.floor(Math.min(WORLD_MAX_Y - 12, y));
+  if (fullHeights.size >= 90000) fullHeights.clear();
+  fullHeights.set(key, result);
+  return result;
+}
+
+/**
+ * Broad ore-height preferences only: this is not Mojang's density function,
+ * biome placement, exposure reduction, or large ore-vein generator. Profiles
+ * use real Y coordinates and stone/deepslate variants instead of old heights.
+ * Seven-cell ore boxes are independent of chunk boundaries and load order.
+ */
+function fullMineralAt(
+  seed: string,
+  s: number,
+  x: number,
+  y: number,
+  z: number,
+): number {
+  const gx = Math.floor(x / 7),
+    gy = Math.floor(y / 7),
+    gz = Math.floor(z / 7);
+  const key = `${s}:${gx},${gy},${gz}`;
+  let vein = fullVeins.get(key);
+  if (vein === undefined) {
+    const centerY = gy * 7 + 3;
+    const highland = fullHeight(seed, gx * 7 + 3, gz * 7 + 3) >= 96;
+    const within = (low: number, high: number) =>
+      centerY >= low && centerY <= high;
+    const deep = clamp01((16 - centerY) / 76);
+    const choices: Array<[number, number]> = [
+      [9, within(0, 256) ? 0.025 + 0.11 * triangle(centerY, 96, 96) : 0],
+      [
+        10,
+        within(-60, 256)
+          ? 0.024 +
+            0.09 * triangle(centerY, 16, 64) +
+            (highland ? 0.12 * triangle(centerY, 176, 112) : 0)
+          : 0,
+      ],
+      [84, within(-16, 112) ? 0.018 + 0.105 * triangle(centerY, 48, 64) : 0],
+      [85, within(-60, 32) ? 0.018 + 0.06 * triangle(centerY, -16, 48) : 0],
+      [86, within(-60, 16) ? 0.022 + 0.075 * deep : 0],
+      [87, within(-60, 64) ? 0.018 + 0.07 * triangle(centerY, 0, 48) : 0],
+      [88, within(-60, 16) ? 0.009 + 0.04 * deep : 0],
+      [
+        89,
+        highland && within(-16, 256)
+          ? 0.012 + 0.055 * triangle(centerY, 128, 144)
+          : 0,
+      ],
+    ];
+    let pick = hash(s + 17011, gx, gy, gz),
+      id = 0;
+    for (const [candidate, probability] of choices) {
+      if (pick < probability) {
+        id = candidate;
+        break;
+      }
+      pick -= probability;
+    }
+    vein = id
+      ? {
+          id,
+          x: gx * 7 + 3 + (hash(s + 17021, gx, gy, gz) - 0.5) * 0.8,
+          y: centerY + (hash(s + 17027, gx, gy, gz) - 0.5) * 0.6,
+          z: gz * 7 + 3 + (hash(s + 17033, gx, gy, gz) - 0.5) * 0.8,
+          rx: 2.05 + hash(s + 17041, gx, gy, gz) * 0.65,
+          ry: id === 9 ? 3.2 : 1.65 + hash(s + 17047, gx, gy, gz) * 0.7,
+          rz: 2.05 + hash(s + 17053, gx, gy, gz) * 0.65,
+        }
+      : null;
+    if (fullVeins.size >= 16384) fullVeins.clear();
+    fullVeins.set(key, vein);
+  }
+  if (!vein || (vein.id === 9 && y < 0)) return 0;
+  const distance =
+    ((x - vein.x) / vein.rx) ** 2 +
+    ((y - vein.y) / vein.ry) ** 2 +
+    ((z - vein.z) / vein.rz) ** 2;
+  if (distance > 1 + (hash(s + 17059, x, y, z) - 0.5) * 0.2) return 0;
+  return y <= 0 ? fullDeepMinerals[vein.id] : vein.id;
+}
+
+/** Small gravel pockets replace only unmineralized rock, never cave air/soil. */
+function fullGravelAt(s: number, x: number, y: number, z: number): boolean {
+  // Keep the spawn column's foundation stable while players first dig down.
+  if (x * x + z * z < 144) return false;
+  const gx = Math.floor(x / 9),
+    gy = Math.floor(y / 9),
+    gz = Math.floor(z / 9);
+  const key = `${s}:${gx},${gy},${gz}`;
+  let pocket = fullGravelPockets.get(key);
+  if (pocket === undefined) {
+    pocket =
+      hash(s + 21001, gx, gy, gz) < 0.12
+        ? {
+            id: 5,
+            x: gx * 9 + 4 + (hash(s + 21011, gx, gy, gz) - 0.5) * 0.8,
+            y: gy * 9 + 4 + (hash(s + 21013, gx, gy, gz) - 0.5) * 0.8,
+            z: gz * 9 + 4 + (hash(s + 21017, gx, gy, gz) - 0.5) * 0.8,
+            rx: 2.4 + hash(s + 21019, gx, gy, gz) * 0.8,
+            ry: 1.8 + hash(s + 21023, gx, gy, gz),
+            rz: 2.4 + hash(s + 21031, gx, gy, gz) * 0.8,
+          }
+        : null;
+    if (fullGravelPockets.size >= 16384) fullGravelPockets.clear();
+    fullGravelPockets.set(key, pocket);
+  }
+  if (!pocket) return false;
+  const distance =
+    ((x - pocket.x) / pocket.rx) ** 2 +
+    ((y - pocket.y) / pocket.ry) ** 2 +
+    ((z - pocket.z) / pocket.rz) ** 2;
+  return distance <= 1 + (hash(s + 21037, x, y, z) - 0.5) * 0.15;
+}
+
+function sampleFullHeight(
+  seed: string,
+  x: number,
+  y: number,
+  z: number,
+): number {
+  if (y < WORLD_MIN_Y || y > WORLD_MAX_Y) return 0;
+  if (y === WORLD_MIN_Y) return 24;
+  const s = seedNumber(seed);
+  if (y < -59 && hash(s + 19001, x, y, z) < (-59 - y) / 5) return 24;
+  const top = fullHeight(seed, x, z);
+  if (y > top) {
+    // SEA_LEVEL names the geometric water surface, not the top block index.
+    if (y < SEA_LEVEL) return 6;
+    if (y > top + 18) return 0;
+    const tree = treeAt(seed, x, y, z, 5);
+    if (tree) return tree;
+    if (
+      y === top + 1 &&
+      top > SEA_LEVEL + 1 &&
+      Math.hypot(x, z) > 2 &&
+      hash(s + 19009, x, y, z) < 0.24
+    )
+      return 58;
+    return 0;
+  }
+  // Keep a soil roof and spawn footing intact; deep caves still pass underneath
+  // the spawn column. Cavities continue down to the top of the bedrock layer.
+  if (y < top - 4 && y > -60 && !(y > 48 && Math.hypot(x, z) < 9)) {
+    const phase = (s % 7919) * 0.013;
+    const chamber =
+      Math.sin(x * 0.075 + Math.sin(z * 0.041 + phase) * 2.3 + phase) +
+      Math.cos(y * 0.104 - x * 0.023 + phase * 1.3) +
+      Math.sin(z * 0.079 + y * 0.057 - phase * 0.7);
+    const worm =
+      Math.abs(Math.sin(x * 0.037 + y * 0.069 + phase)) +
+      Math.abs(Math.cos(z * 0.047 - y * 0.051 + phase * 1.7));
+    if (chamber > 2.42 || worm < 0.14) return y < -54 ? 76 : 0;
+  }
+  if (y === top) return top <= SEA_LEVEL ? 4 : 1;
+  if (y >= top - 3) return top <= SEA_LEVEL ? 4 : 2;
+  return (
+    fullMineralAt(seed, s, x, y, z) ||
+    (fullGravelAt(s, x, y, z) ? 5 : y <= 0 ? 90 : 3)
+  );
+}
+
 /** Deterministic terrain; trees never cover the safe spawn at (0, 0). */
 export function sampleBlock(
   seed: string,
   x: number,
   y: number,
   z: number,
-  generatorVersion: 1 | 2 | 3 | 4 = 1,
+  generatorVersion: GeneratorVersion = 1,
 ): number {
   x = Math.floor(x);
   y = Math.floor(y);
   z = Math.floor(z);
-  if (y <= WORLD_MIN_Y) return 24;
-  if (y > WORLD_MAX_Y) return 0;
+  if (generatorVersion === 5) return sampleFullHeight(seed, x, y, z);
+  if (y <= LEGACY_MIN_Y) return 24;
+  if (y > LEGACY_MAX_Y) return 0;
   const top = surfaceHeight(seed, x, z);
   if (y > top) {
-    if (y <= SEA_LEVEL) return 6;
+    if (y <= LEGACY_SEA_LEVEL) return 6;
     if (y > top + 9) return 0;
     const tree = treeAt(seed, x, y, z);
     if (tree) return tree;
@@ -219,7 +442,7 @@ export function sampleBlock(
     if (
       generatorVersion >= 2 &&
       y === top + 1 &&
-      top > SEA_LEVEL + 1 &&
+      top > LEGACY_SEA_LEVEL + 1 &&
       Math.hypot(x, z) > 2 &&
       hash(seedNumber(seed) + 521, x, y, z) < 0.24
     )
@@ -234,15 +457,15 @@ export function sampleBlock(
     return 9;
   if (x >= 20 && x <= 28 && (z === 0 || z === 5) && y >= 23 && y <= 26)
     return 10;
-  if (y < top - 5 && y > WORLD_MIN_Y + 3 && Math.hypot(x, z) > 9) {
+  if (y < top - 5 && y > LEGACY_MIN_Y + 3 && Math.hypot(x, z) > 9) {
     const tunnel =
       Math.sin(x * 0.12 + Math.sin(z * 0.09) * 2 + (s % 91)) +
       Math.sin(y * 0.22 + z * 0.11) +
       Math.cos(z * 0.13 - x * 0.065 + y * 0.095);
     if (tunnel > 2.35) return generatorVersion >= 3 && y <= -5 ? 76 : 0;
   }
-  if (y === top) return top <= SEA_LEVEL + 1 ? 4 : 1;
-  if (y >= top - 3) return top <= SEA_LEVEL + 1 ? 4 : 2;
+  if (y === top) return top <= LEGACY_SEA_LEVEL + 1 ? 4 : 1;
+  if (y >= top - 3) return top <= LEGACY_SEA_LEVEL + 1 ? 4 : 2;
   const cluster = hash(
     s + 352,
     Math.floor(x / 3),

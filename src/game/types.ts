@@ -1,3 +1,4 @@
+import type { GeneratorVersion } from "../engine/world-height";
 import type { FluidState } from "./fluids";
 import type { NaturalState } from "./natural-updates";
 import type { FarmState } from "./farming";
@@ -58,8 +59,8 @@ export type ContainerState =
       progress: number;
     };
 export interface SaveManifest {
-  version: 1 | 2 | 3 | 4;
-  generatorVersion: 1 | 2 | 3 | 4;
+  version: 1 | 2 | 3 | 4 | 5;
+  generatorVersion: GeneratorVersion;
   id: string;
   name: string;
   seed: string;
@@ -145,9 +146,12 @@ export interface EntityDefinition {
   drops: ItemStack[];
 }
 export interface WorldPort {
+  /** Authoritative blocks, including saved edits and deterministic unloaded terrain. */
   getBlock(x: number, y: number, z: number): number;
   setBlock(x: number, y: number, z: number, id: number): void;
-  isReady(x: number, z: number): boolean;
+  isReady(x: number, z: number, y?: number): boolean;
+  /** Authoritative vertical sky query independent of mesh residency. */
+  hasSkyAccess?(x: number, y: number, z: number): boolean;
   getSurface(x: number, z: number): number;
   getChanges(): BlockChange[];
 }

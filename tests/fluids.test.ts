@@ -3,6 +3,7 @@ import { FluidSystem, FLUID_QUEUE_LIMIT, FLUID_SCAN_SIZE, FLUID_TASK_BUDGET } fr
 import type { FluidState } from '../src/game/fluids';
 import { fluidInfo, isFluid, isWater, isLava } from '../src/game/fluid-blocks';
 import type { BlockChange, Vec3, WorldPort } from '../src/game/types';
+import { WORLD_MIN_Y, WORLD_MAX_Y } from '../src/engine/world-height';
 
 class FluidWorld implements WorldPort {
   blocks = new Map<string, BlockChange>();
@@ -15,7 +16,7 @@ class FluidWorld implements WorldPort {
     return this.blocks.get(`${x},${y},${z}`)?.id ?? this.base(x, y, z);
   }
   setBlock(x: number, y: number, z: number, id: number): void {
-    if (!this.loaded(x, z) || y < -16 || y > 95) throw new Error('Write outside loaded world');
+    if (!this.loaded(x, z) || y < WORLD_MIN_Y || y > WORLD_MAX_Y) throw new Error('Write outside loaded world');
     this.blocks.set(`${x},${y},${z}`, { x, y, z, id });
   }
   isReady(x: number, z: number): boolean { return this.loaded(x, z); }
@@ -185,12 +186,12 @@ describe('loaded boundaries, natural activation and bounded scheduling', () => {
     expect(world.getBlock(15, 1, 0)).toBe(68);
     expect(system.pendingCount).toBeGreaterThan(0);
   });
-  it.each([-16, 95])('handles world height %i without waiting forever on out-of-world neighbors', y => {
+  it.each([WORLD_MIN_Y, WORLD_MAX_Y])('handles world height %i without waiting forever on out-of-world neighbors', y => {
     const world = new FluidWorld(); world.base = (_x, blockY) => blockY < y ? 3 : 0;
     const { system, edit } = setup(world); edit(0, y, 0, 6);
     advance(system, .3, { x: .5, y: y + 1, z: .5 });
     expect(world.getBlock(1, y, 0)).toBe(68);
-    expect(world.getChanges().every(block => block.y >= -16 && block.y <= 95)).toBe(true);
+    expect(world.getChanges().every(block => block.y >= WORLD_MIN_Y && block.y <= WORLD_MAX_Y)).toBe(true);
   });
   it('wakes an exposed natural source without enumerating natural world blocks', () => {
     const world = new FluidWorld(); world.base = (x, y, z) => x === 0 && y === 1 && z === 0 ? 6 : y <= 0 ? 3 : 0;
@@ -265,7 +266,7 @@ describe('checkpoint continuation and pause', () => {
     ['duplicate task', (state: any) => { state.tasks.push({ ...state.tasks[0] }); }],
     ['unknown fluid kind', (state: any) => { state.tasks[0].kind = 'oil'; }],
     ['fractional coordinate', (state: any) => { state.tasks[0].x = .1; }],
-    ['out-of-world height', (state: any) => { state.tasks[0].y = 96; }],
+    ['out-of-world height', (state: any) => { state.tasks[0].y = WORLD_MAX_Y + 1; }],
     ['unbounded deadline', (state: any) => { state.tasks[0].due = 2; }],
   ])('rejects %s when restoring its own state', (_, mutate) => {
     const state: FluidState = { version: 1, clock: 0, scanCursor: 0, tasks: [{ x: 0, y: 1, z: 0, kind: 'water', due: .25 }] };

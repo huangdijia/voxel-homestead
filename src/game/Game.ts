@@ -480,9 +480,11 @@ export class Game implements GameUIBridge {
     const angle = (sim.time / 24000) * Math.PI * 2;
     this.sky.sun.position.set(
       p.position.x + Math.cos(angle) * 90,
-      Math.sin(angle) * 110,
+      p.position.y + Math.sin(angle) * 110,
       p.position.z - 60,
     );
+    this.sky.sun.target.position.set(p.position.x, p.position.y, p.position.z);
+    this.sky.sun.target.updateMatrixWorld();
     this.sky.sunMesh.position.set(
       p.position.x + Math.cos(angle) * 120,
       p.position.y + Math.sin(angle) * 120,
@@ -500,7 +502,7 @@ export class Game implements GameUIBridge {
     this.sky.clouds.position.set(
       Math.floor(p.position.x / 200) * 200 +
         Math.sin(this.elapsed * 0.002) * 10,
-      0,
+      sim.manifest.generatorVersion >= 5 ? 192 - 65 : 0,
       Math.floor(p.position.z / 200) * 200,
     );
     this.sky.clouds.visible = this.settings.quality !== "low";

@@ -1,0 +1,98 @@
+{
+  "url": "http://127.0.0.1:4175/",
+  "manifest": {
+    "data": "{\"name\":\"方块纪行 · 耕作与牧场\",\"short_name\":\"方块纪行\",\"description\":\"自由探索、耕作与建造的原创方块沙盒游戏，支持本地存档与离线游玩。\",\"start_url\":\"/\",\"display\":\"standalone\",\"background_color\":\"#172722\",\"theme_color\":\"#172722\",\"lang\":\"zh-CN\",\"scope\":\"/\",\"id\":\"/\",\"categories\":[\"games\",\"entertainment\"],\"icons\":[{\"src\":\"icons/icon-192.png\",\"sizes\":\"192x192\",\"type\":\"image/png\",\"purpose\":\"any\"},{\"src\":\"icons/icon-512.png\",\"sizes\":\"512x512\",\"type\":\"image/png\",\"purpose\":\"any\"},{\"src\":\"icons/icon-maskable-512.png\",\"sizes\":\"512x512\",\"type\":\"image/png\",\"purpose\":\"maskable\"}]}\n",
+    "errors": [],
+    "manifest": {
+      "backgroundColor": "rgba(23,39,34,1)",
+      "description": "自由探索、耕作与建造的原创方块沙盒游戏，支持本地存档与离线游玩。",
+      "display": "kStandalone",
+      "icons": [
+        {
+          "sizes": "192x192",
+          "type": "image/png",
+          "url": "http://127.0.0.1:4175/icons/icon-192.png"
+        },
+        {
+          "sizes": "512x512",
+          "type": "image/png",
+          "url": "http://127.0.0.1:4175/icons/icon-512.png"
+        },
+        {
+          "sizes": "512x512",
+          "type": "image/png",
+          "url": "http://127.0.0.1:4175/icons/icon-maskable-512.png"
+        }
+      ],
+      "id": "http://127.0.0.1:4175/",
+      "name": "方块纪行 · 耕作与牧场",
+      "orientation": "DEFAULT",
+      "preferRelatedApplications": false,
+      "scope": "http://127.0.0.1:4175/",
+      "startUrl": "http://127.0.0.1:4175/",
+      "themeColor": "rgba(23,39,34,1)"
+    },
+    "parsed": {
+      "scope": "http://127.0.0.1:4175/"
+    },
+    "url": "http://127.0.0.1:4175/manifest.webmanifest"
+  },
+  "installability": {
+    "installabilityErrors": []
+  },
+  "offline": {
+    "result": {
+      "type": "object",
+      "value": {
+        "controller": true,
+        "errorOverlay": false,
+        "online": true,
+        "probe": "network-failed",
+        "scripts": [
+          "http://127.0.0.1:4175/assets/index-DJQoKuHi.js"
+        ]
+      }
+    }
+  },
+  "offlineWorld": {
+    "result": {
+      "type": "object",
+      "value": {
+        "canvas": true,
+        "controller": true,
+        "online": false,
+        "script": [
+          "http://127.0.0.1:4175/assets/index-DJQoKuHi.js"
+        ],
+        "text": "原野漫游\n第 1 天/07:00\nF3\n点击画面，开始你的方块旅程\nW A S D\n移动\n左键\n挖掘\nE\n背包\n空手\n1\n2\n3\n4\n5\n6\n7\n8\n9\n滚轮\n切换物品\nE\n背包与合成\n旅程准备就绪\n出发，去创造。\n\n高山原野 · 离线验收\n·\n生存模式\n\n进入世界\n游戏设置\n操作指南\n导出当前进度\n保存并返回世界列表\n进度已保存"
+      }
+    }
+  },
+  "offlineSavedWorld": {
+    "result": {
+      "type": "object",
+      "value": [
+        {
+          "inventoryEmpty": true,
+          "manifest": {
+            "createdAt": 1788576762720,
+            "generatorVersion": 5,
+            "id": "f55ef8a3-27b2-46b0-866c-e39f84b7b1ad",
+            "mode": "survival",
+            "name": "高山原野 · 离线验收",
+            "playedSeconds": 0,
+            "seed": "M2-height-20260905",
+            "updatedAt": 1788576762720,
+            "version": 5
+          },
+          "position": {
+            "x": 0.5,
+            "y": 69.05,
+            "z": 0.5
+          }
+        }
+      ]
+    }
+  },
+  "nativeControls": "Not rerun: native tool reported Mac locked; prior mineral-build native evidence is historical"
+}

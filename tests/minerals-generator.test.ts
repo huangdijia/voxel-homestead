@@ -1,11 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildChunk } from "../src/engine/mesher";
-import {
-  sampleBlock,
-  surfaceHeight,
-  WORLD_MAX_Y,
-  WORLD_MIN_Y,
-} from "../src/engine/generator";
+import { sampleBlock, surfaceHeight } from "../src/engine/generator";
 
 const seed = "M2-minerals-20260905";
 const newOres = new Set([84, 85, 86, 87, 88, 89, 94, 95, 96, 97, 98, 99]);
@@ -154,8 +149,6 @@ describe("versioned mineral terrain compatibility", () => {
     expect(sampleBlock(seed, 3, 18, -20, 4)).toBe(6);
   });
   it("keeps the compact world's bounds explicit instead of adopting Java ore-height assumptions", () => {
-    expect(WORLD_MIN_Y).toBe(-16);
-    expect(WORLD_MAX_Y).toBe(95);
     for (const [x, z] of [
       [0, 0],
       [-17, -16],

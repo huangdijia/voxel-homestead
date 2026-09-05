@@ -1,9 +1,10 @@
 import { isFluid } from "./fluid-blocks";
+import { WORLD_MIN_Y, WORLD_MAX_Y } from "../engine/world-height";
 import { BLOCKS } from "./registry";
 import type { ItemStack, Vec3, WorldPort } from "./types";
 
-export const NATURAL_MIN_Y = -16;
-export const NATURAL_MAX_Y = 95;
+export const NATURAL_MIN_Y = WORLD_MIN_Y;
+export const NATURAL_MAX_Y = WORLD_MAX_Y;
 export const NATURAL_WORLD_LIMIT = 30_000_000;
 export const NATURAL_SCAN_INTERVAL = 0.1;
 export const NATURAL_SCAN_RADIUS = 12;
@@ -119,7 +120,7 @@ export class NaturalUpdatesSystem {
     for (const p of saved.falling) {
       if (!validPosition(p) || !isSand(p.id) || this.falling.has(keyOf(p)))
         throw new Error("无效或重复的下落方块");
-      if (this.world.isReady(p.x, p.z) && this.get(p) === p.id)
+      if (this.loaded(p) && this.get(p) === p.id)
         throw new Error("下落方块与世界方块重复");
       this.falling.set(keyOf(p), { x: p.x, y: p.y, z: p.z, id: p.id });
     }
@@ -136,7 +137,7 @@ export class NaturalUpdatesSystem {
     return this.world.getBlock(p.x, p.y, p.z);
   }
   private loaded(p: Vec3): boolean {
-    return validPosition(p) && this.world.isReady(p.x, p.z);
+    return validPosition(p) && this.world.isReady(p.x, p.z, p.y);
   }
   private active(p: Vec3, player: Vec3): boolean {
     return (
@@ -177,7 +178,7 @@ export class NaturalUpdatesSystem {
     for (const [dx, dy, dz] of directions) {
       const next = { x: p.x + dx, y: p.y + dy, z: p.z + dz };
       if (!validPosition(next)) continue;
-      if (!this.world.isReady(next.x, next.z) || isNatural(this.get(next)))
+      if (!this.loaded(next) || isNatural(this.get(next)))
         this.enqueue(next, dy === 1);
     }
     if (isNatural(newId)) this.enqueue(p, true);
@@ -249,11 +250,14 @@ export class NaturalUpdatesSystem {
       this.enqueue(p);
       return;
     }
-    if (
-      p.y > NATURAL_MIN_Y &&
-      isFullSupport(this.world.getBlock(p.x, p.y - 1, p.z))
-    )
-      return;
+    if (p.y > NATURAL_MIN_Y) {
+      const below = { ...p, y: p.y - 1 };
+      if (!this.loaded(below)) {
+        this.enqueue(p);
+        return;
+      }
+      if (isFullSupport(this.get(below))) return;
+    }
     if (
       this.falling.size >= NATURAL_FALLING_MAX ||
       this.falling.has(keyOf(p))
@@ -285,7 +289,7 @@ export class NaturalUpdatesSystem {
         };
         if (!validPosition(next) || seen.has(keyOf(next))) continue;
         seen.add(keyOf(next));
-        if (!this.world.isReady(next.x, next.z)) {
+        if (!this.loaded(next)) {
           incomplete = true;
           continue;
         }
@@ -313,11 +317,16 @@ export class NaturalUpdatesSystem {
   }
   private hasGrowthLight(start: Vec3, daylight: number): boolean {
     if (daylight >= 9) {
-      let sky = true;
-      for (let y = start.y + 1; y <= NATURAL_MAX_Y; y++) {
-        if (blocksLight(this.world.getBlock(start.x, y, start.z))) {
-          sky = false;
-          break;
+      let sky = this.world.hasSkyAccess?.(start.x, start.y, start.z) ?? true;
+      if (!this.world.hasSkyAccess) {
+        for (let y = start.y + 1; y <= NATURAL_MAX_Y; y++) {
+          if (
+            !this.world.isReady(start.x, start.z, y) ||
+            blocksLight(this.world.getBlock(start.x, y, start.z))
+          ) {
+            sky = false;
+            break;
+          }
         }
       }
       if (sky) return true;
@@ -350,6 +359,7 @@ export class NaturalUpdatesSystem {
       p.y <= NATURAL_MIN_Y ||
       p.y + 5 > NATURAL_MAX_Y ||
       !this.loaded(p) ||
+      !this.loaded({ ...p, y: p.y - 1 }) ||
       this.get(p) !== OAK_SAPLING ||
       !Number.isFinite(daylight)
     )
@@ -389,6 +399,7 @@ export class NaturalUpdatesSystem {
         }
     }
     if (
+      plan.some((block) => !this.loaded(block)) ||
       plan.some((block) => this.get(block) !== block.oldId) ||
       !this.hasGrowthLight(p, daylight)
     )
@@ -473,6 +484,10 @@ export class NaturalUpdatesSystem {
       if (isSand(id)) this.sand(p, id);
       else if (id === NATURAL_LEAVES) this.leaf(p);
       else if (id === OAK_SAPLING) {
+        if (p.y > NATURAL_MIN_Y && !this.loaded({ ...p, y: p.y - 1 })) {
+          this.enqueue(p);
+          continue;
+        }
         const soil =
           p.y > NATURAL_MIN_Y ? this.world.getBlock(p.x, p.y - 1, p.z) : 0;
         if (soil !== 1 && soil !== 2) {

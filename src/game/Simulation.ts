@@ -1,3 +1,4 @@
+import { WORLD_MIN_Y, WORLD_MAX_Y } from "../engine/world-height";
 import { canHarvest, miningDuration, damageAfterArmor } from "./equipment";
 import { FluidSystem } from "./fluids";
 import { NaturalUpdatesSystem } from "./natural-updates";
@@ -61,11 +62,11 @@ export function createNewSave(
 ): SaveData {
   const worldSeed =
     seed.trim() || String(Math.floor(Math.random() * 2147483647));
-  const spawn = { x: 0.5, y: surfaceHeight(worldSeed, 0, 0) + 1.05, z: 0.5 };
+  const spawn = { x: 0.5, y: surfaceHeight(worldSeed, 0, 0, 5) + 1.05, z: 0.5 };
   return {
     manifest: {
-      version: 4,
-      generatorVersion: 4,
+      version: 5,
+      generatorVersion: 5,
       id: uid(),
       name: name.trim() || "新的世界",
       seed: worldSeed,
@@ -209,7 +210,12 @@ export class Simulation {
   }
   /** Every authoritative edit wakes neighboring block rules after the write succeeds. */
   setBlock(x: number, y: number, z: number, id: number): boolean {
-    if (y < -16 || y >= 96 || !this.world.isReady(x, z) || !BLOCKS[id])
+    if (
+      y < WORLD_MIN_Y ||
+      y > WORLD_MAX_Y ||
+      !this.world.isReady(x, z, y) ||
+      !BLOCKS[id]
+    )
       return false;
     const position = { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) };
     const oldId = this.world.getBlock(position.x, position.y, position.z);
@@ -286,7 +292,13 @@ export class Simulation {
     return intersectsWorld(this.world, p, w, h);
   }
   step(dt: number, input: PlayerInput) {
-    if (!this.world.isReady(this.player.position.x, this.player.position.z))
+    if (
+      !this.world.isReady(
+        this.player.position.x,
+        this.player.position.z,
+        this.player.position.y,
+      )
+    )
       return;
     this.age += dt;
     this.manifest.playedSeconds += dt;
@@ -303,7 +315,7 @@ export class Simulation {
     this.farming.step(dt, this.player.position, this.night ? 4 : 15);
     for (const [key, remaining] of Object.entries(this.composters)) {
       const [x, y, z] = key.split(",").map(Number);
-      if (!this.world.isReady(x, z)) continue;
+      if (!this.world.isReady(x, z, y)) continue;
       if (this.world.getBlock(x, y, z) !== 66) {
         delete this.composters[key];
         continue;
@@ -383,7 +395,7 @@ export class Simulation {
       if (!BLOCKS[support(body.x + dx, body.z)]?.solid) dx = 0;
       if (!BLOCKS[support(body.x, body.z + dz)]?.solid) dz = 0;
     }
-    if (!this.world.isReady(body.x + dx, body.z + dz)) {
+    if (!this.world.isReady(body.x + dx, body.z + dz, body.y)) {
       dx = 0;
       dz = 0;
     }
@@ -404,7 +416,7 @@ export class Simulation {
       p.velocity.y = 0;
       this.fallDistance = 0;
     }
-    if (p.position.y < -60) {
+    if (p.position.y < WORLD_MIN_Y - 64) {
       if (this.creative) {
         p.position = { ...p.spawn };
         p.velocity = { x: 0, y: 0, z: 0 };
@@ -540,6 +552,9 @@ export class Simulation {
   }
   respawn() {
     const p = this.player;
+    // A remote bed may not be resident yet. Only this destination search uses
+    // authoritative voxels without the temporary barriers of normal movement.
+    const spawnWorld = { getBlock: this.world.getBlock.bind(this.world) };
     let spawn = { ...p.spawn };
     if (p.bedSpawn) {
       const b = p.bedSpawn;
@@ -554,7 +569,7 @@ export class Simulation {
           { x: b.x - 0.5, y: b.y + 0.1, z: b.z + 0.5 },
           { x: b.x + 0.5, y: b.y + 1, z: b.z + 0.5 },
         ];
-        const safe = candidates.find((c) => !this.hasCollision(c));
+        const safe = candidates.find((c) => !intersectsWorld(spawnWorld, c));
         if (safe) spawn = safe;
       } else p.bedSpawn = undefined;
     }
@@ -570,8 +585,9 @@ export class Simulation {
     this.toast("新的清晨，新的旅程。");
   }
   private safeSpawn(preferred: Vec3): Vec3 {
+    const spawnWorld = { getBlock: this.world.getBlock.bind(this.world) };
     const safe = (p: Vec3) =>
-      !this.hasCollision(p) &&
+      !intersectsWorld(spawnWorld, p) &&
       !this.fluidAt(p) &&
       !this.fluidAt({ ...p, y: p.y + 1.6 }) &&
       !!BLOCKS[
@@ -594,16 +610,20 @@ export class Simulation {
             };
             if (safe(p)) return p;
           }
-    for (let y = Math.floor(preferred.y) + 1; y < 94; y++) {
+    for (
+      let y = Math.max(WORLD_MIN_Y, Math.floor(preferred.y) + 1);
+      y <= WORLD_MAX_Y + 1;
+      y++
+    ) {
       const p = { x: preferred.x, y: y + 0.05, z: preferred.z };
       if (
-        !this.hasCollision(p) &&
+        !intersectsWorld(spawnWorld, p) &&
         !this.fluidAt(p) &&
         !this.fluidAt({ ...p, y: p.y + 1.6 })
       )
         return p;
     }
-    return { ...this.player.spawn, y: 95 };
+    return { ...preferred };
   }
   spawnDrop(stack: ItemStack, position: Vec3) {
     if (stack.count <= 0) return;
@@ -620,16 +640,25 @@ export class Simulation {
   }
   private updateDrops(dt: number) {
     this.drops = this.drops.filter((drop) => {
-      if (!this.world.isReady(drop.position.x, drop.position.z)) return true;
+      if (
+        !this.world.isReady(drop.position.x, drop.position.z, drop.position.y)
+      )
+        return true;
       if (this.fluidAt(drop.position)?.kind === "lava") return false;
       drop.age += dt;
-      const ground = this.world.getBlock(
-        Math.floor(drop.position.x),
-        Math.floor(drop.position.y - 0.2),
-        Math.floor(drop.position.z),
-      );
-      if (!BLOCKS[ground]?.solid && !isWater(ground))
-        drop.position.y -= Math.min(3 * dt, 0.15);
+      const groundY = Math.floor(drop.position.y - 0.2);
+      const nextY = drop.position.y - Math.min(3 * dt, 0.15);
+      if (
+        this.world.isReady(drop.position.x, drop.position.z, groundY) &&
+        this.world.isReady(drop.position.x, drop.position.z, nextY)
+      ) {
+        const ground = this.world.getBlock(
+          Math.floor(drop.position.x),
+          groundY,
+          Math.floor(drop.position.z),
+        );
+        if (!BLOCKS[ground]?.solid && !isWater(ground)) drop.position.y = nextY;
+      }
       if (
         !this.player.dead &&
         drop.age > 0 &&
@@ -645,7 +674,7 @@ export class Simulation {
         }
         drop.stack = remaining;
       }
-      return drop.age < 300 && drop.position.y > -64;
+      return drop.age < 300 && drop.position.y > WORLD_MIN_Y - 64;
     });
   }
   dropSelected() {
@@ -712,13 +741,19 @@ export class Simulation {
       blockZ = Math.floor(position.z);
     // Side effects must follow a successful authoritative edit, including explosion edges.
     if (
-      !this.world.isReady(blockX, blockZ) ||
+      !this.world.isReady(blockX, blockZ, blockY) ||
       this.world.getBlock(blockX, blockY, blockZ) !== id ||
       !BLOCKS[id]
     )
       return;
     const pairedZ = id === 22 ? blockZ + 1 : id === 27 ? blockZ - 1 : blockZ;
-    if (!this.world.isReady(blockX, pairedZ)) return;
+    const pairedY =
+      id === 18 || id === 19
+        ? blockY + 1
+        : id === 25 || id === 26
+          ? blockY - 1
+          : blockY;
+    if (!this.world.isReady(blockX, pairedZ, pairedY)) return;
     if (id === 0 || isFluid(id) || (id === 24 && (!this.creative || exploded)))
       return;
     const def = BLOCKS[id],
@@ -870,7 +905,14 @@ export class Simulation {
       this.interactFarm(held.id, null);
       return;
     }
-    if (target && !this.world.isReady(target.position.x, target.position.z)) {
+    if (
+      target &&
+      !this.world.isReady(
+        target.position.x,
+        target.position.z,
+        target.position.y,
+      )
+    ) {
       this.toast("请等待目标地形加载完成");
       return;
     }
@@ -920,8 +962,23 @@ export class Simulation {
     if ([18, 19, 25, 26].includes(id)) {
       const y = t.y - (id === 25 || id === 26 ? 1 : 0),
         open = id === 18 || id === 25;
-      this.setBlock(t.x, y, t.z, open ? 19 : 18);
-      this.setBlock(t.x, y + 1, t.z, open ? 26 : 25);
+      if (
+        y < WORLD_MIN_Y ||
+        y + 1 > WORLD_MAX_Y ||
+        !this.world.isReady(t.x, t.z, y) ||
+        !this.world.isReady(t.x, t.z, y + 1)
+      ) {
+        this.toast("请等待整扇门的地形加载完成");
+        return;
+      }
+      const bottom = this.world.getBlock(t.x, y, t.z);
+      const top = this.world.getBlock(t.x, y + 1, t.z);
+      if (![18, 19].includes(bottom) || ![25, 26].includes(top)) return;
+      if (!this.setBlock(t.x, y, t.z, open ? 19 : 18)) return;
+      if (!this.setBlock(t.x, y + 1, t.z, open ? 26 : 25)) {
+        this.setBlock(t.x, y, t.z, bottom);
+        return;
+      }
       this.sound("door");
       return;
     }
@@ -945,7 +1002,12 @@ export class Simulation {
             y: t.y + target.normal.y,
             z: t.z + target.normal.z,
           };
-    if (p.y < -16 || p.y >= 96 || !this.world.isReady(p.x, p.z)) return;
+    if (
+      p.y < WORLD_MIN_Y ||
+      p.y > WORLD_MAX_Y ||
+      !this.world.isReady(p.x, p.z, p.y)
+    )
+      return;
     const replaceable = (id: number) =>
       [0, 58, 83].includes(id) || isFluid(id) || !!cropAt(id);
     if (!replaceable(this.world.getBlock(p.x, p.y, p.z))) return;
@@ -953,11 +1015,11 @@ export class Simulation {
     if (def.block === 18) boxes.push({ x: p.x, y: p.y + 1, z: p.z });
     if (def.block === 22) boxes.push({ x: p.x, y: p.y, z: p.z + 1 });
     for (const b of boxes) {
-      if (b.y < -16 || b.y >= 96) {
+      if (b.y < WORLD_MIN_Y || b.y > WORLD_MAX_Y) {
         this.toast("这里超出了可建造高度");
         return;
       }
-      if (!this.world.isReady(b.x, b.z)) {
+      if (!this.world.isReady(b.x, b.z, b.y)) {
         this.toast("请等待相邻地形加载完成");
         return;
       }
@@ -1085,7 +1147,7 @@ export class Simulation {
       if (
         water &&
         (water.id === 6 || water.id === 76) &&
-        this.world.isReady(water.position.x, water.position.z)
+        this.world.isReady(water.position.x, water.position.z, water.position.y)
       ) {
         if (
           !this.setBlock(
@@ -1127,7 +1189,7 @@ export class Simulation {
       (id === FARMLAND.dry || id === FARMLAND.wet) &&
       target.normal.y === 1
     ) {
-      if (p.y < 95 && this.world.getBlock(p.x, p.y + 1, p.z) === 0) {
+      if (p.y < WORLD_MAX_Y && this.world.getBlock(p.x, p.y + 1, p.z) === 0) {
         this.setBlock(p.x, p.y + 1, p.z, crop.firstId);
         if (this.world.getBlock(p.x, p.y + 1, p.z) !== crop.firstId)
           return true;
@@ -1157,13 +1219,13 @@ export class Simulation {
           const z = p.z + Math.floor(this.farming.nextRandom() * 7) - 3;
           const y = p.y;
           if (
-            this.world.isReady(x, z) &&
-            y < 95 &&
+            this.world.isReady(x, z, y) &&
+            y < WORLD_MAX_Y &&
+            this.world.isReady(x, z, y + 1) &&
             this.world.getBlock(x, y, z) === 1 &&
             this.world.getBlock(x, y + 1, z) === 0
           ) {
-            this.setBlock(x, y + 1, z, 58);
-            planted++;
+            if (this.setBlock(x, y + 1, z, 58)) planted++;
           }
         }
         if (planted) {
@@ -1182,9 +1244,9 @@ export class Simulation {
       };
       const old = this.world.getBlock(at.x, at.y, at.z);
       if (
-        at.y >= -16 &&
-        at.y < 96 &&
-        this.world.isReady(at.x, at.z) &&
+        at.y >= WORLD_MIN_Y &&
+        at.y <= WORLD_MAX_Y &&
+        this.world.isReady(at.x, at.z, at.y) &&
         (old === 0 || old === 58 || old === 83 || isFluid(old) || !!cropAt(old))
       ) {
         if (old && !isFluid(old)) this.breakBlock(at, old);
@@ -1222,7 +1284,7 @@ export class Simulation {
         (e) =>
           !ENTITIES[e.kind].hostile &&
           e.health > 0 &&
-          this.world.isReady(e.position.x, e.position.z),
+          this.world.isReady(e.position.x, e.position.z, e.position.y),
       )
       .map((e) => {
         const height = (e.age ?? 0) < 0 ? 0.28 : 0.55;
@@ -1448,8 +1510,8 @@ export class Simulation {
   private updateFurnaces(dt: number) {
     for (const [key, container] of Object.entries(this.containers)) {
       if (container.kind !== "furnace") continue;
-      const [x, , z] = key.split(",").map(Number);
-      if (!this.world.isReady(x, z)) continue;
+      const [x, y, z] = key.split(",").map(Number);
+      if (!this.world.isReady(x, z, y)) continue;
       const input = container.slots[0],
         fuel = container.slots[1],
         output = container.slots[2];
@@ -1496,8 +1558,8 @@ export class Simulation {
     );
   }
   private spawnEntity(kind: EntityKind, x: number, z: number) {
-    if (!this.world.isReady(x, z)) return;
     const y = this.world.getSurface(Math.floor(x), Math.floor(z)) + 1.05;
+    if (!this.world.isReady(x, z, y)) return;
     if (
       ![0, 58].includes(
         this.world.getBlock(Math.floor(x), Math.floor(y), Math.floor(z)),
@@ -1548,7 +1610,8 @@ export class Simulation {
       this.spawnTimer = 0;
     }
     for (const e of [...this.entities]) {
-      if (!this.world.isReady(e.position.x, e.position.z)) continue;
+      if (!this.world.isReady(e.position.x, e.position.z, e.position.y))
+        continue;
       const def = ENTITIES[e.kind],
         dist = distance(e.position, this.player.position);
       if (!def.hostile) {
@@ -1561,10 +1624,12 @@ export class Simulation {
             y: Math.floor(e.position.y - 0.1),
             z: Math.floor(e.position.z),
           };
-          if (this.world.getBlock(at.x, at.y, at.z) === 1) {
-            e.woolTimer = (e.woolTimer ?? 0) + dt;
-            if (e.woolTimer >= 30) {
-              this.setBlock(at.x, at.y, at.z, 2);
+          if (
+            this.world.isReady(at.x, at.z, at.y) &&
+            this.world.getBlock(at.x, at.y, at.z) === 1
+          ) {
+            e.woolTimer = Math.min(30, (e.woolTimer ?? 0) + dt);
+            if (e.woolTimer >= 30 && this.setBlock(at.x, at.y, at.z, 2)) {
               e.sheared = false;
               e.woolTimer = 0;
             }
@@ -1600,7 +1665,11 @@ export class Simulation {
                   (other.age ?? 0) >= 0 &&
                   (other.love ?? 0) > 0 &&
                   (other.breedCooldown ?? 0) === 0 &&
-                  this.world.isReady(other.position.x, other.position.z) &&
+                  this.world.isReady(
+                    other.position.x,
+                    other.position.z,
+                    other.position.y,
+                  ) &&
                   distance(e.position, other.position) < 8 &&
                   this.animalsVisible(e, other),
               )
@@ -1628,7 +1697,7 @@ export class Simulation {
               { ...e.position, z: e.position.z + 0.8 },
             ].find(
               (p) =>
-                this.world.isReady(p.x, p.z) &&
+                this.world.isReady(p.x, p.z, p.y) &&
                 !intersectsWorld(this.world, p, 0.35, 0.6),
             );
             if (position) {
@@ -1739,9 +1808,15 @@ export class Simulation {
     );
   }
   private skyVisible(position: Vec3): boolean {
+    if (this.world.hasSkyAccess)
+      return this.world.hasSkyAccess(
+        position.x,
+        Math.floor(position.y + 1.8) - 1,
+        position.z,
+      );
     const x = Math.floor(position.x),
       z = Math.floor(position.z);
-    for (let y = Math.floor(position.y + 1.8); y < 96; y++)
+    for (let y = Math.floor(position.y + 1.8); y <= WORLD_MAX_Y; y++)
       if (BLOCKS[this.world.getBlock(x, y, z)]?.opaque) return false;
     return true;
   }
@@ -1795,7 +1870,7 @@ export class Simulation {
           });
       }
     return {
-      manifest: { ...this.manifest, version: 4, updatedAt: Date.now() },
+      manifest: { ...this.manifest, version: 5, updatedAt: Date.now() },
       player: p,
       time: this.time,
       changes: this.world.getChanges(),

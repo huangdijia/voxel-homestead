@@ -1,0 +1,156 @@
+{
+  "advancedSeconds": 6.599999999999982,
+  "checkpoints": [
+    {
+      "changes": 166,
+      "generator": 5,
+      "name": "deep-diamonds",
+      "same": true,
+      "version": 5
+    },
+    {
+      "changes": 215,
+      "generator": 5,
+      "name": "deep-and-high-edits",
+      "same": true,
+      "version": 5
+    },
+    {
+      "changes": 214,
+      "generator": 5,
+      "name": "vertical-return",
+      "same": true,
+      "version": 5
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-09-05T02:50:35.483Z",
+  "fixture": [
+    "Fresh survival world; grants iron pickaxe, 2 planks, 1 door and 2 torches",
+    "Cleared deep gallery, bedrock access, sky platform/pedestal and a remote roof",
+    "Teleports and accelerated 60 Hz simulation; no diamond or ore grants"
+  ],
+  "initialPlayedSeconds": 0,
+  "limitations": [
+    "Not an unassisted survival playthrough or browser FPS benchmark"
+  ],
+  "passed": true,
+  "stages": [
+    {
+      "generator": 5,
+      "id": "d3f42e16-ba5a-4de4-88c4-b8b0e326fb42",
+      "name": "new-world",
+      "passed": true,
+      "spawn": {
+        "x": 0.5,
+        "y": 69.05,
+        "z": 0.5
+      },
+      "stats": {
+        "chunks": 307,
+        "pending": 1890
+      },
+      "version": 5
+    },
+    {
+      "diamonds": 3,
+      "durability": 247,
+      "health": 20,
+      "mining": [
+        {
+          "seconds": 1.1333333333333333,
+          "x": -10,
+          "y": -33,
+          "z": 2
+        },
+        {
+          "seconds": 1.1333333333333333,
+          "x": -11,
+          "y": -33,
+          "z": 2
+        },
+        {
+          "seconds": 1.1333333333333333,
+          "x": -12,
+          "y": -33,
+          "z": 2
+        }
+      ],
+      "name": "natural-deep-mining",
+      "passed": true
+    },
+    {
+      "alive": true,
+      "bedrock": 24,
+      "belowWorld": 0,
+      "name": "bottom-boundary",
+      "passed": true,
+      "position": {
+        "x": 8.5,
+        "y": -63,
+        "z": 8.5
+      }
+    },
+    {
+      "door": [
+        318,
+        319
+      ],
+      "highestBlock": 319,
+      "name": "upper-placement",
+      "passed": true,
+      "rejected": 320,
+      "remainingPlanks": 1
+    },
+    {
+      "cacheInvalidated": true,
+      "name": "remote-roof-and-return",
+      "passed": true,
+      "roofResident": false,
+      "stats": {
+        "chunks": 66,
+        "pending": 2144
+      }
+    }
+  ],
+  "startedAt": "2026-09-05T02:50:31.782Z",
+  "version": 1,
+  "wallSeconds": 3.6425,
+  "worldId": "d3f42e16-ba5a-4de4-88c4-b8b0e326fb42",
+  "pageReload": {
+    "changes": true,
+    "player": true,
+    "containers": true,
+    "farming": true,
+    "fluids": true,
+    "natural": true,
+    "drops": true,
+    "entities": true,
+    "time": true
+  },
+  "visualFixture": {
+    "method": "Paused simulation; DEV camera teleports to saved sky platform and deep gallery; overlay temporarily hidden, then restored",
+    "screenshots": [
+      "screenshots/height-sky-platform.png",
+      "screenshots/height-deep-gallery.png"
+    ],
+    "nativeFullscreenVerified": false
+  },
+  "migration": {
+    "id": "c7f29231-aeb5-4209-8494-457117c17ba6",
+    "version": 5,
+    "generator": 4,
+    "backupExact": true,
+    "unchanged": {
+      "changes": true,
+      "player": true,
+      "containers": true,
+      "farming": true,
+      "fluids": true,
+      "natural": true,
+      "drops": true,
+      "entities": true,
+      "time": true
+    }
+  }
+}

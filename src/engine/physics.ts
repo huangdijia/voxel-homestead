@@ -8,7 +8,8 @@ import {
 } from "./shapes";
 import type { BlockBox, ShapeVertex } from "./shapes";
 
-type WorldReader = Pick<WorldPort, "getBlock">;
+type WorldReader = Pick<WorldPort, "getBlock"> &
+  Partial<Pick<WorldPort, "isReady">>;
 const EPSILON = 0.00001;
 type Bounds = { min: Vec3; max: Vec3 };
 function bodyBounds(p: Vec3, width: number, height: number): Bounds {
@@ -25,6 +26,11 @@ function visitBoxes(
   for (let y = Math.floor(range.min.y); y <= Math.floor(range.max.y); y++) {
     for (let z = Math.floor(range.min.z); z <= Math.floor(range.max.z); z++) {
       for (let x = Math.floor(range.min.x); x <= Math.floor(range.max.x); x++) {
+        // A procedural fallback is not permission to enter an unloaded section.
+        if (world.isReady && !world.isReady(x, z, y)) {
+          callback({ min: { x, y, z }, max: { x: x + 1, y: y + 1, z: z + 1 } });
+          continue;
+        }
         const id = world.getBlock(x, y, z);
         for (const box of collisionBoxes(id))
           callback({
@@ -313,6 +319,7 @@ export function raycastVoxel(
     iterations < Math.ceil(max * 4) + 8 && entered <= max;
     iterations++
   ) {
+    if (world.isReady && !world.isReady(voxel.x, voxel.z, voxel.y)) return null;
     const id = world.getBlock(voxel.x, voxel.y, voxel.z);
     let hit =
       includeWater && isFluid(id)
