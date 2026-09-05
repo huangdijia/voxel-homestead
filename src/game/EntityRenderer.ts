@@ -79,7 +79,16 @@ export class EntityRenderer {
       face.scale.set(0.55, 0.55, 1);
       head.add(face);
       if (wool) {
-        fleece = this.block(group, this.mat(0xf8f5e7), 0, 0.84, -0.02, 0.86, 0.67, 1.03);
+        fleece = this.block(
+          group,
+          this.mat(0xf8f5e7),
+          0,
+          0.84,
+          -0.02,
+          0.86,
+          0.67,
+          1.03,
+        );
         fleece.name = "fleece";
       }
       loveMarker = new THREE.Group();
@@ -122,7 +131,15 @@ export class EntityRenderer {
       head.add(face);
     }
     this.scene.add(group);
-    return { group, legs, head, kind, previous: { ...e.position }, fleece, loveMarker };
+    return {
+      group,
+      legs,
+      head,
+      kind,
+      previous: { ...e.position },
+      fleece,
+      loveMarker,
+    };
   }
   update(
     entities: EntityState[],
@@ -162,7 +179,8 @@ export class EntityRenderer {
       if (model.loveMarker) {
         model.loveMarker.visible = (e.love ?? 0) > 0;
         model.loveMarker.position.y = 1.62 + Math.sin(elapsed * 3) * 0.055;
-        model.loveMarker.rotation.y = Math.atan2(player.x - p.x, player.z - p.z) - e.yaw;
+        model.loveMarker.rotation.y =
+          Math.atan2(player.x - p.x, player.z - p.z) - e.yaw;
       }
       const pulse = e.fuse ? 1 + Math.sin(elapsed * 30) * 0.035 * e.fuse : 1;
       model.group.scale.setScalar(size * pulse);
@@ -206,7 +224,10 @@ export class EntityRenderer {
       if (m.isMesh) {
         const mats = Array.isArray(m.material) ? m.material : [m.material];
         for (const mat of mats)
-          if (!disposed.has(mat) && !this.faceMaterials.includes(mat as THREE.MeshLambertMaterial)) {
+          if (
+            !disposed.has(mat) &&
+            !this.faceMaterials.includes(mat as THREE.MeshLambertMaterial)
+          ) {
             disposed.add(mat);
             mat.dispose();
             const i = this.materials.indexOf(mat);

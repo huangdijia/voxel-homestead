@@ -1,0 +1,1289 @@
+[
+  {
+    "id": "minecraft:speed",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 0,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:speed",
+      "template": "effects",
+      "targetId": "minecraft:speed",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/0",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 0,
+      "name": "Speed",
+      "displayName": "Speed",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:slowness",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 1,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:slowness",
+      "template": "effects",
+      "targetId": "minecraft:slowness",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/1",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 1,
+      "name": "Slowness",
+      "displayName": "Slowness",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:haste",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 2,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:haste",
+      "template": "effects",
+      "targetId": "minecraft:haste",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/2",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 2,
+      "name": "Haste",
+      "displayName": "Haste",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:mining_fatigue",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 3,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:mining_fatigue",
+      "template": "effects",
+      "targetId": "minecraft:mining_fatigue",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/3",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 3,
+      "name": "MiningFatigue",
+      "displayName": "Mining Fatigue",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:strength",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 4,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:strength",
+      "template": "effects",
+      "targetId": "minecraft:strength",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/4",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 4,
+      "name": "Strength",
+      "displayName": "Strength",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:instant_health",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 5,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:instant_health",
+      "template": "effects",
+      "targetId": "minecraft:instant_health",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/5",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 5,
+      "name": "InstantHealth",
+      "displayName": "Instant Health",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:instant_damage",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 6,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:instant_damage",
+      "template": "effects",
+      "targetId": "minecraft:instant_damage",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/6",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 6,
+      "name": "InstantDamage",
+      "displayName": "Instant Damage",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:jump_boost",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 7,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:jump_boost",
+      "template": "effects",
+      "targetId": "minecraft:jump_boost",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/7",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 7,
+      "name": "JumpBoost",
+      "displayName": "Jump Boost",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:nausea",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 8,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:nausea",
+      "template": "effects",
+      "targetId": "minecraft:nausea",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/8",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 8,
+      "name": "Nausea",
+      "displayName": "Nausea",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:regeneration",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 9,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:regeneration",
+      "template": "effects",
+      "targetId": "minecraft:regeneration",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/9",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 9,
+      "name": "Regeneration",
+      "displayName": "Regeneration",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:resistance",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 10,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:resistance",
+      "template": "effects",
+      "targetId": "minecraft:resistance",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/10",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 10,
+      "name": "Resistance",
+      "displayName": "Resistance",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:fire_resistance",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 11,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:fire_resistance",
+      "template": "effects",
+      "targetId": "minecraft:fire_resistance",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/11",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 11,
+      "name": "FireResistance",
+      "displayName": "Fire Resistance",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:water_breathing",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 12,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:water_breathing",
+      "template": "effects",
+      "targetId": "minecraft:water_breathing",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/12",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 12,
+      "name": "WaterBreathing",
+      "displayName": "Water Breathing",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:invisibility",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 13,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:invisibility",
+      "template": "effects",
+      "targetId": "minecraft:invisibility",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/13",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 13,
+      "name": "Invisibility",
+      "displayName": "Invisibility",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:blindness",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 14,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:blindness",
+      "template": "effects",
+      "targetId": "minecraft:blindness",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/14",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 14,
+      "name": "Blindness",
+      "displayName": "Blindness",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:night_vision",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 15,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:night_vision",
+      "template": "effects",
+      "targetId": "minecraft:night_vision",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/15",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 15,
+      "name": "NightVision",
+      "displayName": "Night Vision",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:hunger",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 16,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:hunger",
+      "template": "effects",
+      "targetId": "minecraft:hunger",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/16",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 16,
+      "name": "Hunger",
+      "displayName": "Hunger",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:weakness",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 17,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:weakness",
+      "template": "effects",
+      "targetId": "minecraft:weakness",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/17",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 17,
+      "name": "Weakness",
+      "displayName": "Weakness",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:poison",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 18,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:poison",
+      "template": "effects",
+      "targetId": "minecraft:poison",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/18",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 18,
+      "name": "Poison",
+      "displayName": "Poison",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:wither",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 19,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:wither",
+      "template": "effects",
+      "targetId": "minecraft:wither",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/19",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 19,
+      "name": "Wither",
+      "displayName": "Wither",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:health_boost",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 20,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:health_boost",
+      "template": "effects",
+      "targetId": "minecraft:health_boost",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/20",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 20,
+      "name": "HealthBoost",
+      "displayName": "Health Boost",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:absorption",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 21,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:absorption",
+      "template": "effects",
+      "targetId": "minecraft:absorption",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/21",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 21,
+      "name": "Absorption",
+      "displayName": "Absorption",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:saturation",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 22,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:saturation",
+      "template": "effects",
+      "targetId": "minecraft:saturation",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/22",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 22,
+      "name": "Saturation",
+      "displayName": "Saturation",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:glowing",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 23,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:glowing",
+      "template": "effects",
+      "targetId": "minecraft:glowing",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/23",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 23,
+      "name": "Glowing",
+      "displayName": "Glowing",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:levitation",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 24,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:levitation",
+      "template": "effects",
+      "targetId": "minecraft:levitation",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/24",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 24,
+      "name": "Levitation",
+      "displayName": "Levitation",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:luck",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 25,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:luck",
+      "template": "effects",
+      "targetId": "minecraft:luck",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/25",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 25,
+      "name": "Luck",
+      "displayName": "Luck",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:unluck",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 26,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:unluck",
+      "template": "effects",
+      "targetId": "minecraft:unluck",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/26",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 26,
+      "name": "Unluck",
+      "displayName": "Bad Luck",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:slow_falling",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 27,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:slow_falling",
+      "template": "effects",
+      "targetId": "minecraft:slow_falling",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/27",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 27,
+      "name": "SlowFalling",
+      "displayName": "Slow Falling",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:conduit_power",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 28,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:conduit_power",
+      "template": "effects",
+      "targetId": "minecraft:conduit_power",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/28",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 28,
+      "name": "ConduitPower",
+      "displayName": "Conduit Power",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:dolphins_grace",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 29,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:dolphins_grace",
+      "template": "effects",
+      "targetId": "minecraft:dolphins_grace",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/29",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 29,
+      "name": "DolphinsGrace",
+      "displayName": "Dolphin's Grace",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:bad_omen",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 30,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:bad_omen",
+      "template": "effects",
+      "targetId": "minecraft:bad_omen",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/30",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 30,
+      "name": "BadOmen",
+      "displayName": "Bad Omen",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:hero_of_the_village",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 31,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:hero_of_the_village",
+      "template": "effects",
+      "targetId": "minecraft:hero_of_the_village",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/31",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 31,
+      "name": "HeroOfTheVillage",
+      "displayName": "Hero of the Village",
+      "type": "good"
+    }
+  },
+  {
+    "id": "minecraft:darkness",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 32,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:darkness",
+      "template": "effects",
+      "targetId": "minecraft:darkness",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/32",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 32,
+      "name": "Darkness",
+      "displayName": "Darkness",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:trial_omen",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 33,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:trial_omen",
+      "template": "effects",
+      "targetId": "minecraft:trial_omen",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/33",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 33,
+      "name": "TrialOmen",
+      "displayName": "Trial Omen",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:raid_omen",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 34,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:raid_omen",
+      "template": "effects",
+      "targetId": "minecraft:raid_omen",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/34",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 34,
+      "name": "RaidOmen",
+      "displayName": "Raid Omen",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:wind_charged",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 35,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:wind_charged",
+      "template": "effects",
+      "targetId": "minecraft:wind_charged",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/35",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 35,
+      "name": "WindCharged",
+      "displayName": "Wind Charged",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:weaving",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 36,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:weaving",
+      "template": "effects",
+      "targetId": "minecraft:weaving",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/36",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 36,
+      "name": "Weaving",
+      "displayName": "Weaving",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:oozing",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 37,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:oozing",
+      "template": "effects",
+      "targetId": "minecraft:oozing",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/37",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 37,
+      "name": "Oozing",
+      "displayName": "Oozing",
+      "type": "bad"
+    }
+  },
+  {
+    "id": "minecraft:infested",
+    "idBasis": "normalized-third-party-name-not-official-registry-report",
+    "upstreamNumericId": 38,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/effects/minecraft:infested",
+      "template": "effects",
+      "targetId": "minecraft:infested",
+      "status": "not-run",
+      "requiredChecks": [
+        "apply-amplifier-duration",
+        "stack-replace-remove-and-death",
+        "gameplay-effect-and-save"
+      ]
+    },
+    "source": {
+      "file": "effects",
+      "pointer": "/38",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 38,
+      "name": "Infested",
+      "displayName": "Infested",
+      "type": "bad"
+    }
+  }
+]

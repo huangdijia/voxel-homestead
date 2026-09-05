@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "target": {
+    "edition": "Java",
+    "version": "1.21.1"
+  },
+  "upstream": {
+    "name": "PrismarineJS/minecraft-data",
+    "classification": "third-party-curated",
+    "repository": "https://github.com/PrismarineJS/minecraft-data",
+    "commit": "abfaadb4c45e2968a98fc927d32f7c648962d8ad",
+    "commitDate": "2026-09-04T14:01:53Z",
+    "versionSelection": "data/dataPaths.json: pc[1.21.1]",
+    "packageVersion": null,
+    "packageVersionNote": "This data repository has no package.json at the pinned root. The commit and per-file SHA256 pin this source, not an unrelated npm wrapper version."
+  },
+  "officialRelease": {
+    "url": "https://www.minecraft.net/en-us/article/minecraft-java-edition-1-21-1",
+    "title": "Minecraft Java Edition 1.21.1",
+    "publishedDate": "2024-08-07",
+    "role": "Confirms release identity and hotfix scope; does not enumerate all content."
+  },
+  "files": {
+    "dataPaths": {
+      "path": "data/dataPaths.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/dataPaths.json",
+      "file": "sources/data__dataPaths.json",
+      "sha256": "f4b7bca4fe57fd2574de3ccd08b3cd47e7d0d9857f02b92107e6edc73819438d",
+      "bytes": 89148,
+      "mappedVersion": null
+    },
+    "version": {
+      "path": "data/pc/1.21.1/version.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/pc/1.21.1/version.json",
+      "file": "sources/data__pc__1.21.1__version.json",
+      "sha256": "da9541e79f0a996c5a041003d41f194056bd363bb216b75b978e87a6d994873d",
+      "bytes": 106,
+      "mappedVersion": "1.21.1"
+    },
+    "blocks": {
+      "path": "data/pc/1.21.1/blocks.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/pc/1.21.1/blocks.json",
+      "file": "sources/data__pc__1.21.1__blocks.json",
+      "sha256": "7d1d95c4e0255f9f269293e8077c7923c9ec0ff902a9a475ed131da8b26bc654",
+      "bytes": 765435,
+      "mappedVersion": "1.21.1"
+    },
+    "items": {
+      "path": "data/pc/1.21.1/items.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/pc/1.21.1/items.json",
+      "file": "sources/data__pc__1.21.1__items.json",
+      "sha256": "f0960c81bbd2b10f9ab6187c567dec4f88fee7893d7b119423045abb635631f6",
+      "bytes": 164889,
+      "mappedVersion": "1.21.1"
+    },
+    "entities": {
+      "path": "data/pc/1.20.5/entities.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/pc/1.20.5/entities.json",
+      "file": "sources/data__pc__1.20.5__entities.json",
+      "sha256": "abc419e378564603f249cfeb1d5ee7cd2a0ec3bf7c7fb1ba7d704bb0e7454038",
+      "bytes": 72403,
+      "mappedVersion": "1.20.5"
+    },
+    "biomes": {
+      "path": "data/pc/1.20.5/biomes.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/pc/1.20.5/biomes.json",
+      "file": "sources/data__pc__1.20.5__biomes.json",
+      "sha256": "ff5c83d782c6fa8398c597ea685218304f9c138f1758f31fe30cd666ddc29b5c",
+      "bytes": 13912,
+      "mappedVersion": "1.20.5"
+    },
+    "recipes": {
+      "path": "data/pc/1.21.1/recipes.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/pc/1.21.1/recipes.json",
+      "file": "sources/data__pc__1.21.1__recipes.json",
+      "sha256": "5fc555cf33d0d11b332c06ca3b280b731c823159d9b042a13540ec388aa04341",
+      "bytes": 382911,
+      "mappedVersion": "1.21.1"
+    },
+    "foods": {
+      "path": "data/pc/1.21.1/foods.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/pc/1.21.1/foods.json",
+      "file": "sources/data__pc__1.21.1__foods.json",
+      "sha256": "92e9bb94cd81f84e877d902b5f7cd2ed29accd46bd875c2e320c1beeb65a5887",
+      "bytes": 8450,
+      "mappedVersion": "1.21.1"
+    },
+    "enchantments": {
+      "path": "data/pc/1.21.1/enchantments.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/pc/1.21.1/enchantments.json",
+      "file": "sources/data__pc__1.21.1__enchantments.json",
+      "sha256": "6e068ae86da3113d43d53313f872f20a6e92e1d2da5aeb1e4e09ebf3ccb1c397",
+      "bytes": 16454,
+      "mappedVersion": "1.21.1"
+    },
+    "effects": {
+      "path": "data/pc/1.20.5/effects.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/pc/1.20.5/effects.json",
+      "file": "sources/data__pc__1.20.5__effects.json",
+      "sha256": "e89a5add45ea9e967a63066c3b2fd59d8b88d057bb4c4d1821c109374d8b7f83",
+      "bytes": 3876,
+      "mappedVersion": "1.20.5"
+    },
+    "attributes": {
+      "path": "data/pc/1.21.1/attributes.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/pc/1.21.1/attributes.json",
+      "file": "sources/data__pc__1.21.1__attributes.json",
+      "sha256": "b1ea965fa0d5be8a75067f65a851e3137c7736316e0c0bedd28a81efe18c7c27",
+      "bytes": 4578,
+      "mappedVersion": "1.21.1"
+    },
+    "particles": {
+      "path": "data/pc/1.20.5/particles.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/pc/1.20.5/particles.json",
+      "file": "sources/data__pc__1.20.5__particles.json",
+      "sha256": "b302916023d4ceb7789d813ad93f5e6ae15f89d560cc65df5076623e96580608",
+      "bytes": 5386,
+      "mappedVersion": "1.20.5"
+    },
+    "sounds": {
+      "path": "data/pc/1.21.1/sounds.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/pc/1.21.1/sounds.json",
+      "file": "sources/data__pc__1.21.1__sounds.json",
+      "sha256": "f1f0188268c613e65c37692994a5c6e6b7840858be70782f6f6e71e3802aad0d",
+      "bytes": 112941,
+      "mappedVersion": "1.21.1"
+    },
+    "instruments": {
+      "path": "data/pc/1.20.5/instruments.json",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/data/pc/1.20.5/instruments.json",
+      "file": "sources/data__pc__1.20.5__instruments.json",
+      "sha256": "cc8aa6c49badf122471dfb945d482e61307512650cee1a323da3a987594543a1",
+      "bytes": 1023,
+      "mappedVersion": "1.20.5"
+    },
+    "upstreamReadme": {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/PrismarineJS/minecraft-data/abfaadb4c45e2968a98fc927d32f7c648962d8ad/README.md",
+      "file": "sources/README.md",
+      "sha256": "e2d060994dcdfa608a8e65a0d300098e264f6634b70955db80443b445eb138cb",
+      "bytes": 10054,
+      "mappedVersion": null
+    }
+  }
+}

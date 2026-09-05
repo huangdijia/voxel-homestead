@@ -1,0 +1,1056 @@
+[
+  {
+    "id": "minecraft:generic.armor",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.armor",
+      "template": "attributes",
+      "targetId": "minecraft:generic.armor",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/0",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "armor",
+      "resource": "minecraft:generic.armor",
+      "min": 0,
+      "max": 30,
+      "default": 0
+    }
+  },
+  {
+    "id": "minecraft:generic.armor_toughness",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.armor_toughness",
+      "template": "attributes",
+      "targetId": "minecraft:generic.armor_toughness",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/1",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "armorToughness",
+      "resource": "minecraft:generic.armor_toughness",
+      "min": 0,
+      "max": 20,
+      "default": 0
+    }
+  },
+  {
+    "id": "minecraft:generic.attack_damage",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.attack_damage",
+      "template": "attributes",
+      "targetId": "minecraft:generic.attack_damage",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/2",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "attackDamage",
+      "resource": "minecraft:generic.attack_damage",
+      "min": 0,
+      "max": 2048,
+      "default": 2
+    }
+  },
+  {
+    "id": "minecraft:generic.attack_knockback",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.attack_knockback",
+      "template": "attributes",
+      "targetId": "minecraft:generic.attack_knockback",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/3",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "attackKnockback",
+      "resource": "minecraft:generic.attack_knockback",
+      "min": 0,
+      "max": 5,
+      "default": 0
+    }
+  },
+  {
+    "id": "minecraft:generic.attack_speed",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.attack_speed",
+      "template": "attributes",
+      "targetId": "minecraft:generic.attack_speed",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/4",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "attackSpeed",
+      "resource": "minecraft:generic.attack_speed",
+      "min": 0,
+      "max": 1024,
+      "default": 4
+    }
+  },
+  {
+    "id": "minecraft:player.block_break_speed",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:player.block_break_speed",
+      "template": "attributes",
+      "targetId": "minecraft:player.block_break_speed",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/5",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "playerBlockBreakSpeed",
+      "resource": "minecraft:player.block_break_speed",
+      "min": 0,
+      "max": 1024,
+      "default": 1
+    }
+  },
+  {
+    "id": "minecraft:player.block_interaction_range",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:player.block_interaction_range",
+      "template": "attributes",
+      "targetId": "minecraft:player.block_interaction_range",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/6",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "playerBlockInteractionRange",
+      "resource": "minecraft:player.block_interaction_range",
+      "min": 0,
+      "max": 64,
+      "default": 4.5
+    }
+  },
+  {
+    "id": "minecraft:generic.burning_time",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.burning_time",
+      "template": "attributes",
+      "targetId": "minecraft:generic.burning_time",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/7",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "burningTime",
+      "resource": "minecraft:generic.burning_time",
+      "min": 0,
+      "max": 1024,
+      "default": 1
+    }
+  },
+  {
+    "id": "minecraft:generic.explosion_knockback_resistance",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.explosion_knockback_resistance",
+      "template": "attributes",
+      "targetId": "minecraft:generic.explosion_knockback_resistance",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/8",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "explosionKnockbackResistance",
+      "resource": "minecraft:generic.explosion_knockback_resistance",
+      "min": 0,
+      "max": 1,
+      "default": 0
+    }
+  },
+  {
+    "id": "minecraft:player.entity_interaction_range",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:player.entity_interaction_range",
+      "template": "attributes",
+      "targetId": "minecraft:player.entity_interaction_range",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/9",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "playerEntityInteractionRange",
+      "resource": "minecraft:player.entity_interaction_range",
+      "min": 0,
+      "max": 64,
+      "default": 3
+    }
+  },
+  {
+    "id": "minecraft:generic.fall_damage_multiplier",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.fall_damage_multiplier",
+      "template": "attributes",
+      "targetId": "minecraft:generic.fall_damage_multiplier",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/10",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "fallDamageMultiplier",
+      "resource": "minecraft:generic.fall_damage_multiplier",
+      "min": 0,
+      "max": 100,
+      "default": 1
+    }
+  },
+  {
+    "id": "minecraft:generic.flying_speed",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.flying_speed",
+      "template": "attributes",
+      "targetId": "minecraft:generic.flying_speed",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/11",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "flyingSpeed",
+      "resource": "minecraft:generic.flying_speed",
+      "min": 0,
+      "max": 1024,
+      "default": 0.4
+    }
+  },
+  {
+    "id": "minecraft:generic.follow_range",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.follow_range",
+      "template": "attributes",
+      "targetId": "minecraft:generic.follow_range",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/12",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "followRange",
+      "resource": "minecraft:generic.follow_range",
+      "min": 0,
+      "max": 2048,
+      "default": 32
+    }
+  },
+  {
+    "id": "minecraft:generic.gravity",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.gravity",
+      "template": "attributes",
+      "targetId": "minecraft:generic.gravity",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/13",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "gravity",
+      "resource": "minecraft:generic.gravity",
+      "min": -1,
+      "max": 1,
+      "default": 0.08
+    }
+  },
+  {
+    "id": "minecraft:generic.jump_strength",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.jump_strength",
+      "template": "attributes",
+      "targetId": "minecraft:generic.jump_strength",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/14",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "jumpStrength",
+      "resource": "minecraft:generic.jump_strength",
+      "min": 0,
+      "max": 32,
+      "default": 0.41999998688697815
+    }
+  },
+  {
+    "id": "minecraft:generic.knockback_resistance",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.knockback_resistance",
+      "template": "attributes",
+      "targetId": "minecraft:generic.knockback_resistance",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/15",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "knockbackResistance",
+      "resource": "minecraft:generic.knockback_resistance",
+      "min": 0,
+      "max": 1,
+      "default": 0
+    }
+  },
+  {
+    "id": "minecraft:generic.luck",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.luck",
+      "template": "attributes",
+      "targetId": "minecraft:generic.luck",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/16",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "luck",
+      "resource": "minecraft:generic.luck",
+      "min": -1024,
+      "max": 1024,
+      "default": 0
+    }
+  },
+  {
+    "id": "minecraft:generic.max_absorption",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.max_absorption",
+      "template": "attributes",
+      "targetId": "minecraft:generic.max_absorption",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/17",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "maxAbsorption",
+      "resource": "minecraft:generic.max_absorption",
+      "min": 0,
+      "max": 2048,
+      "default": 0
+    }
+  },
+  {
+    "id": "minecraft:generic.max_health",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.max_health",
+      "template": "attributes",
+      "targetId": "minecraft:generic.max_health",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/18",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "maxHealth",
+      "resource": "minecraft:generic.max_health",
+      "min": 1,
+      "max": 1024,
+      "default": 20
+    }
+  },
+  {
+    "id": "minecraft:player.mining_efficiency",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:player.mining_efficiency",
+      "template": "attributes",
+      "targetId": "minecraft:player.mining_efficiency",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/19",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "playerMiningEfficiency",
+      "resource": "minecraft:player.mining_efficiency",
+      "min": 0,
+      "max": 1024,
+      "default": 0
+    }
+  },
+  {
+    "id": "minecraft:generic.movement_efficiency",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.movement_efficiency",
+      "template": "attributes",
+      "targetId": "minecraft:generic.movement_efficiency",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/20",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "movementEfficiency",
+      "resource": "minecraft:generic.movement_efficiency",
+      "min": 0,
+      "max": 1,
+      "default": 0
+    }
+  },
+  {
+    "id": "minecraft:generic.movement_speed",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.movement_speed",
+      "template": "attributes",
+      "targetId": "minecraft:generic.movement_speed",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/21",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "movementSpeed",
+      "resource": "minecraft:generic.movement_speed",
+      "min": 0,
+      "max": 1024,
+      "default": 0.7
+    }
+  },
+  {
+    "id": "minecraft:generic.oxygen_bonus",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.oxygen_bonus",
+      "template": "attributes",
+      "targetId": "minecraft:generic.oxygen_bonus",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/22",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "oxygenBonus",
+      "resource": "minecraft:generic.oxygen_bonus",
+      "min": 0,
+      "max": 1024,
+      "default": 0
+    }
+  },
+  {
+    "id": "minecraft:generic.safe_fall_distance",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.safe_fall_distance",
+      "template": "attributes",
+      "targetId": "minecraft:generic.safe_fall_distance",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/23",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "safeFallDistance",
+      "resource": "minecraft:generic.safe_fall_distance",
+      "min": -1024,
+      "max": 1024,
+      "default": 3
+    }
+  },
+  {
+    "id": "minecraft:generic.scale",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.scale",
+      "template": "attributes",
+      "targetId": "minecraft:generic.scale",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/24",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "scale",
+      "resource": "minecraft:generic.scale",
+      "min": 0.0625,
+      "max": 16,
+      "default": 1
+    }
+  },
+  {
+    "id": "minecraft:player.sneaking_speed",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:player.sneaking_speed",
+      "template": "attributes",
+      "targetId": "minecraft:player.sneaking_speed",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/25",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "playerSneakingSpeed",
+      "resource": "minecraft:player.sneaking_speed",
+      "min": 0,
+      "max": 1,
+      "default": 0.3
+    }
+  },
+  {
+    "id": "minecraft:zombie.spawn_reinforcements",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:zombie.spawn_reinforcements",
+      "template": "attributes",
+      "targetId": "minecraft:zombie.spawn_reinforcements",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/26",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "zombieSpawnReinforcements",
+      "resource": "minecraft:zombie.spawn_reinforcements",
+      "min": 0,
+      "max": 1,
+      "default": 0
+    }
+  },
+  {
+    "id": "minecraft:generic.step_height",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.step_height",
+      "template": "attributes",
+      "targetId": "minecraft:generic.step_height",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/27",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "stepHeight",
+      "resource": "minecraft:generic.step_height",
+      "min": 0,
+      "max": 10,
+      "default": 0.6
+    }
+  },
+  {
+    "id": "minecraft:player.submerged_mining_speed",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:player.submerged_mining_speed",
+      "template": "attributes",
+      "targetId": "minecraft:player.submerged_mining_speed",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/28",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "playerSubmergedMiningSpeed",
+      "resource": "minecraft:player.submerged_mining_speed",
+      "min": 0,
+      "max": 20,
+      "default": 0.2
+    }
+  },
+  {
+    "id": "minecraft:player.sweeping_damage_ratio",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:player.sweeping_damage_ratio",
+      "template": "attributes",
+      "targetId": "minecraft:player.sweeping_damage_ratio",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/29",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "playerSweepingDamageRatio",
+      "resource": "minecraft:player.sweeping_damage_ratio",
+      "min": 0,
+      "max": 1,
+      "default": 0
+    }
+  },
+  {
+    "id": "minecraft:generic.water_movement_efficiency",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": null,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/attributes/minecraft:generic.water_movement_efficiency",
+      "template": "attributes",
+      "targetId": "minecraft:generic.water_movement_efficiency",
+      "status": "not-run",
+      "requiredChecks": [
+        "base-bounds-and-modifiers",
+        "equipment-effect-and-removal",
+        "save-roundtrip"
+      ]
+    },
+    "source": {
+      "file": "attributes",
+      "pointer": "/30",
+      "mappedVersion": "1.21.1"
+    },
+    "reference": {
+      "name": "waterMovementEfficiency",
+      "resource": "minecraft:generic.water_movement_efficiency",
+      "min": 0,
+      "max": 1,
+      "default": 0
+    }
+  }
+]

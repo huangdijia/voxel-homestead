@@ -99,13 +99,13 @@ describe("save validation", () => {
     [
       "future version",
       (w: any) => {
-        w.manifest.version = 2;
+        w.manifest.version = 9000;
       },
     ],
     [
       "unknown generator",
       (w: any) => {
-        w.manifest.generatorVersion = 2;
+        w.manifest.generatorVersion = 9000;
       },
     ],
     [

@@ -73,7 +73,14 @@ recipe("bread", ["WWW"], { W: "wheat" }, "bread");
 recipe("bowl", ["P P", " P "], { P: "planks" }, "bowl", 4);
 recipe("bucket", ["I I", " I "], { I: "iron_ingot" }, "bucket");
 recipe("shears", [" I", "I "], { I: "iron_ingot" }, "shears");
-RECIPES.push({ id: "beetroot_soup", name: "甜菜汤", ingredients: { beetroot: 6, bowl: 1 }, output: { id: "beetroot_soup", count: 1 }, station: "workbench" });
+recipe("composter", ["S S", "S S", "SSS"], { S: "slab" }, "composter");
+RECIPES.push({
+  id: "beetroot_soup",
+  name: "甜菜汤",
+  ingredients: { beetroot: 6, bowl: 1 },
+  output: { id: "beetroot_soup", count: 1 },
+  station: "workbench",
+});
 
 export const SMELTING: Record<string, { output: string; count: number }> = {
   potato: { output: "baked_potato", count: 1 },

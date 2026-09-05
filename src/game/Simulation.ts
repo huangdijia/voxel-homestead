@@ -27,7 +27,13 @@ import {
 } from "./recipes";
 import { intersectsWorld, moveBody, raycastVoxel } from "../engine/physics";
 import { surfaceHeight, seedNumber } from "../engine/generator";
-import { FarmingSystem, CROP_DEFINITIONS, cropAt, harvestCrop, FARMLAND } from "./farming";
+import {
+  FarmingSystem,
+  CROP_DEFINITIONS,
+  cropAt,
+  harvestCrop,
+  FARMLAND,
+} from "./farming";
 
 const uid = () => crypto.randomUUID();
 export const posKey = (p: Vec3) =>
@@ -83,7 +89,15 @@ export function createNewSave(
     entities: [],
     drops: [],
     time: 1000,
-    farming: { version: 1, randomState: seedNumber(worldSeed), clock: 0, accumulator: 0, scanCursor: 0, plots: [] },
+    farming: {
+      version: 1,
+      randomState: seedNumber(worldSeed),
+      clock: 0,
+      accumulator: 0,
+      scanCursor: 0,
+      plots: [],
+    },
+    composters: {},
   };
 }
 
@@ -96,6 +110,7 @@ export class Simulation {
   drops: DropState[];
   containers: Record<string, ContainerState>;
   readonly farming: FarmingSystem;
+  composters: Record<string, number>;
   craftSlots: Slot[] = Array(4).fill(null);
   cursor: Slot = null;
   station: "inventory" | "workbench" = "inventory";
@@ -130,12 +145,17 @@ export class Simulation {
     this.entities = clone(data.entities);
     this.drops = clone(data.drops);
     this.containers = clone(data.containers);
+    this.composters = clone(data.composters ?? {});
     this.farming = new FarmingSystem(world, data.manifest.seed, data.farming, {
       dropItem: (stack, position) => this.spawnDrop(stack, position),
-      changed: () => { this.dirty = true; },
+      changed: () => {
+        this.dirty = true;
+      },
     });
-    if (!data.farming) for (const change of world.getChanges())
-      if (change.id === 28 || change.id === 29) this.farming.notifyBlockChanged(change, 0, change.id);
+    if (!data.farming)
+      for (const change of world.getChanges())
+        if (change.id === 28 || change.id === 29)
+          this.farming.notifyBlockChanged(change, 0, change.id);
   }
   get creative() {
     return this.manifest.mode === "creative";
@@ -204,6 +224,19 @@ export class Simulation {
     }
     this.updateFurnaces(dt);
     this.farming.step(dt, this.player.position, this.night ? 4 : 15);
+    for (const [key, remaining] of Object.entries(this.composters)) {
+      const [x, y, z] = key.split(",").map(Number);
+      if (!this.world.isReady(x, z)) continue;
+      if (this.world.getBlock(x, y, z) !== 66) {
+        delete this.composters[key];
+        continue;
+      }
+      this.composters[key] = remaining - dt;
+      if (this.composters[key] <= 0) {
+        this.setBlock(x, y, z, 67);
+        delete this.composters[key];
+      }
+    }
     this.updateDrops(dt);
     this.updateMobs(dt);
     this.dirty = true;
@@ -603,6 +636,7 @@ export class Simulation {
       z: Math.floor(position.z),
     };
     this.setBlock(p.x, p.y, p.z, 0);
+    delete this.composters[posKey(p)];
     if (id === 18 || id === 19) {
       this.setBlock(p.x, p.y + 1, p.z, 0);
       drop = "door";
@@ -627,10 +661,13 @@ export class Simulation {
       delete this.containers[posKey(p)];
     }
     if (!this.creative && cropAt(id)) {
-      for (const stack of harvestCrop(id, () => this.farming.nextRandom())) this.spawnDrop(stack, { x: p.x + 0.5, y: p.y + 0.1, z: p.z + 0.5 });
+      for (const stack of harvestCrop(id, () => this.farming.nextRandom()))
+        this.spawnDrop(stack, { x: p.x + 0.5, y: p.y + 0.1, z: p.z + 0.5 });
     } else if (!this.creative && id === 58) {
-      if (this.held?.id === "shears") this.spawnDrop({ id: "short_grass", count: 1 }, p);
-      else if (this.farming.nextRandom() < 0.125) this.spawnDrop({ id: "wheat_seeds", count: 1 }, p);
+      if (this.held?.id === "shears")
+        this.spawnDrop({ id: "short_grass", count: 1 }, p);
+      else if (this.farming.nextRandom() < 0.125)
+        this.spawnDrop({ id: "wheat_seeds", count: 1 }, p);
     } else if (drop && !this.creative && (exploded || eligible))
       this.spawnDrop(
         { id: drop, count: 1 },
@@ -647,7 +684,7 @@ export class Simulation {
     if (this.attackCooldown > 0 || this.player.dead) return false;
     const eye = this.eye(),
       dir = this.direction();
-    const wall = this.target();
+    const wall = raycastVoxel(this.world, eye, dir, 3.2, false, true);
     let victim: EntityState | undefined;
     let nearest = 3.2;
     for (const e of this.entities) {
@@ -688,12 +725,16 @@ export class Simulation {
     );
     victim.position = knock.position;
     if (victim.health <= 0) {
-      if ((victim.age ?? 0) >= 0) ENTITIES[victim.kind].drops.forEach((s) => {
-        if (s.id !== "wool" || !victim!.sheared) this.spawnDrop(s, victim!.position);
-      });
+      if ((victim.age ?? 0) >= 0)
+        ENTITIES[victim.kind].drops.forEach((s) => {
+          if (s.id !== "wool" || !victim!.sheared)
+            this.spawnDrop(s, victim!.position);
+        });
       // Adult zombies provide the survival route to the two root crops.
       if (victim.kind === "zombie" && this.farming.nextRandom() < 0.025) {
-        const rare = ["iron_ingot", "carrot", "potato"][Math.floor(this.farming.nextRandom() * 3)];
+        const rare = ["iron_ingot", "carrot", "potato"][
+          Math.floor(this.farming.nextRandom() * 3)
+        ];
         this.spawnDrop({ id: rare, count: 1 }, victim.position);
       }
       this.entities = this.entities.filter((e) => e.id !== victim!.id);
@@ -707,6 +748,7 @@ export class Simulation {
       def = held ? ITEMS[held.id] : null;
     const target = this.target();
     if (held && this.interactAnimal(held.id)) return;
+    if (target && this.interactComposter(target)) return;
     if (held && this.interactFarm(held.id, target)) return;
     if (def?.food && !this.creative) {
       if (this.player.hunger >= 20) {
@@ -769,13 +811,17 @@ export class Simulation {
       this.toast("选择一个方块，就可以开始建造");
       return;
     }
-    const p = {
-      x: t.x + target.normal.x,
-      y: t.y + target.normal.y,
-      z: t.z + target.normal.z,
-    };
+    const p =
+      id === 58 || cropAt(id)
+        ? { ...t }
+        : {
+            x: t.x + target.normal.x,
+            y: t.y + target.normal.y,
+            z: t.z + target.normal.z,
+          };
     if (p.y < -16 || p.y >= 96 || !this.world.isReady(p.x, p.z)) return;
-    if (![0, 6].includes(this.world.getBlock(p.x, p.y, p.z))) return;
+    const replaceable = (id: number) => [0, 6, 58].includes(id) || !!cropAt(id);
+    if (!replaceable(this.world.getBlock(p.x, p.y, p.z))) return;
     const boxes = [p];
     if (def.block === 18) boxes.push({ x: p.x, y: p.y + 1, z: p.z });
     if (def.block === 22) boxes.push({ x: p.x, y: p.y, z: p.z + 1 });
@@ -788,7 +834,7 @@ export class Simulation {
         this.toast("请等待相邻地形加载完成");
         return;
       }
-      if (![0, 6].includes(this.world.getBlock(b.x, b.y, b.z))) {
+      if (!replaceable(this.world.getBlock(b.x, b.y, b.z))) {
         this.toast("这里没有足够的空间");
         return;
       }
@@ -819,6 +865,10 @@ export class Simulation {
       this.toast("床的两端都需要地面支撑");
       return;
     }
+    for (const b of boxes) {
+      const old = this.world.getBlock(b.x, b.y, b.z);
+      if (old === 58 || cropAt(old)) this.breakBlock(b, old);
+    }
     this.setBlock(p.x, p.y, p.z, def.block);
     if (def.block === 18) this.setBlock(p.x, p.y + 1, p.z, 25);
     if (def.block === 22) this.setBlock(p.x, p.y, p.z + 1, 27);
@@ -828,6 +878,232 @@ export class Simulation {
     }
     this.sound("place");
     this.dirty = true;
+  }
+  private useHeld(remainder?: string) {
+    if (this.creative || !this.held) return;
+    const slot = this.player.selected;
+    this.held.count--;
+    if (!this.held.count)
+      this.player.inventory[slot] = remainder
+        ? { id: remainder, count: 1 }
+        : null;
+    else if (remainder) {
+      const left = addItem(this.player.inventory, { id: remainder, count: 1 });
+      if (left) this.spawnDrop(left, this.player.position);
+    }
+  }
+  private interactComposter(
+    target: NonNullable<ReturnType<Simulation["target"]>>,
+  ): boolean {
+    if (target.id < 59 || target.id > 67) return false;
+    const p = target.position;
+    if (target.id === 67) {
+      this.setBlock(p.x, p.y, p.z, 59);
+      this.spawnDrop(
+        { id: "bone_meal", count: 1 },
+        { x: p.x + 0.5, y: p.y + 0.7, z: p.z + 0.5 },
+      );
+      this.sound("pickup");
+      this.toast("收取了骨粉，可以用来催熟作物或让草地长出草丛");
+    } else if (target.id === 66) this.toast("堆肥正在熟成…");
+    else {
+      const chance: Record<string, number> = {
+        wheat_seeds: 0.3,
+        beetroot_seeds: 0.3,
+        leaves: 0.3,
+        short_grass: 0.3,
+        wheat: 0.65,
+        carrot: 0.65,
+        potato: 0.65,
+        beetroot: 0.65,
+        bread: 0.85,
+        baked_potato: 0.85,
+      };
+      const probability = this.held ? chance[this.held.id] : 0;
+      if (!probability) {
+        this.toast("放入种子、树叶或作物，装满后可获得骨粉");
+        return true;
+      }
+      this.useHeld();
+      if (target.id === 59 || this.farming.nextRandom() < probability) {
+        this.setBlock(p.x, p.y, p.z, target.id + 1);
+        if (target.id + 1 === 66) this.composters[posKey(p)] = 1;
+        this.toast(`堆肥进度 ${target.id - 58}/7`);
+      } else this.toast("加入了材料，这次没有增加堆肥层");
+      this.sound("place");
+    }
+    return true;
+  }
+  private interactFarm(
+    item: string,
+    target: ReturnType<Simulation["target"]>,
+  ): boolean {
+    if (item === "bucket") {
+      const water = raycastVoxel(
+        this.world,
+        this.eye(),
+        this.direction(),
+        this.creative ? 6 : 4.5,
+        true,
+      );
+      if (
+        water?.id === 6 &&
+        this.world.isReady(water.position.x, water.position.z)
+      ) {
+        this.setBlock(water.position.x, water.position.y, water.position.z, 0);
+        this.useHeld("water_bucket");
+        this.sound("place");
+        this.toast("装了一桶水");
+      } else this.toast("对着水源使用铁桶装水");
+      return true;
+    }
+    if (!target) return false;
+    const p = target.position,
+      id = target.id;
+    if (ITEMS[item]?.tool === "hoe") {
+      if ((id === 1 || id === 2) && target.normal.y >= 0) {
+        const above = this.world.getBlock(p.x, p.y + 1, p.z);
+        if (above === 0 || above === 58) {
+          if (above === 58) this.breakBlock({ ...p, y: p.y + 1 }, above);
+          this.setBlock(p.x, p.y, p.z, FARMLAND.dry);
+          this.wearTool();
+          this.sound("dig");
+          this.toast("翻好了耕地。附近的水可以保持湿润");
+        } else this.toast("耕地上方需要留空");
+      }
+      return true;
+    }
+    const crop = Object.values(CROP_DEFINITIONS).find(
+      (c) => c.seedItem === item,
+    );
+    if (
+      crop &&
+      (id === FARMLAND.dry || id === FARMLAND.wet) &&
+      target.normal.y === 1
+    ) {
+      if (p.y < 95 && this.world.getBlock(p.x, p.y + 1, p.z) === 0) {
+        this.setBlock(p.x, p.y + 1, p.z, crop.firstId);
+        this.useHeld();
+        this.sound("place");
+        this.toast("种下了作物，保持水分和光照，等待它成熟");
+      } else this.toast("耕地上方已经有东西了");
+      return true;
+    }
+    if (item === "bone_meal") {
+      if (this.farming.fertilize(p)) {
+        this.useHeld();
+        this.sound("place");
+        this.toast("作物长大了一些");
+      } else if (id === 1) {
+        let planted = 0;
+        // Natural, repeatable seed route also available in generator-1 worlds.
+        for (let i = 0; i < 32; i++) {
+          const x = p.x + Math.floor(this.farming.nextRandom() * 7) - 3;
+          const z = p.z + Math.floor(this.farming.nextRandom() * 7) - 3;
+          const y = p.y;
+          if (
+            this.world.isReady(x, z) &&
+            y < 95 &&
+            this.world.getBlock(x, y, z) === 1 &&
+            this.world.getBlock(x, y + 1, z) === 0
+          ) {
+            this.setBlock(x, y + 1, z, 58);
+            planted++;
+          }
+        }
+        if (planted) {
+          this.useHeld();
+          this.sound("place");
+          this.toast("草地上长出了新的草丛");
+        }
+      }
+      return true;
+    }
+    if (item === "water_bucket") {
+      const at = {
+        x: p.x + target.normal.x,
+        y: p.y + target.normal.y,
+        z: p.z + target.normal.z,
+      };
+      const old = this.world.getBlock(at.x, at.y, at.z);
+      if (
+        at.y >= -16 &&
+        at.y < 96 &&
+        this.world.isReady(at.x, at.z) &&
+        (old === 0 || old === 58 || !!cropAt(old))
+      ) {
+        if (old) this.breakBlock(at, old);
+        this.setBlock(at.x, at.y, at.z, 6);
+        this.useHeld("bucket");
+        this.sound("place");
+      }
+      return true;
+    }
+    return false;
+  }
+  private animalFood(kind: EntityKind, item: string) {
+    return kind === "sheep"
+      ? item === "wheat"
+      : kind === "pig" && ["carrot", "potato", "beetroot"].includes(item);
+  }
+  private interactAnimal(item: string): boolean {
+    const eye = this.eye(),
+      dir = this.direction(),
+      wall = raycastVoxel(this.world, eye, dir, 3.2, false, true);
+    const max = wall ? Math.min(3.2, distance(eye, wall.position)) : 3.2;
+    const animal = this.entities
+      .filter((e) => !ENTITIES[e.kind].hostile && e.health > 0)
+      .map((e) => {
+        const height = (e.age ?? 0) < 0 ? 0.28 : 0.55;
+        const dx = e.position.x - eye.x,
+          dy = e.position.y + height - eye.y,
+          dz = e.position.z - eye.z;
+        const along = dx * dir.x + dy * dir.y + dz * dir.z;
+        const side = Math.hypot(
+          dx - dir.x * along,
+          dy - dir.y * along,
+          dz - dir.z * along,
+        );
+        return { e, along, side, height };
+      })
+      .filter(
+        ({ along, side, height }) =>
+          along > 0 && along < max && side < height + 0.12,
+      )
+      .sort((a, b) => a.along - b.along)[0]?.e;
+    if (!animal) return false;
+    if (item === "shears" && animal.kind === "sheep") {
+      if (animal.sheared || (animal.age ?? 0) < 0) {
+        this.toast("幼羊或刚剪过毛的羊现在不能剪毛");
+        return true;
+      }
+      animal.sheared = true;
+      animal.woolTimer = 0;
+      this.spawnDrop(
+        { id: "wool", count: 1 + Math.floor(this.farming.nextRandom() * 3) },
+        animal.position,
+      );
+      this.wearTool();
+      this.sound("dig");
+      this.toast("剪下了羊毛，羊吃草后会重新长毛");
+      return true;
+    }
+    if (!this.animalFood(animal.kind, item)) return false;
+    if ((animal.age ?? 0) < 0) {
+      animal.age = Math.min(0, animal.age! + Math.max(1, -animal.age! * 0.1));
+      this.useHeld();
+      this.sound("eat");
+      this.toast("幼崽吃饱了，长大得更快");
+    } else if ((animal.breedCooldown ?? 0) > 0 || (animal.love ?? 0) > 0)
+      this.toast("它暂时不想再吃，等一会儿吧");
+    else {
+      animal.love = 60;
+      animal.courtship = 0;
+      this.useHeld();
+      this.sound("eat");
+      this.toast("它正在寻找同类伙伴，再喂一只成年动物吧");
+    }
+    return true;
   }
   private sleep(bed: Vec3) {
     this.player.bedSpawn = { ...bed };
@@ -1049,7 +1325,11 @@ export class Simulation {
   private spawnEntity(kind: EntityKind, x: number, z: number) {
     if (!this.world.isReady(x, z)) return;
     const y = this.world.getSurface(Math.floor(x), Math.floor(z)) + 1.05;
-    if (this.world.getBlock(Math.floor(x), Math.floor(y), Math.floor(z)) !== 0)
+    if (
+      ![0, 58].includes(
+        this.world.getBlock(Math.floor(x), Math.floor(y), Math.floor(z)),
+      )
+    )
       return;
     this.entities.push({
       id: uid(),
@@ -1098,6 +1378,26 @@ export class Simulation {
       if (!this.world.isReady(e.position.x, e.position.z)) continue;
       const def = ENTITIES[e.kind],
         dist = distance(e.position, this.player.position);
+      if (!def.hostile) {
+        e.age = Math.min(0, (e.age ?? 0) + dt);
+        e.breedCooldown = Math.max(0, (e.breedCooldown ?? 0) - dt);
+        e.love = Math.max(0, (e.love ?? 0) - dt);
+        if (e.kind === "sheep" && e.sheared) {
+          const at = {
+            x: Math.floor(e.position.x),
+            y: Math.floor(e.position.y - 0.1),
+            z: Math.floor(e.position.z),
+          };
+          if (this.world.getBlock(at.x, at.y, at.z) === 1) {
+            e.woolTimer = (e.woolTimer ?? 0) + dt;
+            if (e.woolTimer >= 30) {
+              this.setBlock(at.x, at.y, at.z, 2);
+              e.sheared = false;
+              e.woolTimer = 0;
+            }
+          }
+        }
+      }
       if (dist > 96 && def.hostile) {
         e.health = 0;
         continue;
@@ -1115,19 +1415,85 @@ export class Simulation {
         e.timer = 2 + Math.random() * 4;
         e.yaw = Math.random() * Math.PI * 2;
       }
-      if (!def.hostile) moving = e.timer > 2;
+      if (!def.hostile) {
+        moving = e.timer > 2;
+        const partner =
+          (e.love ?? 0) > 0 && (e.age ?? 0) >= 0 && (e.breedCooldown ?? 0) === 0
+            ? this.entities.find(
+                (other) =>
+                  other.id !== e.id &&
+                  other.kind === e.kind &&
+                  other.health > 0 &&
+                  (other.age ?? 0) >= 0 &&
+                  (other.love ?? 0) > 0 &&
+                  (other.breedCooldown ?? 0) === 0 &&
+                  this.world.isReady(other.position.x, other.position.z) &&
+                  distance(e.position, other.position) < 8 &&
+                  this.animalsVisible(e, other),
+              )
+            : undefined;
+        const lure =
+          this.held &&
+          this.animalFood(e.kind, this.held.id) &&
+          dist < 8 &&
+          !this.player.dead &&
+          this.canSeePlayer(e.position);
+        const follow =
+          partner?.position ?? (lure ? this.player.position : undefined);
+        if (follow) {
+          e.yaw = Math.atan2(follow.x - e.position.x, follow.z - e.position.z);
+          moving = distance(follow, e.position) > (partner ? 1.1 : 1.6);
+          speed *= 1.2;
+        }
+        if (partner && distance(e.position, partner.position) < 2) {
+          e.courtship = Math.min(3, (e.courtship ?? 0) + dt);
+          if (e.courtship >= 3 && this.entities.length < 10_000) {
+            const position = [
+              { ...e.position },
+              { ...partner.position },
+              { ...e.position, x: e.position.x + 0.8 },
+              { ...e.position, z: e.position.z + 0.8 },
+            ].find(
+              (p) =>
+                this.world.isReady(p.x, p.z) &&
+                !intersectsWorld(this.world, p, 0.35, 0.6),
+            );
+            if (position) {
+              this.entities.push({
+                id: uid(),
+                kind: e.kind,
+                position,
+                health: def.health,
+                yaw: e.yaw,
+                timer: 2,
+                age: -1200,
+                love: 0,
+                breedCooldown: 0,
+              });
+              for (const parent of [e, partner]) {
+                parent.love = 0;
+                parent.courtship = 0;
+                parent.breedCooldown = 300;
+              }
+              this.sound("pickup");
+              this.toast("一只幼崽出生了！");
+            }
+          }
+        } else e.courtship = 0;
+      }
       if (!this.night && e.kind === "zombie" && this.skyVisible(e.position)) {
         e.health -= dt * 0.8;
       }
       const vel = (this.entityVel.get(e.id) ?? 0) - 20 * dt;
       const dx = moving ? Math.sin(e.yaw) * speed * dt : 0,
         dz = moving ? Math.cos(e.yaw) * speed * dt : 0;
-      const h = def.hostile ? 1.75 : 1.2;
+      const baby = (e.age ?? 0) < 0;
+      const h = def.hostile ? 1.75 : baby ? 0.6 : 1.2;
       const moved = moveBody(
         this.world,
         e.position,
         { x: dx, y: Math.max(-15, vel) * dt, z: dz },
-        0.65,
+        baby ? 0.35 : 0.65,
         h,
       );
       e.position = moved.position;
@@ -1175,6 +1541,21 @@ export class Simulation {
       from,
       { x: d.x / length, y: d.y / length, z: d.z / length },
       Math.max(0, length - 0.15),
+      false,
+      true,
+    );
+  }
+  private animalsVisible(a: EntityState, b: EntityState): boolean {
+    const from = { ...a.position, y: a.position.y + 0.55 };
+    const to = { ...b.position, y: b.position.y + 0.55 };
+    const dir = { x: to.x - from.x, y: to.y - from.y, z: to.z - from.z };
+    return !raycastVoxel(
+      this.world,
+      from,
+      dir,
+      Math.max(0, distance(from, to) - 0.2),
+      false,
+      true,
     );
   }
   private skyVisible(position: Vec3): boolean {
@@ -1241,6 +1622,7 @@ export class Simulation {
       containers: clone(this.containers),
       entities: clone(this.entities),
       farming: this.farming.snapshot(),
+      composters: clone(this.composters),
       drops,
     };
   }

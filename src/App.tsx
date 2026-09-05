@@ -14,6 +14,8 @@ import {
   listWorlds,
   loadWorld,
   saveWorld,
+  migrationBackupIds,
+  exportMigrationBackup,
 } from "./game/storage";
 import { ITEMS } from "./game/registry";
 import type {
@@ -70,6 +72,7 @@ export default function App() {
   const previewDispose = useRef<null | (() => void)>(null);
   const [game, setGame] = useState<GameUIBridge | null>(null);
   const [worlds, setWorlds] = useState<SaveManifest[]>([]);
+  const [backupIds, setBackupIds] = useState<string[]>([]);
   const [settings, setSettings] = useState<Settings>(readSettings);
   const [modal, setModal] = useState<"create" | "settings" | "help" | null>(
     null,
@@ -82,7 +85,12 @@ export default function App() {
   const reloadWorlds = useCallback(async () => {
     setListLoading(true);
     try {
-      setWorlds(await listWorlds());
+      const [worldList, backups] = await Promise.all([
+        listWorlds(),
+        migrationBackupIds(),
+      ]);
+      setWorlds(worldList);
+      setBackupIds(backups);
     } catch (e) {
       setError(String(e));
     } finally {
@@ -325,6 +333,19 @@ export default function App() {
                           本机存档
                         </span>
                         <div>
+                          {backupIds.includes(world.id) && (
+                            <button
+                              title={`导出 ${world.name} 升级前备份`}
+                              onClick={() => {
+                                void exportMigrationBackup(world.id).catch(
+                                  (e) => setError(String(e)),
+                                );
+                              }}
+                            >
+                              <Icon name="download" size={14} />
+                              升级前备份
+                            </button>
+                          )}
                           <button
                             title={`导出 ${world.name}`}
                             onClick={() => {
@@ -365,7 +386,7 @@ export default function App() {
           <footer className="home-footer">
             <span>每一块，都有新的可能。</span>
             <div>
-              <span className="version">M1 · 铁器时代</span>
+              <span className="version">耕作与牧场</span>
               <button onClick={() => setModal("help")}>
                 操作指南
                 <Icon name="info" size={15} />
@@ -1249,6 +1270,10 @@ function HelpDialog({ close }: { close: () => void }) {
           <span className="section-label">生存的第一天</span>
           <p>
             先砍树获得原木，在背包里制作木板和工作台。做一把木镐，采集石头升级工具，再寻找煤和铁。天黑前，记得搭建庇护所、放置火把。
+            <br />
+            割草获得小麦种子，用锄头翻耕泥土，再向耕地播种。水能滋润四格内的耕地；成熟小麦可做面包、喂羊。用胡萝卜、马铃薯或甜菜喂猪，同类成年动物吃饱后会繁殖。剪刀可以采羊毛，羊吃草后重新长毛。
+            <br />
+            用七个木台阶制作堆肥桶，投入树叶或种子，装满后收取骨粉。骨粉可催熟作物，也可让草地长出草丛。铁桶能搬运水源；甜菜种子目前可在创造物品栏获得。
           </p>
         </div>
         <button className="button forest full-button" onClick={close}>

@@ -1,0 +1,286 @@
+{
+  "schemaVersion": 1,
+  "target": {
+    "edition": "Java",
+    "version": "1.21.1"
+  },
+  "sourceCommit": "abfaadb4c45e2968a98fc927d32f7c648962d8ad",
+  "sourceAuthority": "Third-party curated data. Counts prove faithful enumeration of pinned files only, not Mojang official completeness or functional parity.",
+  "generatedBy": "node scripts/build-parity-catalog.mjs",
+  "deterministic": true,
+  "localSourceSnapshot": {
+    "src/game/inventory.ts": {
+      "sha256": "9bdb268484d6d4ead19a194637b2213f4aaee1797328ca762b6d92cead820402",
+      "bytes": 3438
+    },
+    "src/game/recipes.ts": {
+      "sha256": "4dae936419b567c2f6827aac014b01b5a7c33e6ce8633da6ef0e08343bbb2833",
+      "bytes": 6887
+    },
+    "src/game/registry.ts": {
+      "sha256": "f686e9a996f4c12c1c813e232a601d1d99349efa56766219e2c0c75210df6ce4",
+      "bytes": 8557
+    }
+  },
+  "totals": {
+    "entries": 5953,
+    "blockStateIdsInRanges": 26684,
+    "acceptedEntries": 0,
+    "missingDomains": 10
+  },
+  "behaviorBacklog": {
+    "file": "behavior-cases.json",
+    "count": 43,
+    "acceptedCases": 0,
+    "sourceSha256": "e9d21caa9ea02bd0fc19fae65bd2c7a95d90d4bf440aa53a1ef4212c806e41db"
+  },
+  "domains": {
+    "blocks": {
+      "file": "catalogs/blocks.json",
+      "count": 1060,
+      "referenceCoverage": "all-records-in-pinned-third-party-file",
+      "mappedVersion": "1.21.1",
+      "stageCounts": {
+        "M1": 24,
+        "M2": 837,
+        "M3": 199
+      },
+      "implementationCounts": {
+        "not-mapped": 1029,
+        "partial-unverified": 31
+      },
+      "acceptancePassed": 0
+    },
+    "items": {
+      "file": "catalogs/items.json",
+      "count": 1333,
+      "referenceCoverage": "all-records-in-pinned-third-party-file",
+      "mappedVersion": "1.21.1",
+      "stageCounts": {
+        "M1": 47,
+        "M2": 1065,
+        "M3": 221
+      },
+      "implementationCounts": {
+        "not-mapped": 1265,
+        "partial-unverified": 68
+      },
+      "acceptancePassed": 0
+    },
+    "entities": {
+      "file": "catalogs/entities.json",
+      "count": 130,
+      "referenceCoverage": "all-records-in-pinned-third-party-file",
+      "mappedVersion": "1.20.5",
+      "stageCounts": {
+        "M1": 4,
+        "M2": 107,
+        "M3": 19
+      },
+      "implementationCounts": {
+        "not-mapped": 126,
+        "partial-unverified": 4
+      },
+      "acceptancePassed": 0
+    },
+    "biomes": {
+      "file": "catalogs/biomes.json",
+      "count": 64,
+      "referenceCoverage": "all-records-in-pinned-third-party-file",
+      "mappedVersion": "1.20.5",
+      "stageCounts": {
+        "M2": 54,
+        "M3": 10
+      },
+      "implementationCounts": {
+        "not-mapped": 64
+      },
+      "acceptancePassed": 0
+    },
+    "foods": {
+      "file": "catalogs/foods.json",
+      "count": 41,
+      "referenceCoverage": "all-records-in-pinned-third-party-file",
+      "mappedVersion": "1.21.1",
+      "stageCounts": {
+        "M1": 4,
+        "M2": 36,
+        "M3": 1
+      },
+      "implementationCounts": {
+        "not-mapped": 30,
+        "partial-unverified": 11
+      },
+      "acceptancePassed": 0
+    },
+    "enchantments": {
+      "file": "catalogs/enchantments.json",
+      "count": 42,
+      "referenceCoverage": "all-records-in-pinned-third-party-file",
+      "mappedVersion": "1.21.1",
+      "stageCounts": {
+        "M3": 42
+      },
+      "implementationCounts": {
+        "not-mapped": 42
+      },
+      "acceptancePassed": 0
+    },
+    "effects": {
+      "file": "catalogs/effects.json",
+      "count": 39,
+      "referenceCoverage": "all-records-in-pinned-third-party-file",
+      "mappedVersion": "1.20.5",
+      "stageCounts": {
+        "M3": 39
+      },
+      "implementationCounts": {
+        "not-mapped": 39
+      },
+      "acceptancePassed": 0
+    },
+    "attributes": {
+      "file": "catalogs/attributes.json",
+      "count": 31,
+      "referenceCoverage": "all-records-in-pinned-third-party-file",
+      "mappedVersion": "1.21.1",
+      "stageCounts": {
+        "M3": 31
+      },
+      "implementationCounts": {
+        "not-mapped": 31
+      },
+      "acceptancePassed": 0
+    },
+    "particles": {
+      "file": "catalogs/particles.json",
+      "count": 109,
+      "referenceCoverage": "all-records-in-pinned-third-party-file",
+      "mappedVersion": "1.20.5",
+      "stageCounts": {
+        "M3": 9,
+        "M4": 100
+      },
+      "implementationCounts": {
+        "not-mapped": 109
+      },
+      "acceptancePassed": 0
+    },
+    "sounds": {
+      "file": "catalogs/sounds.json",
+      "count": 1611,
+      "referenceCoverage": "all-records-in-pinned-third-party-file",
+      "mappedVersion": "1.21.1",
+      "stageCounts": {
+        "M3": 5,
+        "M4": 1606
+      },
+      "implementationCounts": {
+        "not-mapped": 1611
+      },
+      "acceptancePassed": 0
+    },
+    "instruments": {
+      "file": "catalogs/instruments.json",
+      "count": 23,
+      "referenceCoverage": "all-records-in-pinned-third-party-file",
+      "mappedVersion": "1.20.5",
+      "stageCounts": {
+        "M3": 23
+      },
+      "implementationCounts": {
+        "not-mapped": 23
+      },
+      "acceptancePassed": 0
+    },
+    "recipes": {
+      "file": "catalogs/recipes.json",
+      "count": 1470,
+      "referenceCoverage": "all-records-in-pinned-third-party-file",
+      "mappedVersion": "1.21.1",
+      "stageCounts": {
+        "M1": 125,
+        "M2": 1137,
+        "M3": 208
+      },
+      "implementationCounts": {
+        "definition-match-unverified": 35,
+        "not-mapped": 1310,
+        "output-candidate-unverified": 125
+      },
+      "acceptancePassed": 0
+    }
+  },
+  "missing": [
+    {
+      "id": "dimensions",
+      "status": "missing",
+      "stage": "M3",
+      "reason": "dataPaths has no dimension registry dataset; biome.dimension labels do not enumerate dimension types, generators, or portals.",
+      "gate": "Pin Java 1.21.1 dimension and dimension_type resource IDs and definitions; verify height, scale, time, respawn and portal transitions separately."
+    },
+    {
+      "id": "structures",
+      "status": "missing",
+      "stage": "M2",
+      "reason": "No structure/structure_set/template_pool dataset selected by this source.",
+      "gate": "Obtain fixed-version resource IDs and generation/loot/encounter definitions; enumerate each structure, variants and dimension; test seeded location, exploration and reload."
+    },
+    {
+      "id": "official-recipe-resource-ids",
+      "status": "missing",
+      "stage": "M2",
+      "reason": "recipes.json stores expanded crafting combinations keyed by numeric output IDs; official recipe resource locations and tags are absent.",
+      "gate": "Pin resource-location recipes and tag expansion; deduplicate logical recipes without mistaking ingredient variants for separate official recipes."
+    },
+    {
+      "id": "non-crafting-recipes",
+      "status": "missing",
+      "stage": "M2",
+      "reason": "All 1470 source records use inShape or ingredients; there is no smelting, blasting, smoking, campfire, stonecutting, smithing, brewing or special-recipe serializer catalog.",
+      "gate": "Add every recipe type, serializer, timing, experience and remainder behavior; reconcile the existing local smelting definitions."
+    },
+    {
+      "id": "block-states-individual-acceptance",
+      "status": "missing",
+      "stage": "M2",
+      "reason": "Block state ranges and property schemas are retained, but no per-state runtime acceptance is inferred from local numeric block aliases.",
+      "gate": "Expand and validate each state combination and neighbor transition; fixed-facing doors/beds and partial farmland states cannot pass the whole block."
+    },
+    {
+      "id": "worldgen-registries-tags",
+      "status": "missing",
+      "stage": "M2",
+      "reason": "Biome records do not include all configured/placed features, carvers, noise, density functions, tags, processors or presets.",
+      "gate": "Pin each worldgen registry and tag; test generation relations and resource reachability across representative seeds."
+    },
+    {
+      "id": "loot-tables-trades-spawns",
+      "status": "missing",
+      "stage": "M2",
+      "reason": "dataPaths maps blockLoot/entityLoot to 1.20; these older summaries were deliberately not counted as fixed 1.21.1 loot/trade/spawn coverage.",
+      "gate": "Obtain fixed-version loot tables, predicates, item modifiers, spawn rules and villager trades; verify conditions, random ranges and progression."
+    },
+    {
+      "id": "commands",
+      "status": "missing",
+      "stage": "M4",
+      "reason": "dataPaths points commands to 1.20.3; no command nodes have been counted as Java 1.21.1 semantics.",
+      "gate": "Pin the 1.21.1 command tree; verify each argument, selector, permission, feedback, completion and state mutation with authority/reconnect tests."
+    },
+    {
+      "id": "data-components-advancements-statistics",
+      "status": "missing",
+      "stage": "M4",
+      "reason": "No complete item-component, advancement, criterion, statistic, recipe-book, scoreboard, gamerule or data-pack catalog is included.",
+      "gate": "Enumerate fixed-version registries and behavior entry points, then test persistence and all user-observable transitions."
+    },
+    {
+      "id": "non-data-behavior",
+      "status": "missing",
+      "stage": "M4",
+      "reason": "Registry entries cannot enumerate gameplay algorithms, redstone semantics, UI interactions, modes or multiplayer consistency.",
+      "gate": "Close the separately itemized behavior backlog and publish entry-specific automated plus real-browser evidence; see BEHAVIORS.md."
+    }
+  ]
+}

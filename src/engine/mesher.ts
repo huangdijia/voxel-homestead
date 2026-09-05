@@ -97,61 +97,195 @@ export function plantVisualParts(id: number): readonly PlantVisualPart[] {
   const plant = plantStage(id);
   if (!plant) return [];
   const parts: PlantVisualPart[] = [];
-  const add = (box: BlockBox, tint: [number, number, number], tile = 15) => parts.push({ box, tint, tile });
-  const h = plantHeight(id), g = plant.stages > 1 ? plant.stage / (plant.stages - 1) : 1;
-  const green: [number, number, number] = [0.35 - g * 0.11, 0.68 - g * 0.11, 0.13];
-  const bright: [number, number, number] = [0.53 - g * 0.12, 0.78 - g * 0.13, 0.2];
+  const add = (box: BlockBox, tint: [number, number, number], tile = 15) =>
+    parts.push({ box, tint, tile });
+  const h = plantHeight(id),
+    g = plant.stages > 1 ? plant.stage / (plant.stages - 1) : 1;
+  const green: [number, number, number] = [
+    0.35 - g * 0.11,
+    0.68 - g * 0.11,
+    0.13,
+  ];
+  const bright: [number, number, number] = [
+    0.53 - g * 0.12,
+    0.78 - g * 0.13,
+    0.2,
+  ];
   if (plant.kind === "grass") {
     // Three stepped, volumetric blades; 6 boxes total for naturally generated grass.
-    for (const [x, z, ratio, sign] of [[0.34, 0.37, 0.78, -1], [0.52, 0.56, 1, 1], [0.67, 0.4, 0.65, 1]]) {
-      add([x - 0.021, 0, z - 0.032, x + 0.021, h * ratio * 0.7, z + 0.032], green);
+    for (const [x, z, ratio, sign] of [
+      [0.34, 0.37, 0.78, -1],
+      [0.52, 0.56, 1, 1],
+      [0.67, 0.4, 0.65, 1],
+    ]) {
+      add(
+        [x - 0.021, 0, z - 0.032, x + 0.021, h * ratio * 0.7, z + 0.032],
+        green,
+      );
       const tip = x + sign * 0.045;
-      add([Math.min(x, tip) - 0.014, h * ratio * 0.55, z - 0.021, Math.max(x, tip) + 0.014, h * ratio, z + 0.021], bright);
+      add(
+        [
+          Math.min(x, tip) - 0.014,
+          h * ratio * 0.55,
+          z - 0.021,
+          Math.max(x, tip) + 0.014,
+          h * ratio,
+          z + 0.021,
+        ],
+        bright,
+      );
     }
   } else if (plant.kind === "wheat") {
     const ripe = plant.stage === 7;
     const stem: [number, number, number] = ripe ? [0.8, 0.64, 0.26] : green;
     const leaf: [number, number, number] = ripe ? [0.68, 0.65, 0.24] : bright;
-    for (const [x, z, ratio] of [[0.34, 0.32, 1], [0.64, 0.41, 0.83], [0.49, 0.64, 0.92]]) {
-      const top = h * ratio, length = 0.08 + g * 0.12, half = 0.018 + g * 0.008;
+    for (const [x, z, ratio] of [
+      [0.34, 0.32, 1],
+      [0.64, 0.41, 0.83],
+      [0.49, 0.64, 0.92],
+    ]) {
+      const top = h * ratio,
+        length = 0.08 + g * 0.12,
+        half = 0.018 + g * 0.008;
       add([x - half, -1 / 16, z - half, x + half, top, z + half], stem);
-      add([x - length, top * 0.28, z - 0.025, x, top * 0.28 + 0.035, z + 0.025], leaf);
-      add([x, top * 0.55, z - 0.022, x + length, top * 0.55 + 0.03, z + 0.022], leaf);
+      add(
+        [x - length, top * 0.28, z - 0.025, x, top * 0.28 + 0.035, z + 0.025],
+        leaf,
+      );
+      add(
+        [x, top * 0.55, z - 0.022, x + length, top * 0.55 + 0.03, z + 0.022],
+        leaf,
+      );
       if (plant.stage >= 4) {
-        const ear: [number, number, number] = ripe ? [0.99, 0.77, 0.28] : [0.61 + g * 0.15, 0.75, 0.21];
-        const pale: [number, number, number] = ripe ? [1, 0.88, 0.47] : [0.8, 0.86, 0.33];
+        const ear: [number, number, number] = ripe
+          ? [0.99, 0.77, 0.28]
+          : [0.61 + g * 0.15, 0.75, 0.21];
+        const pale: [number, number, number] = ripe
+          ? [1, 0.88, 0.47]
+          : [0.8, 0.86, 0.33];
         const base = top - (0.09 + g * 0.14);
-        add([x - 0.046, base, z - 0.043, x + 0.046, top - 0.035, z + 0.043], ear);
-        add([x - 0.066, base + 0.035, z - 0.035, x - 0.02, base + 0.086, z + 0.035], pale);
-        add([x + 0.02, base + 0.09, z - 0.035, x + 0.066, Math.min(top - 0.025, base + 0.145), z + 0.035], pale);
+        add(
+          [x - 0.046, base, z - 0.043, x + 0.046, top - 0.035, z + 0.043],
+          ear,
+        );
+        add(
+          [
+            x - 0.066,
+            base + 0.035,
+            z - 0.035,
+            x - 0.02,
+            base + 0.086,
+            z + 0.035,
+          ],
+          pale,
+        );
+        add(
+          [
+            x + 0.02,
+            base + 0.09,
+            z - 0.035,
+            x + 0.066,
+            Math.min(top - 0.025, base + 0.145),
+            z + 0.035,
+          ],
+          pale,
+        );
         add([x - 0.009, top - 0.04, z - 0.01, x + 0.009, top, z + 0.01], pale);
       }
     }
   } else {
-    const beet = plant.kind === "beetroot", potato = plant.kind === "potato";
+    const beet = plant.kind === "beetroot",
+      potato = plant.kind === "potato";
     const stem: [number, number, number] = beet ? [0.68, 0.19, 0.29] : green;
-    const leaves: [number, number, number] = beet ? [0.27, 0.52, 0.19] : potato ? [0.29, 0.59, 0.23] : bright;
+    const leaves: [number, number, number] = beet
+      ? [0.27, 0.52, 0.19]
+      : potato
+        ? [0.29, 0.59, 0.23]
+        : bright;
     add([0.476, -1 / 16, 0.476, 0.524, h, 0.524], stem);
-    const length = 0.11 + g * 0.2, width = (potato || beet ? 0.045 : 0.024) + g * (potato || beet ? 0.045 : 0.018);
+    const length = 0.11 + g * 0.2,
+      width =
+        (potato || beet ? 0.045 : 0.024) + g * (potato || beet ? 0.045 : 0.018);
     const count = plant.stage === 0 ? 2 : 4;
     for (let i = 0; i < count; i++) {
-      const alongX = i % 2 === 0, sign = i < 2 ? 1 : -1;
-      const y = h * (0.44 + i * 0.09), end = 0.5 + sign * length;
+      const alongX = i % 2 === 0,
+        sign = i < 2 ? 1 : -1;
+      const y = h * (0.44 + i * 0.09),
+        end = 0.5 + sign * length;
       const near = 0.5 + sign * length * 0.46;
       if (alongX) {
-        add([Math.min(0.5, near), y, 0.5 - width, Math.max(0.5, near), y + 0.03, 0.5 + width], stem);
-        add([Math.min(near, end), y + 0.025, 0.5 - width, Math.max(near, end), Math.min(h, y + 0.085), 0.5 + width], leaves);
+        add(
+          [
+            Math.min(0.5, near),
+            y,
+            0.5 - width,
+            Math.max(0.5, near),
+            y + 0.03,
+            0.5 + width,
+          ],
+          stem,
+        );
+        add(
+          [
+            Math.min(near, end),
+            y + 0.025,
+            0.5 - width,
+            Math.max(near, end),
+            Math.min(h, y + 0.085),
+            0.5 + width,
+          ],
+          leaves,
+        );
       } else {
-        add([0.5 - width, y, Math.min(0.5, near), 0.5 + width, y + 0.03, Math.max(0.5, near)], stem);
-        add([0.5 - width, y + 0.025, Math.min(near, end), 0.5 + width, Math.min(h, y + 0.085), Math.max(near, end)], leaves);
+        add(
+          [
+            0.5 - width,
+            y,
+            Math.min(0.5, near),
+            0.5 + width,
+            y + 0.03,
+            Math.max(0.5, near),
+          ],
+          stem,
+        );
+        add(
+          [
+            0.5 - width,
+            y + 0.025,
+            Math.min(near, end),
+            0.5 + width,
+            Math.min(h, y + 0.085),
+            Math.max(near, end),
+          ],
+          leaves,
+        );
       }
     }
     if (g >= 0.55) {
       const r = 0.04 + g * 0.07;
-      const root: [number, number, number] = beet ? [0.64, 0.12, 0.23] : potato ? [0.73, 0.57, 0.31] : [1, 0.49, 0.12];
-      add([0.5 - r, -1 / 16, 0.5 - r, 0.5 + r, 0.04 + g * 0.065, 0.5 + r], root);
-      if (beet) add([0.5 - r * 0.7, 0.075, 0.5 - r * 0.7, 0.5 + r * 0.7, 0.115, 0.5 + r * 0.7], [0.79, 0.2, 0.31]);
-      if (potato) add([0.32, -1 / 16, 0.48, 0.43, 0.05, 0.59], [0.81, 0.66, 0.4]);
+      const root: [number, number, number] = beet
+        ? [0.64, 0.12, 0.23]
+        : potato
+          ? [0.73, 0.57, 0.31]
+          : [1, 0.49, 0.12];
+      add(
+        [0.5 - r, -1 / 16, 0.5 - r, 0.5 + r, 0.04 + g * 0.065, 0.5 + r],
+        root,
+      );
+      if (beet)
+        add(
+          [
+            0.5 - r * 0.7,
+            0.075,
+            0.5 - r * 0.7,
+            0.5 + r * 0.7,
+            0.115,
+            0.5 + r * 0.7,
+          ],
+          [0.79, 0.2, 0.31],
+        );
+      if (potato)
+        add([0.32, -1 / 16, 0.48, 0.43, 0.05, 0.59], [0.81, 0.66, 0.4]);
     }
     if (potato && plant.stage >= 5) {
       // Small pale flowers make potato foliage distinct from carrots at maturity.
@@ -187,7 +321,13 @@ export function buildChunk(request: ChunkRequest): ChunkResult {
   for (let y = -1; y <= 16; y++)
     for (let z = -1; z <= 16; z++)
       for (let x = -1; x <= 16; x++) {
-        padded[offset(x, y, z)] = sampleBlock(seed, ox + x, oy + y, oz + z, request.generatorVersion);
+        padded[offset(x, y, z)] = sampleBlock(
+          seed,
+          ox + x,
+          oy + y,
+          oz + z,
+          request.generatorVersion,
+        );
       }
   for (const change of request.changes) {
     const x = change.x - ox,
@@ -309,15 +449,99 @@ export function buildChunk(request: ChunkRequest): ChunkResult {
         const id = get(x, y, z);
         voxels[y * 256 + z * 16 + x] = id;
         if (!id) continue;
-        if (id === 28 || id === 29) {
+        if (id >= 59 && id <= 67) {
+          const wood = [0.8, 0.67, 0.46];
+          addBox(x, y, z, id, [0.04, 0, 0.04, 0.96, 0.13, 0.96], 0, wood, 11);
+          addBox(
+            x,
+            y,
+            z,
+            id,
+            [0.04, 0.1, 0.04, 0.16, 0.875, 0.96],
+            0,
+            wood,
+            11,
+          );
+          addBox(
+            x,
+            y,
+            z,
+            id,
+            [0.84, 0.1, 0.04, 0.96, 0.875, 0.96],
+            0,
+            wood,
+            11,
+          );
+          addBox(
+            x,
+            y,
+            z,
+            id,
+            [0.16, 0.1, 0.04, 0.84, 0.875, 0.16],
+            0,
+            wood,
+            11,
+          );
+          addBox(
+            x,
+            y,
+            z,
+            id,
+            [0.16, 0.1, 0.84, 0.84, 0.875, 0.96],
+            0,
+            wood,
+            11,
+          );
+          if (id > 59) {
+            const top = 0.16 + (id - 59) * 0.074;
+            addBox(
+              x,
+              y,
+              z,
+              id,
+              [0.16, 0.13, 0.16, 0.84, top, 0.84],
+              0,
+              id === 67 ? [0.76, 0.68, 0.48] : [0.35, 0.29, 0.2],
+              id === 67 ? 15 : 2,
+            );
+            if (id === 67)
+              for (const [sx, sz] of [
+                [0.26, 0.29],
+                [0.57, 0.24],
+                [0.41, 0.56],
+                [0.64, 0.62],
+              ]) {
+                addBox(
+                  x,
+                  y,
+                  z,
+                  id,
+                  [sx, top, sz, sx + 0.09, top + 0.012, sz + 0.08],
+                  0,
+                  [0.91, 0.86, 0.67],
+                  15,
+                );
+              }
+          }
+        } else if (id === 28 || id === 29) {
           // Actual 1/16-deep furrows, with a clear dry/wet soil color difference.
           const soil = id === 29 ? [0.44, 0.35, 0.27] : [0.78, 0.63, 0.44];
           addBox(x, y, z, id, [0, 0, 0, 1, 14 / 16, 1], 0, soil, 2);
           for (let row = 0; row < 4; row++) {
-            addBox(x, y, z, id, [0, 14 / 16, row / 4 + 0.025, 1, 15 / 16, row / 4 + 0.215], 0, soil, 2);
+            addBox(
+              x,
+              y,
+              z,
+              id,
+              [0, 14 / 16, row / 4 + 0.025, 1, 15 / 16, row / 4 + 0.215],
+              0,
+              soil,
+              2,
+            );
           }
         } else if (plantStage(id)) {
-          for (const part of plantVisualParts(id)) addBox(x, y, z, id, part.box, 1, part.tint, part.tile);
+          for (const part of plantVisualParts(id))
+            addBox(x, y, z, id, part.box, 1, part.tint, part.tile);
         } else if (id === 20) {
           addBox(x, y, z, id, [0.1, 0, 0.92, 0.21, 1, 0.99]);
           addBox(x, y, z, id, [0.79, 0, 0.92, 0.9, 1, 0.99]);

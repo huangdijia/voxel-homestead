@@ -1,0 +1,692 @@
+[
+  {
+    "id": "prismarine:instrument/harp",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 0,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/harp",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/harp",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/0",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 0,
+      "name": "harp"
+    }
+  },
+  {
+    "id": "prismarine:instrument/basedrum",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 1,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/basedrum",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/basedrum",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/1",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 1,
+      "name": "basedrum"
+    }
+  },
+  {
+    "id": "prismarine:instrument/snare",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 2,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/snare",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/snare",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/2",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 2,
+      "name": "snare"
+    }
+  },
+  {
+    "id": "prismarine:instrument/hat",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 3,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/hat",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/hat",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/3",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 3,
+      "name": "hat"
+    }
+  },
+  {
+    "id": "prismarine:instrument/bass",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 4,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/bass",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/bass",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/4",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 4,
+      "name": "bass"
+    }
+  },
+  {
+    "id": "prismarine:instrument/flute",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 5,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/flute",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/flute",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/5",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 5,
+      "name": "flute"
+    }
+  },
+  {
+    "id": "prismarine:instrument/bell",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 6,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/bell",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/bell",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/6",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 6,
+      "name": "bell"
+    }
+  },
+  {
+    "id": "prismarine:instrument/guitar",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 7,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/guitar",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/guitar",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/7",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 7,
+      "name": "guitar"
+    }
+  },
+  {
+    "id": "prismarine:instrument/chime",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 8,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/chime",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/chime",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/8",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 8,
+      "name": "chime"
+    }
+  },
+  {
+    "id": "prismarine:instrument/xylophone",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 9,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/xylophone",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/xylophone",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/9",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 9,
+      "name": "xylophone"
+    }
+  },
+  {
+    "id": "prismarine:instrument/iron_xylophone",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 10,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/iron_xylophone",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/iron_xylophone",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/10",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 10,
+      "name": "iron_xylophone"
+    }
+  },
+  {
+    "id": "prismarine:instrument/cow_bell",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 11,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/cow_bell",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/cow_bell",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/11",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 11,
+      "name": "cow_bell"
+    }
+  },
+  {
+    "id": "prismarine:instrument/didgeridoo",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 12,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/didgeridoo",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/didgeridoo",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/12",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 12,
+      "name": "didgeridoo"
+    }
+  },
+  {
+    "id": "prismarine:instrument/bit",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 13,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/bit",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/bit",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/13",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 13,
+      "name": "bit"
+    }
+  },
+  {
+    "id": "prismarine:instrument/banjo",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 14,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/banjo",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/banjo",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/14",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 14,
+      "name": "banjo"
+    }
+  },
+  {
+    "id": "prismarine:instrument/pling",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 15,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/pling",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/pling",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/15",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 15,
+      "name": "pling"
+    }
+  },
+  {
+    "id": "prismarine:instrument/zombie",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 16,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/zombie",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/zombie",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/16",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 16,
+      "name": "zombie"
+    }
+  },
+  {
+    "id": "prismarine:instrument/skeleton",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 17,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/skeleton",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/skeleton",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/17",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 17,
+      "name": "skeleton"
+    }
+  },
+  {
+    "id": "prismarine:instrument/creeper",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 18,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/creeper",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/creeper",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/18",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 18,
+      "name": "creeper"
+    }
+  },
+  {
+    "id": "prismarine:instrument/dragon",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 19,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/dragon",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/dragon",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/19",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 19,
+      "name": "dragon"
+    }
+  },
+  {
+    "id": "prismarine:instrument/wither_skeleton",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 20,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/wither_skeleton",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/wither_skeleton",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/20",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 20,
+      "name": "wither_skeleton"
+    }
+  },
+  {
+    "id": "prismarine:instrument/piglin",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 21,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/piglin",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/piglin",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/21",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 21,
+      "name": "piglin"
+    }
+  },
+  {
+    "id": "prismarine:instrument/custom_head",
+    "idBasis": "synthetic-note-block-enum-not-resource-location",
+    "upstreamNumericId": 22,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/instruments/prismarine:instrument/custom_head",
+      "template": "instruments",
+      "targetId": "prismarine:instrument/custom_head",
+      "status": "not-run",
+      "requiredChecks": [
+        "note-pitch-instrument-selection",
+        "redstone-trigger-and-original-audio"
+      ]
+    },
+    "source": {
+      "file": "instruments",
+      "pointer": "/22",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 22,
+      "name": "custom_head"
+    }
+  }
+]

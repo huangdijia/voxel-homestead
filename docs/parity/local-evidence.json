@@ -1,0 +1,1218 @@
+{
+  "sourceSnapshot": {
+    "src/game/inventory.ts": {
+      "sha256": "9bdb268484d6d4ead19a194637b2213f4aaee1797328ca762b6d92cead820402",
+      "bytes": 3438
+    },
+    "src/game/recipes.ts": {
+      "sha256": "4dae936419b567c2f6827aac014b01b5a7c33e6ce8633da6ef0e08343bbb2833",
+      "bytes": 6887
+    },
+    "src/game/registry.ts": {
+      "sha256": "f686e9a996f4c12c1c813e232a601d1d99349efa56766219e2c0c75210df6ce4",
+      "bytes": 8557
+    }
+  },
+  "statusRule": "Definition matches and existing test names are leads, not executed per-entry acceptance. No acceptance is promoted by this generator.",
+  "aliases": {
+    "grass": "grass_block",
+    "log": "oak_log",
+    "leaves": "oak_leaves",
+    "planks": "oak_planks",
+    "workbench": "crafting_table",
+    "door": "oak_door",
+    "door_open": "oak_door",
+    "door_top": "oak_door",
+    "door_top_open": "oak_door",
+    "slab": "oak_slab",
+    "bed": "white_bed",
+    "bed_head": "white_bed",
+    "wool": "white_wool",
+    "raw_pork": "porkchop",
+    "cooked_pork": "cooked_porkchop",
+    "raw_mutton": "mutton",
+    "wet_farmland": "farmland"
+  },
+  "cropAliases": {
+    "wheat": "wheat",
+    "carrot": "carrots",
+    "potato": "potatoes",
+    "beetroot": "beetroots"
+  },
+  "composterAlias": "composter_1..composter_8 -> minecraft:composter; state acceptance remains unverified",
+  "counts": {
+    "blocks": 68,
+    "items": 69,
+    "entities": 4,
+    "craftingRecipes": 36,
+    "smeltingRecipes": 7
+  },
+  "unmatchedLocal": {
+    "blocks": [],
+    "items": [
+      {
+        "id": "minecraft:water",
+        "localDefinitions": [
+          {
+            "id": "water",
+            "key": "water",
+            "source": "src/game/registry.ts"
+          }
+        ],
+        "status": "no-reference-entry-review-required"
+      }
+    ],
+    "entities": []
+  },
+  "craftingRecipes": [
+    {
+      "id": "planks",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_log"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:oak_planks",
+        "count": 4
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "stick",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_planks"
+        ],
+        [
+          "minecraft:oak_planks"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:stick",
+        "count": 4
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "workbench",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ],
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:crafting_table",
+        "count": 1
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "furnace",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:cobblestone",
+          "minecraft:cobblestone",
+          "minecraft:cobblestone"
+        ],
+        [
+          "minecraft:cobblestone",
+          null,
+          "minecraft:cobblestone"
+        ],
+        [
+          "minecraft:cobblestone",
+          "minecraft:cobblestone",
+          "minecraft:cobblestone"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:furnace",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "chest",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ],
+        [
+          "minecraft:oak_planks",
+          null,
+          "minecraft:oak_planks"
+        ],
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:chest",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "torch_coal",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:coal"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:torch",
+        "count": 4
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "torch_charcoal",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:charcoal"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:torch",
+        "count": 4
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "door",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ],
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ],
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:oak_door",
+        "count": 3
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "ladder",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:stick",
+          null,
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:stick",
+          "minecraft:stick",
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:stick",
+          null,
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:ladder",
+        "count": 3
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "slab",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:oak_slab",
+        "count": 6
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "bed",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:white_wool",
+          "minecraft:white_wool",
+          "minecraft:white_wool"
+        ],
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:white_bed",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "wood_pickaxe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ],
+        [
+          null,
+          "minecraft:stick",
+          null
+        ],
+        [
+          null,
+          "minecraft:stick",
+          null
+        ]
+      ],
+      "output": {
+        "id": "minecraft:wooden_pickaxe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "wood_axe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ],
+        [
+          "minecraft:oak_planks",
+          "minecraft:stick"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:wooden_axe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "wood_shovel",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_planks"
+        ],
+        [
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:wooden_shovel",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "wood_sword",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_planks"
+        ],
+        [
+          "minecraft:oak_planks"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:wooden_sword",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "wood_hoe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_planks",
+          "minecraft:oak_planks"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:wooden_hoe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "stone_pickaxe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:cobblestone",
+          "minecraft:cobblestone",
+          "minecraft:cobblestone"
+        ],
+        [
+          null,
+          "minecraft:stick",
+          null
+        ],
+        [
+          null,
+          "minecraft:stick",
+          null
+        ]
+      ],
+      "output": {
+        "id": "minecraft:stone_pickaxe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "stone_axe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:cobblestone",
+          "minecraft:cobblestone"
+        ],
+        [
+          "minecraft:cobblestone",
+          "minecraft:stick"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:stone_axe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "stone_shovel",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:cobblestone"
+        ],
+        [
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:stone_shovel",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "stone_sword",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:cobblestone"
+        ],
+        [
+          "minecraft:cobblestone"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:stone_sword",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "stone_hoe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:cobblestone",
+          "minecraft:cobblestone"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:stone_hoe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "iron_pickaxe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot"
+        ],
+        [
+          null,
+          "minecraft:stick",
+          null
+        ],
+        [
+          null,
+          "minecraft:stick",
+          null
+        ]
+      ],
+      "output": {
+        "id": "minecraft:iron_pickaxe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "iron_axe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot",
+          "minecraft:stick"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:iron_axe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "iron_shovel",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:stick"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:iron_shovel",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "iron_sword",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:iron_sword",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "iron_hoe",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ],
+        [
+          null,
+          "minecraft:stick"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:iron_hoe",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "iron_helmet",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot",
+          null,
+          "minecraft:iron_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:iron_helmet",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "iron_chestplate",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_ingot",
+          null,
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:iron_chestplate",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "iron_leggings",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot",
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot",
+          null,
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot",
+          null,
+          "minecraft:iron_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:iron_leggings",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "iron_boots",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_ingot",
+          null,
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot",
+          null,
+          "minecraft:iron_ingot"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:iron_boots",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "bread",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:wheat",
+          "minecraft:wheat",
+          "minecraft:wheat"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:bread",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "bowl",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_planks",
+          null,
+          "minecraft:oak_planks"
+        ],
+        [
+          null,
+          "minecraft:oak_planks",
+          null
+        ]
+      ],
+      "output": {
+        "id": "minecraft:bowl",
+        "count": 4
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "bucket",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:iron_ingot",
+          null,
+          "minecraft:iron_ingot"
+        ],
+        [
+          null,
+          "minecraft:iron_ingot",
+          null
+        ]
+      ],
+      "output": {
+        "id": "minecraft:bucket",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "shears",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          null,
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:iron_ingot",
+          null
+        ]
+      ],
+      "output": {
+        "id": "minecraft:shears",
+        "count": 1
+      },
+      "station": "inventory"
+    },
+    {
+      "id": "composter",
+      "source": "src/game/recipes.ts",
+      "kind": "shaped",
+      "shape": [
+        [
+          "minecraft:oak_slab",
+          null,
+          "minecraft:oak_slab"
+        ],
+        [
+          "minecraft:oak_slab",
+          null,
+          "minecraft:oak_slab"
+        ],
+        [
+          "minecraft:oak_slab",
+          "minecraft:oak_slab",
+          "minecraft:oak_slab"
+        ]
+      ],
+      "output": {
+        "id": "minecraft:composter",
+        "count": 1
+      },
+      "station": "workbench"
+    },
+    {
+      "id": "beetroot_soup",
+      "source": "src/game/recipes.ts",
+      "kind": "shapeless",
+      "ingredients": [
+        "minecraft:beetroot",
+        "minecraft:beetroot",
+        "minecraft:beetroot",
+        "minecraft:beetroot",
+        "minecraft:beetroot",
+        "minecraft:beetroot",
+        "minecraft:bowl"
+      ],
+      "output": {
+        "id": "minecraft:beetroot_soup",
+        "count": 1
+      },
+      "station": "workbench"
+    }
+  ],
+  "smeltingRecipes": [
+    {
+      "id": "local:smelting/potato",
+      "input": "minecraft:potato",
+      "output": {
+        "id": "minecraft:baked_potato",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/raw_iron",
+      "input": "minecraft:raw_iron",
+      "output": {
+        "id": "minecraft:iron_ingot",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/log",
+      "input": "minecraft:oak_log",
+      "output": {
+        "id": "minecraft:charcoal",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/raw_pork",
+      "input": "minecraft:porkchop",
+      "output": {
+        "id": "minecraft:cooked_porkchop",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/raw_mutton",
+      "input": "minecraft:mutton",
+      "output": {
+        "id": "minecraft:cooked_mutton",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/sand",
+      "input": "minecraft:sand",
+      "output": {
+        "id": "minecraft:glass",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    },
+    {
+      "id": "local:smelting/cobblestone",
+      "input": "minecraft:cobblestone",
+      "output": {
+        "id": "minecraft:stone",
+        "count": 1
+      },
+      "source": "src/game/recipes.ts",
+      "status": "local-definition-reference-domain-missing",
+      "acceptance": "not-run"
+    }
+  ],
+  "localRecipeLinks": [
+    {
+      "id": "planks",
+      "exactSourceRecords": [],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "stick",
+      "exactSourceRecords": [
+        "prismarine:recipe/848/ed022d28e9618b6e2764"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "workbench",
+      "exactSourceRecords": [
+        "prismarine:recipe/300/c415e7eddd961ddca318"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "furnace",
+      "exactSourceRecords": [
+        "prismarine:recipe/302/bf7c05f92757066ea26d"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "chest",
+      "exactSourceRecords": [
+        "prismarine:recipe/299/06ea7054ccc8339ddb57"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "torch_coal",
+      "exactSourceRecords": [
+        "prismarine:recipe/291/8e310167c0df0b4c8183"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "torch_charcoal",
+      "exactSourceRecords": [
+        "prismarine:recipe/291/a8e0f4f0ea48541aa93d"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "door",
+      "exactSourceRecords": [
+        "prismarine:recipe/711/04383bea3a4057b5921f"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "ladder",
+      "exactSourceRecords": [
+        "prismarine:recipe/303/1dabb8b2b947bcdfaf05"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "slab",
+      "exactSourceRecords": [
+        "prismarine:recipe/252/844651178da1d8203470"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "bed",
+      "exactSourceRecords": [
+        "prismarine:recipe/964/ae2efa00ac9161705a6a"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "wood_pickaxe",
+      "exactSourceRecords": [
+        "prismarine:recipe/820/64418e02c5c975a83538"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "wood_axe",
+      "exactSourceRecords": [
+        "prismarine:recipe/821/a80dd31c7bf796803849"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "wood_shovel",
+      "exactSourceRecords": [
+        "prismarine:recipe/819/b8d07833baccf9d2b3c1"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "wood_sword",
+      "exactSourceRecords": [
+        "prismarine:recipe/818/9762a243f35dd5f04c28"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "wood_hoe",
+      "exactSourceRecords": [
+        "prismarine:recipe/822/6cea7a175c3c77d41868"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "stone_pickaxe",
+      "exactSourceRecords": [
+        "prismarine:recipe/825/e86ac16eb7ccc1dca9f8"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "stone_axe",
+      "exactSourceRecords": [
+        "prismarine:recipe/826/838a485fe03a92fa1627"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "stone_shovel",
+      "exactSourceRecords": [
+        "prismarine:recipe/824/dfa6a686facb17808cfe"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "stone_sword",
+      "exactSourceRecords": [
+        "prismarine:recipe/823/c38d11157ee9f295eda7"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "stone_hoe",
+      "exactSourceRecords": [
+        "prismarine:recipe/827/290f2ac16783e81d9e1e"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "iron_pickaxe",
+      "exactSourceRecords": [
+        "prismarine:recipe/835/22859bec72817626fcd4"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "iron_axe",
+      "exactSourceRecords": [
+        "prismarine:recipe/836/9d48bd77c750e102f9c6"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "iron_shovel",
+      "exactSourceRecords": [
+        "prismarine:recipe/834/d4884e9d0174e371ff15"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "iron_sword",
+      "exactSourceRecords": [
+        "prismarine:recipe/833/0188b5d47fbe649b23ed"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "iron_hoe",
+      "exactSourceRecords": [
+        "prismarine:recipe/837/107825706dbc946a6837"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "iron_helmet",
+      "exactSourceRecords": [
+        "prismarine:recipe/864/2d5490725688bb2c8971"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "iron_chestplate",
+      "exactSourceRecords": [
+        "prismarine:recipe/865/96cdb6a9e8dfeccbc5ba"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "iron_leggings",
+      "exactSourceRecords": [
+        "prismarine:recipe/866/47ec2b457531ba6254a4"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "iron_boots",
+      "exactSourceRecords": [
+        "prismarine:recipe/867/64c30b42c13eb237ef56"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "bread",
+      "exactSourceRecords": [
+        "prismarine:recipe/855/2333a25d6ca518965fea"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "bowl",
+      "exactSourceRecords": [
+        "prismarine:recipe/799/83dddf4dd613f5a0ca80"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "bucket",
+      "exactSourceRecords": [
+        "prismarine:recipe/908/0a713b47f79a3e42c46f"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "shears",
+      "exactSourceRecords": [
+        "prismarine:recipe/983/66e886027d0688d4bfca"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "composter",
+      "exactSourceRecords": [
+        "prismarine:recipe/1204/91e0c968127de3c36234"
+      ],
+      "acceptance": "not-run"
+    },
+    {
+      "id": "beetroot_soup",
+      "exactSourceRecords": [
+        "prismarine:recipe/1156/91f602f10227f4e49ee0"
+      ],
+      "acceptance": "not-run"
+    }
+  ],
+  "candidateTestFiles": [
+    "tests/rules.test.ts",
+    "tests/simulation.test.ts",
+    "tests/survival-systems.test.ts",
+    "tests/engine.test.ts",
+    "tests/engine-world.test.ts",
+    "tests/storage.test.ts"
+  ],
+  "candidateTestRule": "Locate relevant cases in these files; file existence does not certify any catalog row. Agriculture additions in this snapshot remain unverified."
+}

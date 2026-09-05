@@ -145,15 +145,65 @@ block(27, "bed_head", "白色床（床头）", 15, {
   drop: undefined,
 });
 
-block(28, "farmland", "耕地", 2, { hardness: 0.6, opaque: false, tool: "shovel", shape: "farmland", drop: "dirt" });
-block(29, "wet_farmland", "湿润耕地", 2, { hardness: 0.6, opaque: false, tool: "shovel", shape: "farmland", drop: "dirt" });
-for (const [first, stages, key, name] of [[30, 8, "wheat", "小麦"], [38, 8, "carrot", "胡萝卜"], [46, 8, "potato", "马铃薯"], [54, 4, "beetroot", "甜菜"]] as const)
-  for (let stage = 0; stage < stages; stage++) block(first + stage, `${key}_crop_${stage}`, `${name}（${stage === stages - 1 ? "成熟" : `生长 ${stage + 1}/${stages}`}）`, 0, { solid: false, opaque: false, hardness: 0, drop: undefined, shape: "crop" });
-block(58, "short_grass", "草丛", 0, { solid: false, opaque: false, hardness: 0, drop: undefined, shape: "crop" });
+block(28, "farmland", "耕地", 2, {
+  hardness: 0.6,
+  opaque: false,
+  tool: "shovel",
+  shape: "farmland",
+  drop: "dirt",
+});
+block(29, "wet_farmland", "湿润耕地", 2, {
+  hardness: 0.6,
+  opaque: false,
+  tool: "shovel",
+  shape: "farmland",
+  drop: "dirt",
+});
+for (const [first, stages, key, name] of [
+  [30, 8, "wheat", "小麦"],
+  [38, 8, "carrot", "胡萝卜"],
+  [46, 8, "potato", "马铃薯"],
+  [54, 4, "beetroot", "甜菜"],
+] as const)
+  for (let stage = 0; stage < stages; stage++)
+    block(
+      first + stage,
+      `${key}_crop_${stage}`,
+      `${name}（${stage === stages - 1 ? "成熟" : `生长 ${stage + 1}/${stages}`}）`,
+      0,
+      {
+        solid: false,
+        opaque: false,
+        hardness: 0,
+        drop: undefined,
+        shape: "crop",
+      },
+    );
+block(58, "short_grass", "草丛", 0, {
+  solid: false,
+  opaque: false,
+  hardness: 0,
+  drop: undefined,
+  shape: "crop",
+});
+for (let level = 0; level <= 8; level++)
+  block(
+    59 + level,
+    level ? `composter_${level}` : "composter",
+    `堆肥桶${level === 8 ? "（可收取骨粉）" : level ? `（${level}/7）` : ""}`,
+    11,
+    { opaque: false, hardness: 0.6, tool: "axe", drop: "composter" },
+  );
 
 export const ITEMS: Record<string, ItemDefinition> = {};
 for (const definition of Object.values(BLOCKS)) {
-  if (!definition.id || [19, 25, 26, 27, 29].includes(definition.id) || (definition.id >= 30 && definition.id <= 57)) continue;
+  if (
+    !definition.id ||
+    [19, 25, 26, 27, 29].includes(definition.id) ||
+    (definition.id >= 30 && definition.id <= 57) ||
+    definition.id >= 60
+  )
+    continue;
   ITEMS[definition.key] = {
     id: definition.key,
     name: definition.name,
@@ -205,9 +255,18 @@ item("beetroot", "甜菜根", "#a03952", { category: "food", food: 1 });
 item("bread", "面包", "#cc943e", { category: "food", food: 5 });
 item("baked_potato", "烤马铃薯", "#d0a358", { category: "food", food: 5 });
 item("bowl", "碗", "#916741");
-item("beetroot_soup", "甜菜汤", "#a54359", { category: "food", food: 6, foodRemainder: "bowl", maxStack: 1 });
+item("beetroot_soup", "甜菜汤", "#a54359", {
+  category: "food",
+  food: 6,
+  foodRemainder: "bowl",
+  maxStack: 1,
+});
 item("bone_meal", "骨粉", "#dbe0cd");
-item("shears", "剪刀", "#bdc5c2", { category: "tools", maxStack: 1, maxDurability: 238 });
+item("shears", "剪刀", "#bdc5c2", {
+  category: "tools",
+  maxStack: 1,
+  maxDurability: 238,
+});
 item("bucket", "铁桶", "#b8c6ce", { category: "tools", maxStack: 16 });
 item("water_bucket", "水桶", "#5898ce", { category: "tools", maxStack: 1 });
 for (const [material, title, tier, maxDurability, color] of [

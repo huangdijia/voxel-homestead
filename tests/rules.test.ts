@@ -20,6 +20,11 @@ import type { RecipeDefinition, Slot } from "../src/game/types";
 const find = (id: string) => RECIPES.find((recipe) => recipe.id === id)!;
 function gridFor(recipe: RecipeDefinition, width = 3): Slot[] {
   const grid: Slot[] = Array.from({ length: width * width }, () => null);
+  if (recipe.ingredients) {
+    let index = 0;
+    for (const [id, count] of Object.entries(recipe.ingredients))
+      for (let i = 0; i < count; i++) grid[index++] = { id, count: 2 };
+  }
   recipe.pattern?.forEach((row, y) =>
     Array.from(row).forEach((char, x) => {
       const id = recipe.keys?.[char];

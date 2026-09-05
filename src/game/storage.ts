@@ -1,4 +1,5 @@
 import { BLOCKS, ENTITIES, ITEMS } from "./registry";
+import type { FarmState } from "./farming";
 import type {
   ArmorSlot,
   ContainerState,
@@ -13,6 +14,7 @@ import type {
 
 const DB_NAME = "voxel-homestead";
 const STORE = "worlds";
+const BACKUPS = "migration-backups";
 const MAX_CHANGES = 2_000_000;
 const bad = (message: string): never => {
   throw new Error(`存档校验失败：${message}`);
@@ -116,6 +118,8 @@ export function validateSave(value: unknown): SaveData {
       "entities",
       "drops",
       "time",
+      "farming",
+      "composters",
     ],
     "根对象",
   );
@@ -135,13 +139,23 @@ export function validateSave(value: unknown): SaveData {
     ],
     "manifest",
   );
-  if (manifest.version !== 1 || manifest.generatorVersion !== 1)
+  if (
+    ![1, 2].includes(manifest.version as number) ||
+    ![1, 2].includes(manifest.generatorVersion as number)
+  )
     return bad("不支持此存档或地形生成器版本；原始文件未被修改");
+  if (
+    manifest.version === 1 &&
+    (manifest.generatorVersion !== 1 ||
+      data.farming !== undefined ||
+      data.composters !== undefined)
+  )
+    return bad("版本 1 不支持农业扩展");
   if (manifest.mode !== "survival" && manifest.mode !== "creative")
     return bad("游戏模式无效");
   const validatedManifest: SaveManifest = {
-    version: 1,
-    generatorVersion: 1,
+    version: manifest.version as 1 | 2,
+    generatorVersion: manifest.generatorVersion as 1 | 2,
     id: string(manifest.id, "manifest.id"),
     name: string(manifest.name, "manifest.name", 80),
     seed: string(manifest.seed, "manifest.seed", 128),
@@ -191,7 +205,13 @@ export function validateSave(value: unknown): SaveData {
       );
       if (position.y < -16 || position.y >= 96)
         bad("方块修改超出当前生成器的世界高度");
-      const id = number(change.id, "changes.id", 0, 27, true);
+      const id = number(
+        change.id,
+        "changes.id",
+        0,
+        manifest.version === 1 ? 27 : 65535,
+        true,
+      );
       if (!BLOCKS[id]) bad("未知方块");
       const key = `${position.x},${position.y},${position.z}`;
       if (occupied.has(key)) bad("同一位置存在重复方块修改");
@@ -248,11 +268,43 @@ export function validateSave(value: unknown): SaveData {
       const entity = record(value, `entities[${index}]`);
       fields(
         entity,
-        ["id", "kind", "position", "health", "yaw", "timer", "fuse"],
+        [
+          "id",
+          "kind",
+          "position",
+          "health",
+          "yaw",
+          "timer",
+          "fuse",
+          "age",
+          "love",
+          "breedCooldown",
+          "courtship",
+          "sheared",
+          "woolTimer",
+        ],
         "entity",
       );
       const kind = string(entity.kind, "entity.kind") as EntityKind;
       if (!Object.hasOwn(ENTITIES, kind)) return bad("未知生物种类");
+      const breedingFields = [
+        "age",
+        "love",
+        "breedCooldown",
+        "courtship",
+        "sheared",
+        "woolTimer",
+      ];
+      if (
+        breedingFields.some((key) => entity[key] !== undefined) &&
+        (manifest.version === 1 || ENTITIES[kind].hostile)
+      )
+        bad("此版本或生物类型不支持繁殖状态");
+      if (
+        kind !== "sheep" &&
+        (entity.sheared !== undefined || entity.woolTimer !== undefined)
+      )
+        bad("仅羊拥有羊毛状态");
       const id = string(entity.id, "entity.id");
       if (entityIds.has(id)) bad("生物标识重复");
       entityIds.add(id);
@@ -268,6 +320,31 @@ export function validateSave(value: unknown): SaveData {
         ),
         yaw: number(entity.yaw, "entity.yaw"),
         timer: number(entity.timer, "entity.timer"),
+        ...(entity.age === undefined
+          ? {}
+          : { age: number(entity.age, "entity.age", -1200, 0) }),
+        ...(entity.love === undefined
+          ? {}
+          : { love: number(entity.love, "entity.love", 0, 60) }),
+        ...(entity.breedCooldown === undefined
+          ? {}
+          : {
+              breedCooldown: number(
+                entity.breedCooldown,
+                "entity.breedCooldown",
+                0,
+                300,
+              ),
+            }),
+        ...(entity.courtship === undefined
+          ? {}
+          : { courtship: number(entity.courtship, "entity.courtship", 0, 3) }),
+        ...(entity.sheared === undefined
+          ? {}
+          : { sheared: boolean(entity.sheared, "entity.sheared") }),
+        ...(entity.woolTimer === undefined
+          ? {}
+          : { woolTimer: number(entity.woolTimer, "entity.woolTimer", 0, 30) }),
         ...(entity.fuse === undefined
           ? {}
           : { fuse: number(entity.fuse, "entity.fuse", 0) }),
@@ -290,6 +367,104 @@ export function validateSave(value: unknown): SaveData {
       age: number(drop.age, "drop.age", -1),
     };
   });
+  let farming: FarmState | undefined;
+  if (manifest.version === 2) {
+    const farm = record(data.farming, "farming");
+    fields(
+      farm,
+      ["version", "randomState", "clock", "accumulator", "scanCursor", "plots"],
+      "farming",
+    );
+    if (farm.version !== 1) bad("农业存档版本无效");
+    const clock = number(farm.clock, "farming.clock", 0);
+    const seen = new Set<string>();
+    const plots = array(farm.plots, "farming.plots", 100_000).map((entry) => {
+      const plot = record(entry, "farming.plot");
+      fields(
+        plot,
+        [
+          "x",
+          "y",
+          "z",
+          "moisture",
+          "drySeconds",
+          "growthRemaining",
+          "lastVisit",
+          "active",
+        ],
+        "farming.plot",
+      );
+      const at = vector(
+        { x: plot.x, y: plot.y, z: plot.z },
+        "farming.plot",
+        true,
+      );
+      if (at.y < -16 || at.y > 95) bad("耕地高度无效");
+      const key = `${at.x},${at.y},${at.z}`;
+      if (seen.has(key)) bad("耕地记录重复");
+      seen.add(key);
+      if (![28, 29].includes(occupied.get(key) ?? 0))
+        bad("耕地记录没有对应方块");
+      return {
+        ...at,
+        moisture: number(plot.moisture, "farming.moisture", 0, 7, true),
+        drySeconds: number(
+          plot.drySeconds,
+          "farming.drySeconds",
+          0,
+          9.999999999,
+        ),
+        growthRemaining: number(
+          plot.growthRemaining,
+          "farming.growthRemaining",
+          0,
+          60,
+        ),
+        lastVisit: number(plot.lastVisit, "farming.lastVisit", 0, clock),
+        active: boolean(plot.active, "farming.active"),
+      };
+    });
+    for (const [key, id] of occupied)
+      if ((id === 28 || id === 29) && !seen.has(key))
+        bad("耕地方块缺少生长记录");
+    farming = {
+      version: 1,
+      randomState: number(
+        farm.randomState,
+        "farming.randomState",
+        0,
+        0xffffffff,
+        true,
+      ),
+      clock,
+      accumulator: number(
+        farm.accumulator,
+        "farming.accumulator",
+        0,
+        0.2499999999,
+      ),
+      scanCursor: number(
+        farm.scanCursor,
+        "farming.scanCursor",
+        0,
+        Math.max(0, plots.length - 1),
+        true,
+      ),
+      plots,
+    };
+  }
+  const composters: Record<string, number> = {};
+  if (manifest.version === 2) {
+    const timers = record(data.composters ?? {}, "composters");
+    if (Object.keys(timers).length > 50_000) bad("堆肥桶数量过大");
+    for (const [key, timer] of Object.entries(timers)) {
+      if (occupied.get(key) !== 66) bad("堆肥计时没有对应满桶");
+      composters[key] = number(timer, "composter.timer", 0, 1);
+    }
+    for (const [key, id] of occupied)
+      if (id === 66 && !Object.hasOwn(composters, key))
+        bad("堆肥桶缺少熟成记录");
+  }
   return {
     manifest: validatedManifest,
     player: {
@@ -315,6 +490,7 @@ export function validateSave(value: unknown): SaveData {
     entities,
     drops,
     time: number(data.time, "time", 0),
+    ...(farming ? { farming, composters } : {}),
   };
 }
 function openDatabase(): Promise<IDBDatabase> {
@@ -323,12 +499,21 @@ function openDatabase(): Promise<IDBDatabase> {
       reject(new Error("浏览器不支持 IndexedDB，无法保存世界"));
       return;
     }
-    const request = indexedDB.open(DB_NAME, 1);
+    const request = indexedDB.open(DB_NAME, 2);
     request.onupgradeneeded = () => {
       if (!request.result.objectStoreNames.contains(STORE))
         request.result.createObjectStore(STORE, { keyPath: "manifest.id" });
+      if (!request.result.objectStoreNames.contains(BACKUPS)) {
+        const backups = request.result.createObjectStore(BACKUPS, {
+          keyPath: "id",
+        });
+        backups.createIndex("worldId", "worldId");
+      }
     };
-    request.onsuccess = () => resolve(request.result);
+    request.onsuccess = () => {
+      request.result.onversionchange = () => request.result.close();
+      resolve(request.result);
+    };
     request.onerror = () =>
       reject(request.error ?? new Error("无法打开存档数据库"));
     request.onblocked = () =>
@@ -337,13 +522,14 @@ function openDatabase(): Promise<IDBDatabase> {
 }
 async function transaction<T>(
   mode: IDBTransactionMode,
-  operation: (store: IDBObjectStore) => IDBRequest<T>,
+  operation: (store: IDBObjectStore, tx: IDBTransaction) => IDBRequest<T>,
+  extraStores: string[] = [],
 ): Promise<T> {
   const db = await openDatabase();
   return new Promise((resolve, reject) => {
     let tx: IDBTransaction;
     try {
-      tx = db.transaction(STORE, mode);
+      tx = db.transaction([STORE, ...extraStores], mode);
     } catch (error) {
       db.close();
       reject(error);
@@ -362,7 +548,7 @@ async function transaction<T>(
       reject(tx.error ?? new Error("保存事务中断，上一份完整存档已保留"));
     };
     try {
-      const request = operation(tx.objectStore(STORE));
+      const request = operation(tx.objectStore(STORE), tx);
       request.onsuccess = () => {
         result = request.result;
       };
@@ -383,7 +569,56 @@ export async function listWorlds(): Promise<SaveManifest[]> {
 }
 export async function saveWorld(data: SaveData): Promise<void> {
   const checkpoint = validateSave(data);
-  await transaction("readwrite", (store) => store.put(checkpoint));
+  const db = await openDatabase();
+  await new Promise<void>((resolve, reject) => {
+    const tx = db.transaction([STORE, BACKUPS], "readwrite");
+    const worlds = tx.objectStore(STORE),
+      backups = tx.objectStore(BACKUPS);
+    let cause: unknown;
+    tx.oncomplete = () => {
+      db.close();
+      resolve();
+    };
+    tx.onerror = () => {};
+    tx.onabort = () => {
+      db.close();
+      reject(
+        cause ??
+          tx.error ??
+          new Error("保存事务中断，旧存档和升级备份均未修改"),
+      );
+    };
+    const attempt = (operation: () => void) => {
+      try {
+        operation();
+      } catch (error) {
+        cause = error;
+        tx.abort();
+      }
+    };
+    attempt(() => {
+      const read = worlds.get(checkpoint.manifest.id);
+      read.onsuccess = () =>
+        attempt(() => {
+          const old = read.result as SaveData | undefined;
+          if (old && old.manifest.version < checkpoint.manifest.version) {
+            const id = `${old.manifest.id}:v${old.manifest.version}`;
+            const existing = backups.get(id);
+            existing.onsuccess = () =>
+              attempt(() => {
+                if (!existing.result)
+                  backups.add({
+                    id,
+                    worldId: old.manifest.id,
+                    version: old.manifest.version,
+                    data: old,
+                  });
+                worlds.put(checkpoint);
+              });
+          } else worlds.put(checkpoint);
+        });
+    });
+  });
 }
 export async function loadWorld(id: string): Promise<SaveData | null> {
   const value = await transaction<SaveData | undefined>("readonly", (store) =>
@@ -392,7 +627,47 @@ export async function loadWorld(id: string): Promise<SaveData | null> {
   return value ? validateSave(value) : null;
 }
 export async function deleteWorld(id: string): Promise<void> {
-  await transaction("readwrite", (store) => store.delete(id));
+  await transaction(
+    "readwrite",
+    (store, tx) => {
+      const cursor = tx
+        .objectStore(BACKUPS)
+        .index("worldId")
+        .openCursor(IDBKeyRange.only(id));
+      cursor.onsuccess = () => {
+        if (cursor.result) {
+          cursor.result.delete();
+          cursor.result.continue();
+        }
+      };
+      return store.delete(id);
+    },
+    [BACKUPS],
+  );
+}
+export async function loadMigrationBackup(
+  id: string,
+): Promise<SaveData | null> {
+  const result = await transaction<{ data: SaveData } | undefined>(
+    "readonly",
+    (_store, tx) => tx.objectStore(BACKUPS).get(`${id}:v1`),
+    [BACKUPS],
+  );
+  return result ? validateSave(result.data) : null;
+}
+export async function migrationBackupIds(): Promise<string[]> {
+  const result = await transaction<{ worldId: string }[]>(
+    "readonly",
+    (_store, tx) => tx.objectStore(BACKUPS).getAll(),
+    [BACKUPS],
+  );
+  return [...new Set(result.map((b) => b.worldId))];
+}
+export async function exportMigrationBackup(id: string): Promise<void> {
+  const backup = await loadMigrationBackup(id);
+  if (!backup) throw new Error("没有找到升级前备份");
+  backup.manifest.name += "（升级前备份）";
+  downloadSave(backup);
 }
 // Download a detached live checkpoint without reading or writing IndexedDB.
 export function downloadSave(data: SaveData): void {

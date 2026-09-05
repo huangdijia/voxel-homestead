@@ -75,6 +75,7 @@ export interface SaveData {
   drops: DropState[];
   time: number;
   farming?: FarmState;
+  composters?: Record<string, number>;
 }
 export interface Settings {
   renderDistance: number;
@@ -96,7 +97,8 @@ export interface BlockDefinition {
   drop?: string;
   tool?: "pickaxe" | "axe" | "shovel";
   tier?: number;
-  shape?: "cube" | "slab" | "door" | "ladder" | "torch" | "bed" | "crop" | "farmland";
+  shape?:
+    "cube" | "slab" | "door" | "ladder" | "torch" | "bed" | "crop" | "farmland";
 }
 export interface ItemDefinition {
   id: string;

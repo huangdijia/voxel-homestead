@@ -1,0 +1,3272 @@
+[
+  {
+    "id": "minecraft:angry_villager",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 0,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:angry_villager",
+      "template": "particles",
+      "targetId": "minecraft:angry_villager",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/0",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 0,
+      "name": "angry_villager"
+    }
+  },
+  {
+    "id": "minecraft:block",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 1,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:block",
+      "template": "particles",
+      "targetId": "minecraft:block",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/1",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 1,
+      "name": "block"
+    }
+  },
+  {
+    "id": "minecraft:block_marker",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 2,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:block_marker",
+      "template": "particles",
+      "targetId": "minecraft:block_marker",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/2",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 2,
+      "name": "block_marker"
+    }
+  },
+  {
+    "id": "minecraft:bubble",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 3,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:bubble",
+      "template": "particles",
+      "targetId": "minecraft:bubble",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/3",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 3,
+      "name": "bubble"
+    }
+  },
+  {
+    "id": "minecraft:cloud",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 4,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:cloud",
+      "template": "particles",
+      "targetId": "minecraft:cloud",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/4",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 4,
+      "name": "cloud"
+    }
+  },
+  {
+    "id": "minecraft:crit",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 5,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:crit",
+      "template": "particles",
+      "targetId": "minecraft:crit",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/5",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 5,
+      "name": "crit"
+    }
+  },
+  {
+    "id": "minecraft:damage_indicator",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 6,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:damage_indicator",
+      "template": "particles",
+      "targetId": "minecraft:damage_indicator",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/6",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 6,
+      "name": "damage_indicator"
+    }
+  },
+  {
+    "id": "minecraft:dragon_breath",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 7,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:dragon_breath",
+      "template": "particles",
+      "targetId": "minecraft:dragon_breath",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/7",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 7,
+      "name": "dragon_breath"
+    }
+  },
+  {
+    "id": "minecraft:dripping_lava",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 8,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:dripping_lava",
+      "template": "particles",
+      "targetId": "minecraft:dripping_lava",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/8",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 8,
+      "name": "dripping_lava"
+    }
+  },
+  {
+    "id": "minecraft:falling_lava",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 9,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:falling_lava",
+      "template": "particles",
+      "targetId": "minecraft:falling_lava",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/9",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 9,
+      "name": "falling_lava"
+    }
+  },
+  {
+    "id": "minecraft:landing_lava",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 10,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:landing_lava",
+      "template": "particles",
+      "targetId": "minecraft:landing_lava",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/10",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 10,
+      "name": "landing_lava"
+    }
+  },
+  {
+    "id": "minecraft:dripping_water",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 11,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:dripping_water",
+      "template": "particles",
+      "targetId": "minecraft:dripping_water",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/11",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 11,
+      "name": "dripping_water"
+    }
+  },
+  {
+    "id": "minecraft:falling_water",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 12,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:falling_water",
+      "template": "particles",
+      "targetId": "minecraft:falling_water",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/12",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 12,
+      "name": "falling_water"
+    }
+  },
+  {
+    "id": "minecraft:dust",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 13,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:dust",
+      "template": "particles",
+      "targetId": "minecraft:dust",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/13",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 13,
+      "name": "dust"
+    }
+  },
+  {
+    "id": "minecraft:dust_color_transition",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 14,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:dust_color_transition",
+      "template": "particles",
+      "targetId": "minecraft:dust_color_transition",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/14",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 14,
+      "name": "dust_color_transition"
+    }
+  },
+  {
+    "id": "minecraft:effect",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 15,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:effect",
+      "template": "particles",
+      "targetId": "minecraft:effect",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/15",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 15,
+      "name": "effect"
+    }
+  },
+  {
+    "id": "minecraft:elder_guardian",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 16,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:elder_guardian",
+      "template": "particles",
+      "targetId": "minecraft:elder_guardian",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/16",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 16,
+      "name": "elder_guardian"
+    }
+  },
+  {
+    "id": "minecraft:enchanted_hit",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 17,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:enchanted_hit",
+      "template": "particles",
+      "targetId": "minecraft:enchanted_hit",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/17",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 17,
+      "name": "enchanted_hit"
+    }
+  },
+  {
+    "id": "minecraft:enchant",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 18,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:enchant",
+      "template": "particles",
+      "targetId": "minecraft:enchant",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/18",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 18,
+      "name": "enchant"
+    }
+  },
+  {
+    "id": "minecraft:end_rod",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 19,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:end_rod",
+      "template": "particles",
+      "targetId": "minecraft:end_rod",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/19",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 19,
+      "name": "end_rod"
+    }
+  },
+  {
+    "id": "minecraft:entity_effect",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 20,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:entity_effect",
+      "template": "particles",
+      "targetId": "minecraft:entity_effect",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/20",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 20,
+      "name": "entity_effect"
+    }
+  },
+  {
+    "id": "minecraft:explosion_emitter",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 21,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:explosion_emitter",
+      "template": "particles",
+      "targetId": "minecraft:explosion_emitter",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/21",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 21,
+      "name": "explosion_emitter"
+    }
+  },
+  {
+    "id": "minecraft:explosion",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 22,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:explosion",
+      "template": "particles",
+      "targetId": "minecraft:explosion",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/22",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 22,
+      "name": "explosion"
+    }
+  },
+  {
+    "id": "minecraft:gust",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 23,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:gust",
+      "template": "particles",
+      "targetId": "minecraft:gust",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/23",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 23,
+      "name": "gust"
+    }
+  },
+  {
+    "id": "minecraft:small_gust",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 24,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:small_gust",
+      "template": "particles",
+      "targetId": "minecraft:small_gust",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/24",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 24,
+      "name": "small_gust"
+    }
+  },
+  {
+    "id": "minecraft:gust_emitter_large",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 25,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:gust_emitter_large",
+      "template": "particles",
+      "targetId": "minecraft:gust_emitter_large",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/25",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 25,
+      "name": "gust_emitter_large"
+    }
+  },
+  {
+    "id": "minecraft:gust_emitter_small",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 26,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:gust_emitter_small",
+      "template": "particles",
+      "targetId": "minecraft:gust_emitter_small",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/26",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 26,
+      "name": "gust_emitter_small"
+    }
+  },
+  {
+    "id": "minecraft:sonic_boom",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 27,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:sonic_boom",
+      "template": "particles",
+      "targetId": "minecraft:sonic_boom",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/27",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 27,
+      "name": "sonic_boom"
+    }
+  },
+  {
+    "id": "minecraft:falling_dust",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 28,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:falling_dust",
+      "template": "particles",
+      "targetId": "minecraft:falling_dust",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/28",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 28,
+      "name": "falling_dust"
+    }
+  },
+  {
+    "id": "minecraft:firework",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 29,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:firework",
+      "template": "particles",
+      "targetId": "minecraft:firework",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/29",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 29,
+      "name": "firework"
+    }
+  },
+  {
+    "id": "minecraft:fishing",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 30,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:fishing",
+      "template": "particles",
+      "targetId": "minecraft:fishing",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/30",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 30,
+      "name": "fishing"
+    }
+  },
+  {
+    "id": "minecraft:flame",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 31,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:flame",
+      "template": "particles",
+      "targetId": "minecraft:flame",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/31",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 31,
+      "name": "flame"
+    }
+  },
+  {
+    "id": "minecraft:infested",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 32,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:infested",
+      "template": "particles",
+      "targetId": "minecraft:infested",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/32",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 32,
+      "name": "infested"
+    }
+  },
+  {
+    "id": "minecraft:cherry_leaves",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 33,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:cherry_leaves",
+      "template": "particles",
+      "targetId": "minecraft:cherry_leaves",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/33",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 33,
+      "name": "cherry_leaves"
+    }
+  },
+  {
+    "id": "minecraft:sculk_soul",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 34,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:sculk_soul",
+      "template": "particles",
+      "targetId": "minecraft:sculk_soul",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/34",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 34,
+      "name": "sculk_soul"
+    }
+  },
+  {
+    "id": "minecraft:sculk_charge",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 35,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:sculk_charge",
+      "template": "particles",
+      "targetId": "minecraft:sculk_charge",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/35",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 35,
+      "name": "sculk_charge"
+    }
+  },
+  {
+    "id": "minecraft:sculk_charge_pop",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 36,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:sculk_charge_pop",
+      "template": "particles",
+      "targetId": "minecraft:sculk_charge_pop",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/36",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 36,
+      "name": "sculk_charge_pop"
+    }
+  },
+  {
+    "id": "minecraft:soul_fire_flame",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 37,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:soul_fire_flame",
+      "template": "particles",
+      "targetId": "minecraft:soul_fire_flame",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/37",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 37,
+      "name": "soul_fire_flame"
+    }
+  },
+  {
+    "id": "minecraft:soul",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 38,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:soul",
+      "template": "particles",
+      "targetId": "minecraft:soul",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/38",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 38,
+      "name": "soul"
+    }
+  },
+  {
+    "id": "minecraft:flash",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 39,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:flash",
+      "template": "particles",
+      "targetId": "minecraft:flash",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/39",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 39,
+      "name": "flash"
+    }
+  },
+  {
+    "id": "minecraft:happy_villager",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 40,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:happy_villager",
+      "template": "particles",
+      "targetId": "minecraft:happy_villager",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/40",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 40,
+      "name": "happy_villager"
+    }
+  },
+  {
+    "id": "minecraft:composter",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 41,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:composter",
+      "template": "particles",
+      "targetId": "minecraft:composter",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/41",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 41,
+      "name": "composter"
+    }
+  },
+  {
+    "id": "minecraft:heart",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 42,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:heart",
+      "template": "particles",
+      "targetId": "minecraft:heart",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/42",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 42,
+      "name": "heart"
+    }
+  },
+  {
+    "id": "minecraft:instant_effect",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 43,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:instant_effect",
+      "template": "particles",
+      "targetId": "minecraft:instant_effect",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/43",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 43,
+      "name": "instant_effect"
+    }
+  },
+  {
+    "id": "minecraft:item",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 44,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:item",
+      "template": "particles",
+      "targetId": "minecraft:item",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/44",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 44,
+      "name": "item"
+    }
+  },
+  {
+    "id": "minecraft:vibration",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 45,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:vibration",
+      "template": "particles",
+      "targetId": "minecraft:vibration",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/45",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 45,
+      "name": "vibration"
+    }
+  },
+  {
+    "id": "minecraft:item_slime",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 46,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:item_slime",
+      "template": "particles",
+      "targetId": "minecraft:item_slime",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/46",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 46,
+      "name": "item_slime"
+    }
+  },
+  {
+    "id": "minecraft:item_cobweb",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 47,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:item_cobweb",
+      "template": "particles",
+      "targetId": "minecraft:item_cobweb",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/47",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 47,
+      "name": "item_cobweb"
+    }
+  },
+  {
+    "id": "minecraft:item_snowball",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 48,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:item_snowball",
+      "template": "particles",
+      "targetId": "minecraft:item_snowball",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/48",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 48,
+      "name": "item_snowball"
+    }
+  },
+  {
+    "id": "minecraft:large_smoke",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 49,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:large_smoke",
+      "template": "particles",
+      "targetId": "minecraft:large_smoke",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/49",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 49,
+      "name": "large_smoke"
+    }
+  },
+  {
+    "id": "minecraft:lava",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 50,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:lava",
+      "template": "particles",
+      "targetId": "minecraft:lava",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/50",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 50,
+      "name": "lava"
+    }
+  },
+  {
+    "id": "minecraft:mycelium",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 51,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:mycelium",
+      "template": "particles",
+      "targetId": "minecraft:mycelium",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/51",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 51,
+      "name": "mycelium"
+    }
+  },
+  {
+    "id": "minecraft:note",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 52,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:note",
+      "template": "particles",
+      "targetId": "minecraft:note",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/52",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 52,
+      "name": "note"
+    }
+  },
+  {
+    "id": "minecraft:poof",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 53,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:poof",
+      "template": "particles",
+      "targetId": "minecraft:poof",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/53",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 53,
+      "name": "poof"
+    }
+  },
+  {
+    "id": "minecraft:portal",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 54,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:portal",
+      "template": "particles",
+      "targetId": "minecraft:portal",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/54",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 54,
+      "name": "portal"
+    }
+  },
+  {
+    "id": "minecraft:rain",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 55,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:rain",
+      "template": "particles",
+      "targetId": "minecraft:rain",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/55",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 55,
+      "name": "rain"
+    }
+  },
+  {
+    "id": "minecraft:smoke",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 56,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:smoke",
+      "template": "particles",
+      "targetId": "minecraft:smoke",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/56",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 56,
+      "name": "smoke"
+    }
+  },
+  {
+    "id": "minecraft:white_smoke",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 57,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:white_smoke",
+      "template": "particles",
+      "targetId": "minecraft:white_smoke",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/57",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 57,
+      "name": "white_smoke"
+    }
+  },
+  {
+    "id": "minecraft:sneeze",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 58,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:sneeze",
+      "template": "particles",
+      "targetId": "minecraft:sneeze",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/58",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 58,
+      "name": "sneeze"
+    }
+  },
+  {
+    "id": "minecraft:spit",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 59,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:spit",
+      "template": "particles",
+      "targetId": "minecraft:spit",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/59",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 59,
+      "name": "spit"
+    }
+  },
+  {
+    "id": "minecraft:squid_ink",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 60,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:squid_ink",
+      "template": "particles",
+      "targetId": "minecraft:squid_ink",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/60",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 60,
+      "name": "squid_ink"
+    }
+  },
+  {
+    "id": "minecraft:sweep_attack",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 61,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:sweep_attack",
+      "template": "particles",
+      "targetId": "minecraft:sweep_attack",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/61",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 61,
+      "name": "sweep_attack"
+    }
+  },
+  {
+    "id": "minecraft:totem_of_undying",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 62,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:totem_of_undying",
+      "template": "particles",
+      "targetId": "minecraft:totem_of_undying",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/62",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 62,
+      "name": "totem_of_undying"
+    }
+  },
+  {
+    "id": "minecraft:underwater",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 63,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:underwater",
+      "template": "particles",
+      "targetId": "minecraft:underwater",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/63",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 63,
+      "name": "underwater"
+    }
+  },
+  {
+    "id": "minecraft:splash",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 64,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:splash",
+      "template": "particles",
+      "targetId": "minecraft:splash",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/64",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 64,
+      "name": "splash"
+    }
+  },
+  {
+    "id": "minecraft:witch",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 65,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:witch",
+      "template": "particles",
+      "targetId": "minecraft:witch",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/65",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 65,
+      "name": "witch"
+    }
+  },
+  {
+    "id": "minecraft:bubble_pop",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 66,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:bubble_pop",
+      "template": "particles",
+      "targetId": "minecraft:bubble_pop",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/66",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 66,
+      "name": "bubble_pop"
+    }
+  },
+  {
+    "id": "minecraft:current_down",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 67,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:current_down",
+      "template": "particles",
+      "targetId": "minecraft:current_down",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/67",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 67,
+      "name": "current_down"
+    }
+  },
+  {
+    "id": "minecraft:bubble_column_up",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 68,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:bubble_column_up",
+      "template": "particles",
+      "targetId": "minecraft:bubble_column_up",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/68",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 68,
+      "name": "bubble_column_up"
+    }
+  },
+  {
+    "id": "minecraft:nautilus",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 69,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:nautilus",
+      "template": "particles",
+      "targetId": "minecraft:nautilus",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/69",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 69,
+      "name": "nautilus"
+    }
+  },
+  {
+    "id": "minecraft:dolphin",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 70,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:dolphin",
+      "template": "particles",
+      "targetId": "minecraft:dolphin",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/70",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 70,
+      "name": "dolphin"
+    }
+  },
+  {
+    "id": "minecraft:campfire_cosy_smoke",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 71,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:campfire_cosy_smoke",
+      "template": "particles",
+      "targetId": "minecraft:campfire_cosy_smoke",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/71",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 71,
+      "name": "campfire_cosy_smoke"
+    }
+  },
+  {
+    "id": "minecraft:campfire_signal_smoke",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 72,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:campfire_signal_smoke",
+      "template": "particles",
+      "targetId": "minecraft:campfire_signal_smoke",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/72",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 72,
+      "name": "campfire_signal_smoke"
+    }
+  },
+  {
+    "id": "minecraft:dripping_honey",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 73,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:dripping_honey",
+      "template": "particles",
+      "targetId": "minecraft:dripping_honey",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/73",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 73,
+      "name": "dripping_honey"
+    }
+  },
+  {
+    "id": "minecraft:falling_honey",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 74,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:falling_honey",
+      "template": "particles",
+      "targetId": "minecraft:falling_honey",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/74",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 74,
+      "name": "falling_honey"
+    }
+  },
+  {
+    "id": "minecraft:landing_honey",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 75,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:landing_honey",
+      "template": "particles",
+      "targetId": "minecraft:landing_honey",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/75",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 75,
+      "name": "landing_honey"
+    }
+  },
+  {
+    "id": "minecraft:falling_nectar",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 76,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:falling_nectar",
+      "template": "particles",
+      "targetId": "minecraft:falling_nectar",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/76",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 76,
+      "name": "falling_nectar"
+    }
+  },
+  {
+    "id": "minecraft:falling_spore_blossom",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 77,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:falling_spore_blossom",
+      "template": "particles",
+      "targetId": "minecraft:falling_spore_blossom",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/77",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 77,
+      "name": "falling_spore_blossom"
+    }
+  },
+  {
+    "id": "minecraft:ash",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 78,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:ash",
+      "template": "particles",
+      "targetId": "minecraft:ash",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/78",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 78,
+      "name": "ash"
+    }
+  },
+  {
+    "id": "minecraft:crimson_spore",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 79,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:crimson_spore",
+      "template": "particles",
+      "targetId": "minecraft:crimson_spore",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/79",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 79,
+      "name": "crimson_spore"
+    }
+  },
+  {
+    "id": "minecraft:warped_spore",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 80,
+    "stage": "M3",
+    "stageBasis": "planned-advanced-systems-review-required",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:warped_spore",
+      "template": "particles",
+      "targetId": "minecraft:warped_spore",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/80",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 80,
+      "name": "warped_spore"
+    }
+  },
+  {
+    "id": "minecraft:spore_blossom_air",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 81,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:spore_blossom_air",
+      "template": "particles",
+      "targetId": "minecraft:spore_blossom_air",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/81",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 81,
+      "name": "spore_blossom_air"
+    }
+  },
+  {
+    "id": "minecraft:dripping_obsidian_tear",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 82,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:dripping_obsidian_tear",
+      "template": "particles",
+      "targetId": "minecraft:dripping_obsidian_tear",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/82",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 82,
+      "name": "dripping_obsidian_tear"
+    }
+  },
+  {
+    "id": "minecraft:falling_obsidian_tear",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 83,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:falling_obsidian_tear",
+      "template": "particles",
+      "targetId": "minecraft:falling_obsidian_tear",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/83",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 83,
+      "name": "falling_obsidian_tear"
+    }
+  },
+  {
+    "id": "minecraft:landing_obsidian_tear",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 84,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:landing_obsidian_tear",
+      "template": "particles",
+      "targetId": "minecraft:landing_obsidian_tear",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/84",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 84,
+      "name": "landing_obsidian_tear"
+    }
+  },
+  {
+    "id": "minecraft:reverse_portal",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 85,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:reverse_portal",
+      "template": "particles",
+      "targetId": "minecraft:reverse_portal",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/85",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 85,
+      "name": "reverse_portal"
+    }
+  },
+  {
+    "id": "minecraft:white_ash",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 86,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:white_ash",
+      "template": "particles",
+      "targetId": "minecraft:white_ash",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/86",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 86,
+      "name": "white_ash"
+    }
+  },
+  {
+    "id": "minecraft:small_flame",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 87,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:small_flame",
+      "template": "particles",
+      "targetId": "minecraft:small_flame",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/87",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 87,
+      "name": "small_flame"
+    }
+  },
+  {
+    "id": "minecraft:snowflake",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 88,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:snowflake",
+      "template": "particles",
+      "targetId": "minecraft:snowflake",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/88",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 88,
+      "name": "snowflake"
+    }
+  },
+  {
+    "id": "minecraft:dripping_dripstone_lava",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 89,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:dripping_dripstone_lava",
+      "template": "particles",
+      "targetId": "minecraft:dripping_dripstone_lava",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/89",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 89,
+      "name": "dripping_dripstone_lava"
+    }
+  },
+  {
+    "id": "minecraft:falling_dripstone_lava",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 90,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:falling_dripstone_lava",
+      "template": "particles",
+      "targetId": "minecraft:falling_dripstone_lava",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/90",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 90,
+      "name": "falling_dripstone_lava"
+    }
+  },
+  {
+    "id": "minecraft:dripping_dripstone_water",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 91,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:dripping_dripstone_water",
+      "template": "particles",
+      "targetId": "minecraft:dripping_dripstone_water",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/91",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 91,
+      "name": "dripping_dripstone_water"
+    }
+  },
+  {
+    "id": "minecraft:falling_dripstone_water",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 92,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:falling_dripstone_water",
+      "template": "particles",
+      "targetId": "minecraft:falling_dripstone_water",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/92",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 92,
+      "name": "falling_dripstone_water"
+    }
+  },
+  {
+    "id": "minecraft:glow_squid_ink",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 93,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:glow_squid_ink",
+      "template": "particles",
+      "targetId": "minecraft:glow_squid_ink",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/93",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 93,
+      "name": "glow_squid_ink"
+    }
+  },
+  {
+    "id": "minecraft:glow",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 94,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:glow",
+      "template": "particles",
+      "targetId": "minecraft:glow",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/94",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 94,
+      "name": "glow"
+    }
+  },
+  {
+    "id": "minecraft:wax_on",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 95,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:wax_on",
+      "template": "particles",
+      "targetId": "minecraft:wax_on",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/95",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 95,
+      "name": "wax_on"
+    }
+  },
+  {
+    "id": "minecraft:wax_off",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 96,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:wax_off",
+      "template": "particles",
+      "targetId": "minecraft:wax_off",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/96",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 96,
+      "name": "wax_off"
+    }
+  },
+  {
+    "id": "minecraft:electric_spark",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 97,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:electric_spark",
+      "template": "particles",
+      "targetId": "minecraft:electric_spark",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/97",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 97,
+      "name": "electric_spark"
+    }
+  },
+  {
+    "id": "minecraft:scrape",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 98,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:scrape",
+      "template": "particles",
+      "targetId": "minecraft:scrape",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/98",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 98,
+      "name": "scrape"
+    }
+  },
+  {
+    "id": "minecraft:shriek",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 99,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:shriek",
+      "template": "particles",
+      "targetId": "minecraft:shriek",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/99",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 99,
+      "name": "shriek"
+    }
+  },
+  {
+    "id": "minecraft:egg_crack",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 100,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:egg_crack",
+      "template": "particles",
+      "targetId": "minecraft:egg_crack",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/100",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 100,
+      "name": "egg_crack"
+    }
+  },
+  {
+    "id": "minecraft:dust_plume",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 101,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:dust_plume",
+      "template": "particles",
+      "targetId": "minecraft:dust_plume",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/101",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 101,
+      "name": "dust_plume"
+    }
+  },
+  {
+    "id": "minecraft:trial_spawner_detection",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 102,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:trial_spawner_detection",
+      "template": "particles",
+      "targetId": "minecraft:trial_spawner_detection",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/102",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 102,
+      "name": "trial_spawner_detection"
+    }
+  },
+  {
+    "id": "minecraft:trial_spawner_detection_ominous",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 103,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:trial_spawner_detection_ominous",
+      "template": "particles",
+      "targetId": "minecraft:trial_spawner_detection_ominous",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/103",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 103,
+      "name": "trial_spawner_detection_ominous"
+    }
+  },
+  {
+    "id": "minecraft:vault_connection",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 104,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:vault_connection",
+      "template": "particles",
+      "targetId": "minecraft:vault_connection",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/104",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 104,
+      "name": "vault_connection"
+    }
+  },
+  {
+    "id": "minecraft:dust_pillar",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 105,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:dust_pillar",
+      "template": "particles",
+      "targetId": "minecraft:dust_pillar",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/105",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 105,
+      "name": "dust_pillar"
+    }
+  },
+  {
+    "id": "minecraft:ominous_spawning",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 106,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:ominous_spawning",
+      "template": "particles",
+      "targetId": "minecraft:ominous_spawning",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/106",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 106,
+      "name": "ominous_spawning"
+    }
+  },
+  {
+    "id": "minecraft:raid_omen",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 107,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:raid_omen",
+      "template": "particles",
+      "targetId": "minecraft:raid_omen",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/107",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 107,
+      "name": "raid_omen"
+    }
+  },
+  {
+    "id": "minecraft:trial_omen",
+    "idBasis": "third-party-resource-name",
+    "upstreamNumericId": 108,
+    "stage": "M4",
+    "stageBasis": "cross-stage-presentation-final-audit",
+    "implementation": {
+      "status": "not-mapped",
+      "localDefinitions": []
+    },
+    "acceptance": {
+      "id": "java-1.21.1/particles/minecraft:trial_omen",
+      "template": "particles",
+      "targetId": "minecraft:trial_omen",
+      "status": "not-run",
+      "requiredChecks": [
+        "event-trigger-and-required-parameters",
+        "original-rendering-distance-and-settings"
+      ]
+    },
+    "source": {
+      "file": "particles",
+      "pointer": "/108",
+      "mappedVersion": "1.20.5"
+    },
+    "reference": {
+      "id": 108,
+      "name": "trial_omen"
+    }
+  }
+]
