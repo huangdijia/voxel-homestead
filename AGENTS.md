@@ -71,3 +71,12 @@ Verify UI and rendering changes in a browser and record evidence and limitations
 History currently contains only `first commit`, so no established commit convention exists. Use concise imperative subjects, for example, `Fix furnace checkpoint recovery`.
 
 PRs should explain the behavior changed, link relevant issues, report validation results, and include screenshots for visual changes. Update affected feature or asset documentation. Exclude generated builds, caches, and unrelated edits.
+
+## 任务完成后的自动提交与发布
+
+以下规则适用于本项目中产生仓库变更的任务，属于用户对常规收尾操作的持续授权，无需每次重新询问；用户明确要求只读、仅本地修改或暂不提交/发布时，以当次要求为准。
+
+1. **自动提交并推送**：完成任务并通过相关验证后，检查差异，只暂存本任务的变更，创建描述清晰的 Git commit，然后推送到当前分支已配置的远端上游。不得夹带其他任务的未完成修改、提交凭据或强制推送。没有新增变更时不创建空 commit。
+2. **自动发布至 Sites**：提交并推送成功后，使用 Sites 插件的 `sites-hosting` 流程，将该提交对应且构建通过的版本自动发布。工作区存在其他任务的未提交修改时，使用隔离检出构建，确保发布内容与推送的提交一致。优先复用 `.openai/hosting.json` 中的站点；首次发布按插件流程创建并保存关联。沿用已授权的访问范围，新站点默认仅本人可见，不擅自扩大访问权限。等待部署状态明确成功后再报告发布完成。
+
+收尾回复应给出提交与推送结果、Sites 发布链接及验证结论。若发布目标不明确，或远端、认证、构建、部署失败，明确报告已完成步骤和具体阻塞，不将尝试或排队状态当作成功；涉及插件强制要求的额外授权时再请求用户处理。
