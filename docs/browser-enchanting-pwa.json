@@ -1,0 +1,75 @@
+{
+  "date": "2026-09-05T03:30:04.360Z",
+  "url": "http://127.0.0.1:4176",
+  "manifestErrors": [],
+  "installabilityErrors": [],
+  "online": {
+    "active": "activated",
+    "devHooks": false,
+    "online": true,
+    "scripts": [
+      "http://127.0.0.1:4176/assets/index-CYgEyj0F.js"
+    ],
+    "text": "建新世界\n种子生成 · 自由探索\n生存 / 创造\n继续你的旅程\n你的世界\n00\n这里，等着你的第一个世界\n\n为世界取个名字，\n从一片未经探索的原野开始。\n\n开启第一场冒险\n旅程会自动保存在此浏览器\n导入世界\n每一块，都有新的可能。\n耕作与牧场\n操作指南\n把这片世界带到桌面\n离线资源已准备好\n安装应用"
+  },
+  "offlineProbe": {
+    "error": "TypeError: Failed to fetch",
+    "failed": true
+  },
+  "offlineReload": {
+    "body": "属于你的世界。\n\n创建新世界\n种子生成 · 自由探索\n生存 / 创造\n继续你的旅程\n你的世界\n00\n这里，等着你的第一个世界\n\n为世界取个名字，\n从一片未经探索的原野开始。\n\n开启第一场冒险\n旅程会自动保存在此浏览器\n导入世界\n每一块，都有新的可能。\n耕作与牧场\n操作指南\n把这片世界带到桌面\n离线资源已准备好\n安装应用",
+    "controller": true,
+    "online": false,
+    "scripts": [
+      "http://127.0.0.1:4176/assets/index-CYgEyj0F.js"
+    ]
+  },
+  "offlineCreated": {
+    "body": "原野漫游\n第 1 天/07:00\nF3\n点击画面，开始你的方块旅程\n空手\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n滚轮\n切换物品\nE\n背包与合成\n旅程准备就绪\n出发，去创造。\n\n书与微光 · 离线验收\n·\n生存模式\n\n进入世界\n游戏设置\n操作指南\n导出当前进度\n保存并返回世界列表\n进度已保存",
+    "inventoryEmpty": true,
+    "manifest": {
+      "createdAt": 1788578941716,
+      "generatorVersion": 6,
+      "id": "02126161-d81f-4155-8959-c2f7cc28c307",
+      "mode": "survival",
+      "name": "书与微光 · 离线验收",
+      "playedSeconds": 0,
+      "seed": "M2-enchanting-20260905",
+      "updatedAt": 1788578941716,
+      "version": 6
+    },
+    "online": false,
+    "position": {
+      "x": 0.5,
+      "y": 69.05,
+      "z": 0.5
+    },
+    "progression": {
+      "enchantmentSeed": 90246151,
+      "orbs": [],
+      "points": 0
+    }
+  },
+  "offlineSavedAndListed": {
+    "inventoryEmpty": true,
+    "listed": true,
+    "manifest": {
+      "createdAt": 1788578941716,
+      "generatorVersion": 6,
+      "id": "02126161-d81f-4155-8959-c2f7cc28c307",
+      "mode": "survival",
+      "name": "书与微光 · 离线验收",
+      "playedSeconds": 0,
+      "seed": "M2-enchanting-20260905",
+      "updatedAt": 1788578981380,
+      "version": 6
+    },
+    "online": false,
+    "points": 0
+  },
+  "limitations": [
+    "Native fullscreen/Esc retest and actual desktop installation blocked by locked Mac",
+    "Chrome-only PWA smoke test; no performance benchmark"
+  ],
+  "screenshot": "screenshots/enchanting-pwa-offline.png"
+}

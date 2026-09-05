@@ -273,6 +273,26 @@ for (const [id, key, name, tier, hardness] of [
 ] as const)
   block(id, key, name, 15, { hardness, tool: "pickaxe", tier });
 
+block(111, "sugar_cane", "甘蔗", 0, {
+  solid: false,
+  opaque: false,
+  hardness: 0,
+  shape: "crop",
+});
+block(112, "enchanting_table", "附魔台", 3, {
+  opaque: false,
+  shape: "enchanting_table",
+  hardness: 5,
+  tool: "pickaxe",
+  tier: 1,
+});
+block(113, "bookshelf", "书架", 11, {
+  hardness: 1.5,
+  tool: "axe",
+  drop: "book",
+  dropCount: [3, 3],
+});
+
 export const ITEMS: Record<string, ItemDefinition> = {};
 for (const definition of Object.values(BLOCKS)) {
   if (
@@ -290,7 +310,11 @@ for (const definition of Object.values(BLOCKS)) {
     maxStack: 64,
     block: definition.id,
     texture: definition.topTexture ?? definition.texture,
-    ...(definition.id >= 84 ? { introducedVersion: 4 as const } : {}),
+    ...(definition.id >= 111
+      ? { introducedVersion: 6 as const }
+      : definition.id >= 84
+        ? { introducedVersion: 4 as const }
+        : {}),
   };
 }
 Object.assign(ITEMS.leaves, { block: 82 });
@@ -306,6 +330,7 @@ Object.assign(ITEMS.door, { fuel: 10 });
 Object.assign(ITEMS.ladder, { fuel: 15 });
 Object.assign(ITEMS.bed, { maxStack: 1 });
 Object.assign(ITEMS.coal_block, { fuel: 800 });
+Object.assign(ITEMS.bookshelf, { fuel: 15 });
 function item(
   id: string,
   name: string,
@@ -343,6 +368,19 @@ item("raw_pork", "生猪肉", "#ee9d9e", { category: "food", food: 3 });
 item("cooked_pork", "熟猪排", "#b97747", { category: "food", food: 8 });
 item("raw_mutton", "生羊肉", "#c44c56", { category: "food", food: 2 });
 item("cooked_mutton", "熟羊肉", "#88472d", { category: "food", food: 6 });
+item("raw_beef", "生牛肉", "#b84c45", {
+  introducedVersion: 6,
+  category: "food",
+  food: 3,
+});
+item("cooked_beef", "牛排", "#87442a", {
+  introducedVersion: 6,
+  category: "food",
+  food: 8,
+});
+item("paper", "纸", "#efe8d3", { introducedVersion: 6 });
+item("leather", "皮革", "#a56c40", { introducedVersion: 6 });
+item("book", "书", "#9a6940", { introducedVersion: 6 });
 item("wheat_seeds", "小麦种子", "#7c9a40");
 item("wheat", "小麦", "#d2b655");
 item("carrot", "胡萝卜", "#ee872d", { category: "food", food: 3 });
@@ -421,6 +459,12 @@ for (const [material, title, color, toughness, protection, durability] of [
   );
 }
 
+/** Adult cow base drops, before Looting; consumed by the entity kill rules. */
+export const COW_DROP_RANGES = {
+  raw_beef: [1, 3],
+  leather: [0, 2],
+} as const;
+
 export const ENTITIES: Record<EntityKind, EntityDefinition> = {
   pig: {
     kind: "pig",
@@ -439,6 +483,17 @@ export const ENTITIES: Record<EntityKind, EntityDefinition> = {
     drops: [
       { id: "raw_mutton", count: 2 },
       { id: "wool", count: 1 },
+    ],
+  },
+  cow: {
+    kind: "cow",
+    name: "牛",
+    health: 10,
+    speed: 1,
+    hostile: false,
+    drops: [
+      { id: "raw_beef", count: 2 },
+      { id: "leather", count: 1 },
     ],
   },
   zombie: {

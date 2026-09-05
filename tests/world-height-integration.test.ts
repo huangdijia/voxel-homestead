@@ -379,6 +379,8 @@ describe("height-aware save format", () => {
     const save = sim.snapshot();
     save.manifest.version = 4;
     save.manifest.generatorVersion = 4;
+    delete save.progression;
+    delete save.sugarCane;
     save.player.inventory[0] = {
       id: "diamond_pickaxe",
       count: 1,
@@ -395,7 +397,7 @@ describe("height-aware save format", () => {
       new HeightWorld(0, old.changes),
       old,
     ).snapshot();
-    expect(next.manifest.version).toBe(5);
+    expect(next.manifest.version).toBe(6);
     expect(next.manifest.generatorVersion).toBe(4);
     expect(next.player).toEqual(old.player);
     await saveWorld(next);
@@ -404,6 +406,11 @@ describe("height-aware save format", () => {
   });
   it.each([-65, 320])("rejects v5 block changes beyond y=%i", (y) => {
     const save = fixture().sim.snapshot();
+    save.manifest.version = 5;
+    save.manifest.generatorVersion = 5;
+    delete save.progression;
+    delete save.sugarCane;
+    expect(() => validateSave(save)).not.toThrow();
     save.changes = [{ x: 0, y, z: 0, id: 11 }];
     expect(() => validateSave(save)).toThrow("世界高度");
   });
@@ -412,7 +419,7 @@ describe("height-aware save format", () => {
     (y) => {
       const save = v4();
       save.changes = [{ x: 0, y, z: 0, id: 11 }];
-      expect(() => validateSave(save)).toThrow();
+      expect(() => validateSave(save)).toThrow("世界高度");
       save.manifest.version = 5;
       expect(() => validateSave(save)).not.toThrow();
     },
@@ -452,11 +459,15 @@ describe("height-aware save format", () => {
     sim.setBlock(0, 300, 0, 6);
     sim.setBlock(0, -50, 0, 4);
     const save = sim.snapshot();
+    save.manifest.version = 5;
+    save.manifest.generatorVersion = 5;
+    delete save.progression;
+    delete save.sugarCane;
     expect(save.fluids!.tasks.some((t) => t.y > 95)).toBe(true);
     expect(save.natural!.queue.some((t) => t.y < -16)).toBe(true);
     expect(() => validateSave(save)).not.toThrow();
     save.manifest.version = 4;
     save.manifest.generatorVersion = 4;
-    expect(() => validateSave(save)).toThrow();
+    expect(() => validateSave(save)).toThrow("世界高度");
   });
 });

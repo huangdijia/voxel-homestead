@@ -41,20 +41,20 @@
 
 | 状态 | 含义 |
 | --- | --- |
-| `partial-unverified` | 本地注册表存在对应定义，行为、全部状态和浏览器验收尚未逐条核定。 |
+| `partial-unverified` | 本地注册表或明确的模块导出表存在对应定义，行为、全部状态和浏览器验收尚未逐条核定。 |
 | `definition-match-unverified` | 本地合成定义与源组合的类型、材料、形状/镜像和产物数量一致；尚未执行本条验收。 |
 | `output-candidate-unverified` | 本地存在同产物配方，但材料或类型等没有严格对应；不能按已实现计算。 |
 | `not-mapped` | 没有可自动确认的逐项映射；不代表已经全面检查全部模拟代码。 |
 
 所有条目的 `acceptance.status` 均为 **`not-run`**，本基线的逐项验收通过数为 **0**。这不否定已有 M1 集成测试；它说明那些测试结果尚未按本目录每条目标、源码版本、浏览器和状态边界建立验收关联。脚本不会根据“测试文件存在”或“注册表出现”自动升级状态。
 
-[local-evidence.json](local-evidence.json) 保存实际读取的 `registry.ts`、`recipes.ts`、`inventory.ts` 哈希、别名、配方定义及反向映射。例子包括 `log → minecraft:oak_log`、四段门定义 → `minecraft:oak_door`、多阶段作物 → 一个带 `age` 属性的方块。耕地、作物、锄、剪刀、水桶、堆肥桶等本轮新定义一律待验；繁殖属于行为条目，不能从猪羊注册表推断通过。
+[local-evidence.json](local-evidence.json) 保存实际读取的 `registry.ts`、`recipes.ts`、`inventory.ts`、`enchantments.ts` 哈希、别名、定义及反向映射。例子包括 `log → minecraft:oak_log`、`raw_beef → minecraft:beef`、四段门定义 → `minecraft:oak_door`、多阶段作物 → 一个带 `age` 属性的方块。附魔表通过 TypeScript AST 读取 `ENCHANTMENTS` 的 8 个声明及源码行，不执行玩法模块；42 个目标中的其余 34 个仍未映射。本轮甘蔗、纸、皮革、书、附魔台、书架、牛肉和牛的注册信息也只作局部定义证据，附魔效果、酿造、牛的繁殖与全部获取路径均不能据此自动验收。玩法范围说明见 [ENCHANTING.md](../ENCHANTING.md)。
 
 源合成表没有原版资源位置，因此每条 ID 是 `prismarine:recipe/<数值产物ID>/<原始组合记录SHA256前20位>`。保存源文件 JSON Pointer 可定位原记录；同一产物的木材变体不能当成不同的官方配方资源。当前本地木板的 1×1 有序配方与源无序记录没有被严格匹配；这是保守映射差异，不是已证明游戏不能合成木板。
 
 本地存在、源域中没有的内容会留在 `unmatchedLocal`，例如直接使用的 `water` 物品；不会强行映射成 `water_bucket`。本地熔炼配方保存在 `smeltingRecipes`，状态为 `local-definition-reference-domain-missing`，不能混入仅有工作台组合的上游配方分母。
 
-`stage` 是项目排期，不是来源事实或完成声明。M1 对应已有铁器生存范围；M2 默认安排主世界内容；M3 安排维度、红石和高级系统；M4 做跨系统与表现收尾。代码里的高级内容关键词分配是可复现的初步安排，`stageBasis` 含 `review-required` 的条目须在进入对应阶段前人工复核；跨域依赖可使条目提前实现。不能因为某记录被排到 M1 就声称 M1 已覆盖其原版全部变体。
+`stage` 是项目排期，不是来源事实或完成声明。M1 对应已有铁器生存范围；M2 安排主世界内容及附魔、酿造，42 个附魔目标、39 个状态效果、附魔台/酿造台和 `B-MAGIC-01` 均明确归入 M2；M3 安排维度、红石和其他高级系统；M4 做跨系统与表现收尾。代码里的高级内容关键词分配是可复现的初步安排，`stageBasis` 含 `review-required` 的条目须在进入对应阶段前人工复核；跨域依赖可使条目提前实现。不能因为某记录被排到 M1 就声称 M1 已覆盖其原版全部变体。
 
 ## 每条验收如何执行
 

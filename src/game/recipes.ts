@@ -137,6 +137,26 @@ recipe("bowl", ["P P", " P "], { P: "planks" }, "bowl", 4);
 recipe("bucket", ["I I", " I "], { I: "iron_ingot" }, "bucket");
 recipe("shears", [" I", "I "], { I: "iron_ingot" }, "shears");
 recipe("composter", ["S S", "S S", "SSS"], { S: "slab" }, "composter");
+recipe("paper", ["CCC"], { C: "sugar_cane" }, "paper", 3);
+RECIPES.push({
+  id: "book",
+  name: "书",
+  ingredients: { paper: 3, leather: 1 },
+  output: { id: "book", count: 1 },
+  station: "inventory",
+});
+recipe(
+  "bookshelf",
+  ["PPP", "BBB", "PPP"],
+  { P: "planks", B: "book" },
+  "bookshelf",
+);
+recipe(
+  "enchanting_table",
+  [" B ", "DOD", "OOO"],
+  { B: "book", D: "diamond", O: "obsidian" },
+  "enchanting_table",
+);
 RECIPES.push({
   id: "beetroot_soup",
   name: "甜菜汤",
@@ -153,6 +173,7 @@ export const SMELTING: Record<string, { output: string; count: number }> = {
   log: { output: "charcoal", count: 1 },
   raw_pork: { output: "cooked_pork", count: 1 },
   raw_mutton: { output: "cooked_mutton", count: 1 },
+  raw_beef: { output: "cooked_beef", count: 1 },
   sand: { output: "glass", count: 1 },
   cobblestone: { output: "stone", count: 1 },
   cobbled_deepslate: { output: "deepslate", count: 1 },

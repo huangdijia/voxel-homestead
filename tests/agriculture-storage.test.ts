@@ -24,6 +24,7 @@ function legacyFixture(): SaveData {
   save.manifest.version = 1; save.manifest.generatorVersion = 1;
   save.manifest.createdAt = 1234; save.manifest.updatedAt = 5678; save.manifest.playedSeconds = 90;
   delete save.farming; delete save.composters; delete save.fluids; delete save.natural;
+  delete save.progression; delete save.sugarCane;
   save.player.position = { x: .5, y: 1, z: 3.5 };
   save.player.spawn = { ...save.player.position };
   save.player.inventory[0] = { id: 'iron_pickaxe', count: 1, durability: 107 };
@@ -146,7 +147,9 @@ describe('version 2 agriculture and livestock validation', () => {
     ['forged livestock field', (save: any) => { save.entities[0].offspring = 999; }],
     ['breeding hostile entity', (save: any) => { save.entities[0].kind = 'zombie'; }],
   ])('rejects %s', (_, mutate) => {
-    const save = agriculturalFixture(); mutate(save);
+    const save = agriculturalFixture();
+    expect(() => validateSave(save)).not.toThrow();
+    mutate(save);
     expect(() => validateSave(save)).toThrow('存档校验失败');
   });
   it.each([-16, 95])('accepts farmland at legal world height %i without a crop outside the world', y => {
@@ -181,7 +184,7 @@ describe('legacy migration and original checkpoint backups', () => {
     expect(loaded).toEqual(legacy);
     expect(await loadMigrationBackup(legacy.manifest.id)).toBeNull();
     const next = upgrade(loaded!);
-    expect(next.manifest.version).toBe(5); expect(next.manifest.generatorVersion).toBe(1);
+    expect(next.manifest.version).toBe(6); expect(next.manifest.generatorVersion).toBe(1);
     expect(next.farming!.plots).toEqual([]); expect(next.composters).toEqual({});
     expect(validateSave(next)).toEqual(next);
     expect(await loadWorld(legacy.manifest.id)).toEqual(legacy);

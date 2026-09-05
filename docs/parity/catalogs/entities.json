@@ -1236,8 +1236,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "cow",
+          "key": "cow",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/entities/minecraft:cow",

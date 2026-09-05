@@ -9961,8 +9961,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "113",
+          "key": "bookshelf",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/blocks/minecraft:bookshelf",
@@ -15949,8 +15955,14 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "111",
+          "key": "sugar_cane",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/blocks/minecraft:sugar_cane",
@@ -20789,11 +20801,17 @@
     "id": "minecraft:enchanting_table",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 329,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
-      "status": "not-mapped",
-      "localDefinitions": []
+      "status": "partial-unverified",
+      "localDefinitions": [
+        {
+          "id": "112",
+          "key": "enchanting_table",
+          "source": "src/game/registry.ts"
+        }
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/blocks/minecraft:enchanting_table",
@@ -20846,8 +20864,8 @@
     "id": "minecraft:brewing_stand",
     "idBasis": "third-party-resource-name",
     "upstreamNumericId": 330,
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localDefinitions": []

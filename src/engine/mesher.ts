@@ -11,6 +11,7 @@ import {
   isOpaque,
   plantHeight,
   plantStage,
+  progressionBlockParts,
 } from "./shapes";
 import { fluidInfo } from "../game/fluid-blocks";
 import type { BlockBox } from "./shapes";
@@ -680,6 +681,23 @@ export function buildChunk(request: ChunkRequest): ChunkResult {
           addMineral(x, y, z, id, mineral);
         } else if (fluidInfo(id)) {
           addFluid(x, y, z, id);
+        } else if (id >= 111 && id <= 113) {
+          for (const part of progressionBlockParts(id)) {
+            if (part.face !== undefined) {
+              const d = directions[part.face];
+              if (isOpaque(get(x + d[0], y + d[1], z + d[2]))) continue;
+            }
+            addBox(
+              x,
+              y,
+              z,
+              id,
+              part.box,
+              id === 111 ? 1 : 0,
+              part.tint,
+              part.tile,
+            );
+          }
         } else if (id === 83) {
           for (const part of saplingVisualParts)
             addBox(x, y, z, id, part.box, 1, part.tint, part.tile);

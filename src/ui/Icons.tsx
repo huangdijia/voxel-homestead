@@ -3,6 +3,7 @@ import { BLOCKS, ITEMS } from "../game/registry";
 import type { ItemStack } from "../game/types";
 import { mineralAppearance } from "../game/mineral-appearance";
 import type { MineralAppearance } from "../game/mineral-appearance";
+import { hasEnchantments } from "./item-details";
 
 function colorTone(color: string, amount: number): string {
   const hex = color.replace("#", "");
@@ -458,6 +459,109 @@ function agricultureIcon(id: string): React.ReactNode | null {
   return null;
 }
 
+function progressionIcon(id: string): React.ReactNode | null {
+  if (id === "sugar_cane")
+    return (
+      <>
+        <path d="M3 3h2v12H3V3Zm4-2h2v13H7V1Zm4 3h2v10h-2V4Z" fill="#4a793b" />
+        <path d="M4 3h1v12H4V3Zm4-2h1v13H8V1Zm4 3h1v10h-1V4Z" fill="#a4c65f" />
+        <path
+          d="M2 6h4v1H2V6Zm0 5h4v1H2v-1Zm4-7h4v1H6V4Zm0 5h4v1H6V9Zm4-2h4v1h-4V7Zm0 4h4v1h-4v-1Z"
+          fill="#c3d383"
+        />
+        <path
+          d="M1 1h1v1h2v3H3V3H2V2H1V1Zm8 1h3v1h-2v2H9V2Zm4 2h2v1h-1v2h-1V4Z"
+          fill="#629347"
+        />
+      </>
+    );
+  if (id === "paper")
+    return (
+      <>
+        <path d="M3 1h8v2h2v2h1v10H2V2h1V1Z" fill="#a79e84" />
+        <path d="M3 2h7v4h3v8H3V2Z" fill="#f0e9cc" />
+        <path d="M10 2v3h3l-3-3ZM5 8h6v1H5V8Zm0 3h5v1H5v-1Z" fill="#d1c49f" />
+      </>
+    );
+  if (id === "leather")
+    return (
+      <>
+        <path
+          d="M2 1h3v2h6V1h3v4h-2v2h1v2h2v3h-3v3H9v-2H7v2H3v-3H1V9h2V6H1V3h1V1Z"
+          fill="#64432d"
+        />
+        <path
+          d="M3 2h1v2h8V2h1v2h-2v4h1v2h2v1h-3v3h-1v-2H6v2H4v-3H2v-1h2V5H2V4h1V2Z"
+          fill="#b17d47"
+        />
+        <path d="M5 5h5v1H5V5Zm0 3h1v3H5V8Zm3 2h2v1H8v-1Z" fill="#d09a5d" />
+      </>
+    );
+  if (id === "book")
+    return (
+      <>
+        <path d="m3 2 8-1 3 2v10l-9 2-3-2V3l1-1Z" fill="#583527" />
+        <path d="m4 3 8-1 1 1-8 2-1-2Z" fill="#f0dfac" />
+        <path d="m4 5 9-2v9l-8 2-1-9Z" fill="#97513b" />
+        <path d="m3 4 2 1v9l-2-1V4Z" fill="#c38352" />
+        <path d="M8 6h3v1H8V6Zm0 2h2v1H8V8ZM5 12h2v1H5v-1Z" fill="#dcc174" />
+      </>
+    );
+  if (id === "enchanting_table")
+    return (
+      <>
+        <path d="m1 6 7-3 7 3v7l-7 3-7-3V6Z" fill="#241f35" />
+        <path d="m1 6 7 3 7-3-7-3-7 3Z" fill="#a13e44" />
+        <path d="m8 9 7-3v7l-7 3V9Z" fill="#352847" />
+        <path d="M2 7h2v2H2V7Zm10 0h2v2h-2V7ZM7 9h2v2H7V9Z" fill="#62bec1" />
+        <path d="m3 2 4 1 1 2 1-2 4-1v4l-5 2-5-2V2Z" fill="#a67b48" />
+        <path d="m3 1 4 1 1 3 1-3 4-1v4l-5 2-5-2V1Z" fill="#f2e2b1" />
+        <path d="M4 3h2v1H4V3Zm6 0h2v1h-2V3ZM7 5h2v2H7V5Z" fill="#cdb77e" />
+      </>
+    );
+  if (id === "bookshelf")
+    return (
+      <>
+        <path d="M1 1h12l2 2v12H1V1Z" fill="#65472d" />
+        <path d="M2 2h10v12H2V2Z" fill="#332c25" />
+        <path d="M2 2h2v5H2V2Zm7 7h2v5H9V9Z" fill="#b1654d" />
+        <path d="M5 3h2v4H5V3ZM2 9h2v5H2V9Z" fill="#78916a" />
+        <path d="M8 2h3v5H8V2Zm-3 8h3v4H5v-4Z" fill="#b9a15c" />
+        <path d="M2 3h2v1H2V3Zm6 1h3v1H8V4ZM5 11h3v1H5v-1Z" fill="#e2d296" />
+        <path
+          d="M1 1h12v1H1V1Zm0 6h12v2H1V7Zm0 7h12v1H1v-1Zm11-12h1v12h-1V2Z"
+          fill="#bb8e50"
+        />
+        <path d="m13 2 2 1v12l-2-1V2Z" fill="#896236" />
+      </>
+    );
+  if (id === "raw_beef" || id === "cooked_beef") {
+    const cooked = id === "cooked_beef";
+    return (
+      <>
+        <path
+          d="M5 1h6v1h2v2h2v6h-2v2h-2v2H4v-1H2v-2H1V6h2V3h2V1Z"
+          fill={cooked ? "#553425" : "#813d3f"}
+        />
+        <path
+          d="M5 2h6v1h2v2h1v4h-2v2h-2v2H4v-1H3v-2H2V7h2V4h1V2Z"
+          fill={cooked ? "#a46d40" : "#c96965"}
+        />
+        <path
+          d="M6 3h4v1H6V3ZM4 6h1v5H4V6Zm4 4h3v1H8v-1Z"
+          fill={cooked ? "#d09b61" : "#f0b8a0"}
+        />
+        {cooked ? (
+          <path d="M7 5h4v1H7V5ZM6 8h4v1H6V8Z" fill="#754829" />
+        ) : (
+          <path d="M8 4h1v3h2v1H8V6H6V5h2V4Z" fill="#ebc1a9" />
+        )}
+      </>
+    );
+  }
+  return null;
+}
+
 export function ItemIcon({ id, size = 36 }: { id: string; size?: number }) {
   const item = ITEMS[id];
   if (!item) return null;
@@ -478,7 +582,7 @@ export function ItemIcon({ id, size = 36 }: { id: string; size?: number }) {
         {mineralCubeIcon(mineral)}
       </svg>
     );
-  const agriculture = agricultureIcon(id);
+  const agriculture = progressionIcon(id) ?? agricultureIcon(id);
   if (agriculture)
     return (
       <svg
@@ -781,6 +885,11 @@ export function StackView({ stack }: { stack: ItemStack }) {
   return (
     <>
       <ItemIcon id={stack.id} />
+      {hasEnchantments(stack) && (
+        <span className="enchantment-glint" aria-hidden="true">
+          <ItemIcon id={stack.id} />
+        </span>
+      )}
       <span className="stack-count">{stack.count > 1 ? stack.count : ""}</span>
       {stack.durability !== undefined && item?.maxDurability && (
         <span className="durability">

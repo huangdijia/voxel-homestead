@@ -286,13 +286,15 @@ describe("version four checkpoints", () => {
       old = sim.snapshot();
     old.manifest.version = 3;
     old.manifest.generatorVersion = 3;
+    delete old.progression;
+    delete old.sugarCane;
     old.player.inventory[0] = { id: "iron_pickaxe", count: 1, durability: 125 };
     await saveWorld(old);
     const upgraded = new Simulation(
       new MineralWorld(old.changes),
       old,
     ).snapshot();
-    expect(upgraded.manifest.version).toBe(5);
+    expect(upgraded.manifest.version).toBe(6);
     expect(upgraded.manifest.generatorVersion).toBe(3);
     await saveWorld(upgraded);
     expect(await loadMigrationBackup(old.manifest.id, 3)).toEqual(old);
@@ -307,6 +309,9 @@ describe("version four checkpoints", () => {
         save = sim.snapshot();
       save.manifest.version = 3;
       save.manifest.generatorVersion = 3;
+      delete save.progression;
+      delete save.sugarCane;
+      expect(() => validateSave(save)).not.toThrow();
       if (kind === "inventory")
         save.player.inventory[0] = { id: "diamond", count: 1 };
       if (kind === "armor")
@@ -342,7 +347,9 @@ describe("version four checkpoints", () => {
           age: 0,
         });
       if (kind === "block") save.changes.push({ x: 0, y: 1, z: 0, id: 88 });
-      expect(() => validateSave(save)).toThrow();
+      expect(() => validateSave(save)).toThrow(
+        kind === "block" ? "changes.id" : "物品超出存档版本",
+      );
       save.manifest.version = 4;
       expect(() => validateSave(save)).not.toThrow();
     },
@@ -377,7 +384,7 @@ describe("version four checkpoints", () => {
         null,
         { id: output, count: 2 },
       ]);
-      expect(validateSave(resumed.snapshot()).manifest.version).toBe(5);
+      expect(validateSave(resumed.snapshot()).manifest.version).toBe(6);
     },
   );
 });

@@ -5,15 +5,21 @@ export const createInventory = (): Slot[] =>
   Array.from({ length: 36 }, () => null);
 const copy = (stack: ItemStack): ItemStack => ({
   ...stack,
+  ...(stack.enchantments ? { enchantments: { ...stack.enchantments } } : {}),
   ...(ITEMS[stack.id]?.maxDurability !== undefined &&
   stack.durability === undefined
     ? { durability: ITEMS[stack.id].maxDurability }
     : {}),
 });
-const compatible = (a: ItemStack, b: ItemStack) =>
+export const compatibleStacks = (a: ItemStack, b: ItemStack) =>
   a.id === b.id &&
   (a.durability ?? ITEMS[a.id]?.maxDurability) ===
-    (b.durability ?? ITEMS[b.id]?.maxDurability);
+    (b.durability ?? ITEMS[b.id]?.maxDurability) &&
+  Object.keys(a.enchantments ?? {}).length ===
+    Object.keys(b.enchantments ?? {}).length &&
+  Object.entries(a.enchantments ?? {}).every(
+    ([id, level]) => b.enchantments?.[id] === level,
+  );
 export function countItem(slots: Slot[], id: string): number {
   return slots.reduce(
     (sum, slot) => sum + (slot?.id === id ? slot.count : 0),
@@ -27,7 +33,7 @@ export function addItem(slots: Slot[], stack: ItemStack): ItemStack | null {
     return { ...stack };
   const remaining = copy(stack);
   for (const slot of slots) {
-    if (!slot || !compatible(slot, remaining)) continue;
+    if (!slot || !compatibleStacks(slot, remaining)) continue;
     const moved = Math.min(
       Math.max(0, definition.maxStack - slot.count),
       remaining.count,
@@ -39,7 +45,7 @@ export function addItem(slots: Slot[], stack: ItemStack): ItemStack | null {
   for (let index = 0; index < slots.length; index++) {
     if (slots[index]) continue;
     const count = Math.min(definition.maxStack, remaining.count);
-    slots[index] = { ...remaining, count };
+    slots[index] = { ...copy(remaining), count };
     remaining.count -= count;
     if (!remaining.count) return null;
   }
@@ -85,14 +91,14 @@ export function clickInventorySlot(
   if (!cursor) {
     if (!slot) return null;
     const count = right ? Math.ceil(slot.count / 2) : slot.count;
-    const taken = { ...slot, count };
+    const taken = { ...copy(slot), count };
     slot.count -= count;
     if (!slot.count) slots[index] = null;
     return taken;
   }
   const definition = ITEMS[cursor.id];
   if (!definition) return cursor;
-  if (!slot || compatible(slot, cursor)) {
+  if (!slot || compatibleStacks(slot, cursor)) {
     const moved = Math.min(
       right ? 1 : cursor.count,
       definition.maxStack - (slot?.count ?? 0),
@@ -100,10 +106,10 @@ export function clickInventorySlot(
     if (!moved) return cursor;
     slots[index] = { ...copy(cursor), count: (slot?.count ?? 0) + moved };
     return cursor.count > moved
-      ? { ...cursor, count: cursor.count - moved }
+      ? { ...copy(cursor), count: cursor.count - moved }
       : null;
   }
   if (right) return cursor;
   slots[index] = copy(cursor);
-  return { ...slot };
+  return copy(slot);
 }

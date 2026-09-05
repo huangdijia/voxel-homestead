@@ -7612,9 +7612,11 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
+      "status": "output-candidate-unverified",
       "localRecipes": [],
-      "outputCandidates": []
+      "outputCandidates": [
+        "bookshelf"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/286/26d9ca346faa1f2fdc75",
@@ -7664,9 +7666,11 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
+      "status": "output-candidate-unverified",
       "localRecipes": [],
-      "outputCandidates": []
+      "outputCandidates": [
+        "bookshelf"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/286/ad5d6bc1171e89adbd05",
@@ -7716,9 +7720,11 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
+      "status": "output-candidate-unverified",
       "localRecipes": [],
-      "outputCandidates": []
+      "outputCandidates": [
+        "bookshelf"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/286/e98433e6c4a0e48f577e",
@@ -7768,9 +7774,11 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
+      "status": "output-candidate-unverified",
       "localRecipes": [],
-      "outputCandidates": []
+      "outputCandidates": [
+        "bookshelf"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/286/a3f24b5f76dd410bf0a7",
@@ -7820,9 +7828,11 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
+      "status": "output-candidate-unverified",
       "localRecipes": [],
-      "outputCandidates": []
+      "outputCandidates": [
+        "bookshelf"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/286/536bbd94b18af331b56d",
@@ -7872,9 +7882,11 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
+      "status": "output-candidate-unverified",
       "localRecipes": [],
-      "outputCandidates": []
+      "outputCandidates": [
+        "bookshelf"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/286/06b391598bbef9b05b17",
@@ -7924,9 +7936,11 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
+      "status": "output-candidate-unverified",
       "localRecipes": [],
-      "outputCandidates": []
+      "outputCandidates": [
+        "bookshelf"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/286/8c90fc0a7299a18c9eae",
@@ -7976,9 +7990,11 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
+      "status": "output-candidate-unverified",
       "localRecipes": [],
-      "outputCandidates": []
+      "outputCandidates": [
+        "bookshelf"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/286/97011700d44dae401e28",
@@ -8028,9 +8044,11 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
+      "status": "output-candidate-unverified",
       "localRecipes": [],
-      "outputCandidates": []
+      "outputCandidates": [
+        "bookshelf"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/286/9700187ab07d9fa7ee07",
@@ -8080,9 +8098,11 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
+      "status": "output-candidate-unverified",
       "localRecipes": [],
-      "outputCandidates": []
+      "outputCandidates": [
+        "bookshelf"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/286/4619b416121576e9671a",
@@ -8132,9 +8152,13 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localRecipes": [],
-      "outputCandidates": []
+      "status": "definition-match-unverified",
+      "localRecipes": [
+        "bookshelf"
+      ],
+      "outputCandidates": [
+        "bookshelf"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/286/bd2b35a7a0555893f47f",
@@ -12964,12 +12988,16 @@
   {
     "id": "prismarine:recipe/375/fa5072efa9e6e4738baf",
     "idBasis": "synthetic-source-record-hash-not-minecraft-recipe-resource-location",
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
-      "status": "not-mapped",
-      "localRecipes": [],
-      "outputCandidates": []
+      "status": "definition-match-unverified",
+      "localRecipes": [
+        "enchanting_table"
+      ],
+      "outputCandidates": [
+        "enchanting_table"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/375/fa5072efa9e6e4738baf",
@@ -41135,9 +41163,13 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localRecipes": [],
-      "outputCandidates": []
+      "status": "definition-match-unverified",
+      "localRecipes": [
+        "paper"
+      ],
+      "outputCandidates": [
+        "paper"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/924/403c8e9d2e735a0ca659",
@@ -41177,9 +41209,13 @@
     "stage": "M2",
     "stageBasis": "mainworld-content-backlog-review-required",
     "implementation": {
-      "status": "not-mapped",
-      "localRecipes": [],
-      "outputCandidates": []
+      "status": "definition-match-unverified",
+      "localRecipes": [
+        "book"
+      ],
+      "outputCandidates": [
+        "book"
+      ]
     },
     "acceptance": {
       "id": "java-1.21.1/recipes/prismarine:recipe/925/7a9688e0b6ac7a441f6a",
@@ -52516,8 +52552,8 @@
   {
     "id": "prismarine:recipe/1004/8920ec05a5ca2c2ae438",
     "idBasis": "synthetic-source-record-hash-not-minecraft-recipe-resource-location",
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localRecipes": [],
@@ -52563,8 +52599,8 @@
   {
     "id": "prismarine:recipe/1004/b6ad938c1cc240ab54b9",
     "idBasis": "synthetic-source-record-hash-not-minecraft-recipe-resource-location",
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localRecipes": [],
@@ -52610,8 +52646,8 @@
   {
     "id": "prismarine:recipe/1004/4fda2001d957f9bfa2b8",
     "idBasis": "synthetic-source-record-hash-not-minecraft-recipe-resource-location",
-    "stage": "M3",
-    "stageBasis": "planned-advanced-systems-review-required",
+    "stage": "M2",
+    "stageBasis": "planned-m2-enchanting-and-brewing-scope",
     "implementation": {
       "status": "not-mapped",
       "localRecipes": [],

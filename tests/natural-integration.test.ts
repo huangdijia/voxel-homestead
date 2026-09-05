@@ -56,7 +56,7 @@ afterEach(() => vi.unstubAllGlobals());
 describe("natural world integration and checkpoints", () => {
   it("starts the current version with valid detached natural state", () => {
     const save = createNewSave("新世界", "version-three", "survival");
-    expect(save.manifest.generatorVersion).toBe(5);
+    expect(save.manifest.generatorVersion).toBe(6);
     expect(validateSave(save)).toEqual(save);
   });
   it("keeps old terrain generators unchanged while new deep caves contain lava", () => {
@@ -108,12 +108,16 @@ describe("natural world integration and checkpoints", () => {
     delete one.composters;
     delete one.fluids;
     delete one.natural;
+    delete one.progression;
+    delete one.sugarCane;
     await saveWorld(one);
     const two = sim.snapshot();
     two.manifest.version = 2;
     two.manifest.generatorVersion = 1;
     delete two.fluids;
     delete two.natural;
+    delete two.progression;
+    delete two.sugarCane;
     await saveWorld(two);
     await saveWorld(sim.snapshot());
     expect(await loadMigrationBackup(one.manifest.id, 1)).toEqual(one);
@@ -287,13 +291,18 @@ describe("natural world integration and checkpoints", () => {
         s.manifest.generatorVersion = 2;
         delete s.natural;
         delete s.fluids;
+        delete s.progression;
+        delete s.sugarCane;
         s.changes = [{ x: 0, y: 1, z: 0, id: 76 }];
       },
     ],
   ] as const)
     it(`rejects ${name}`, () => {
       const s = createNewSave("测试", "schema", "survival");
+      expect(() => validateSave(s)).not.toThrow();
       corrupt(s);
-      expect(() => validateSave(s)).toThrow();
+      if (name === "old version with future blocks")
+        expect(() => validateSave(s)).toThrow("changes.id");
+      else expect(() => validateSave(s)).toThrow();
     });
 });

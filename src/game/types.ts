@@ -2,9 +2,15 @@ import type { GeneratorVersion } from "../engine/world-height";
 import type { FluidState } from "./fluids";
 import type { NaturalState } from "./natural-updates";
 import type { FarmState } from "./farming";
+import type { SugarCaneState } from "./sugar-cane";
 export type Vec3 = { x: number; y: number; z: number };
 export type GameMode = "survival" | "creative";
-export type ItemStack = { id: string; count: number; durability?: number };
+export type ItemStack = {
+  id: string;
+  count: number;
+  durability?: number;
+  enchantments?: Record<string, number>;
+};
 export type Slot = ItemStack | null;
 export type ArmorSlot = "head" | "chest" | "legs" | "feet";
 export interface PlayerState {
@@ -23,7 +29,7 @@ export interface PlayerState {
   dead: boolean;
   flying: boolean;
 }
-export type EntityKind = "pig" | "sheep" | "zombie" | "creeper";
+export type EntityKind = "pig" | "sheep" | "cow" | "zombie" | "creeper";
 export interface EntityState {
   id: string;
   kind: EntityKind;
@@ -39,6 +45,7 @@ export interface EntityState {
   courtship?: number;
   sheared?: boolean;
   woolTimer?: number;
+  playerHitTimer?: number;
 }
 export interface DropState {
   id: string;
@@ -57,9 +64,10 @@ export type ContainerState =
       burn: number;
       burnTotal: number;
       progress: number;
+      experience?: number;
     };
 export interface SaveManifest {
-  version: 1 | 2 | 3 | 4 | 5;
+  version: 1 | 2 | 3 | 4 | 5 | 6;
   generatorVersion: GeneratorVersion;
   id: string;
   name: string;
@@ -68,6 +76,32 @@ export interface SaveManifest {
   createdAt: number;
   updatedAt: number;
   playedSeconds: number;
+}
+export interface ExperienceOrb {
+  id: string;
+  position: Vec3;
+  value: number;
+  age: number;
+}
+export interface ProgressionState {
+  points: number;
+  enchantmentSeed: number;
+  orbs: ExperienceOrb[];
+}
+export interface EnchantingOffer {
+  option: 0 | 1 | 2;
+  requiredLevel: number;
+  levelCost: number;
+  lapisCost: number;
+  hint: { id: string; level: number } | null;
+  available: boolean;
+  reason?: string;
+}
+export interface EnchantingView {
+  bookshelves: number;
+  level: number;
+  progress: number;
+  offers: EnchantingOffer[];
 }
 export interface SaveData {
   manifest: SaveManifest;
@@ -81,6 +115,8 @@ export interface SaveData {
   composters?: Record<string, number>;
   fluids?: FluidState;
   natural?: NaturalState;
+  sugarCane?: SugarCaneState;
+  progression?: ProgressionState;
 }
 export interface Settings {
   renderDistance: number;
@@ -104,10 +140,18 @@ export interface BlockDefinition {
   tool?: "pickaxe" | "axe" | "shovel";
   tier?: number;
   shape?:
-    "cube" | "slab" | "door" | "ladder" | "torch" | "bed" | "crop" | "farmland";
+    | "cube"
+    | "slab"
+    | "door"
+    | "ladder"
+    | "torch"
+    | "bed"
+    | "crop"
+    | "farmland"
+    | "enchanting_table";
 }
 export interface ItemDefinition {
-  introducedVersion?: 4;
+  introducedVersion?: 4 | 6;
   id: string;
   name: string;
   category: "building" | "tools" | "materials" | "food";
@@ -162,13 +206,15 @@ export type GameCommand =
   | { type: "drop" }
   | { type: "respawn" }
   | { type: "craft"; recipeId: string }
-  | { type: "setTime"; time: number };
+  | { type: "setTime"; time: number }
+  | { type: "enchant"; option: 0 | 1 | 2 };
 export interface WorldEvent {
   type: "sound" | "toast" | "inventory" | "damage" | "block";
   message?: string;
   sound?: string;
 }
 export interface GameSnapshot {
+  progression: { points: number };
   manifest: SaveManifest;
   player: PlayerState;
   time: number;
@@ -185,6 +231,7 @@ export type Overlay =
   | "pause"
   | "inventory"
   | "workbench"
+  | "enchanting"
   | "chest"
   | "furnace"
   | "death"
@@ -198,6 +245,7 @@ export interface GameUIBridge {
   startMouseFallback(): void;
   openInventory(station?: "inventory" | "workbench"): void;
   getCraftSlots(): Slot[];
+  getEnchanting(): EnchantingView | null;
   getContainer(): ContainerState | null;
   clickSlot(
     source: "inventory" | "craft" | "container" | "armor",

@@ -38,7 +38,13 @@ const keyOf = (p: Vec3, kind: FluidKind) => `${p.x},${p.y},${p.z},${kind}`;
 const offset = (p: Vec3, d: readonly number[]): Vec3 => ({ x: p.x + d[0], y: p.y + d[1], z: p.z + d[2] });
 const finitePosition = (p: Vec3) => [p.x, p.y, p.z].every(Number.isFinite) && Math.abs(p.x) <= 30_000_000 && Math.abs(p.z) <= 30_000_000;
 const validBlock = (p: Vec3) => finitePosition(p) && p.y >= MIN_Y && p.y <= MAX_Y && [p.x, p.y, p.z].every(Number.isInteger);
-const replaceable = (id: number) => id === 0 || id === 16 || id === 20 || (id >= 30 && id <= 58) || id === 83;
+const replaceable = (id: number) =>
+  id === 0 ||
+  id === 16 ||
+  id === 20 ||
+  (id >= 30 && id <= 58) ||
+  id === 83 ||
+  id === 111;
 
 /**
  * Deterministic local relaxation of fluid levels. Downward edges take priority;
